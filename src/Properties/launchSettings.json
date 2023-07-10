@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "IceAge (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "IceAge (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
