@@ -20,12 +20,20 @@ public class Settings : INotifyPropertyChanged
     private bool _canSave = false;
 
     private AppRegistration _appRegistration;
+<<<<<<< HEAD
+=======
+    private string _authCode;
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
     #endregion
 
     #region Public Properties
     public const string AppName = "IceAge";
     public event PropertyChangedEventHandler PropertyChanged;
 
+<<<<<<< HEAD
+=======
+    [JsonProperty]
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
     public AppRegistration AppRegistration
     {
         get => _appRegistration;
@@ -34,6 +42,22 @@ public class Settings : INotifyPropertyChanged
             if (_appRegistration == value) return;
             _appRegistration = value;
             RaisePropertyChanged(nameof(AppRegistration));
+<<<<<<< HEAD
+=======
+            saveAsync().ConfigureAwait(false);
+        }
+    }
+
+    public string AuthCode
+    {
+        get => _authCode;
+        set
+        {
+            if (_authCode == value) return;
+            _authCode = value;
+            RaisePropertyChanged(nameof(AuthCode));
+            saveAsync().ConfigureAwait(false);
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
         }
     }
     #endregion
@@ -80,6 +104,10 @@ public class Settings : INotifyPropertyChanged
     private async Task saveAsync()
     {
         if (!_canSave) return;
+<<<<<<< HEAD
+=======
+        _canSave = false;
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
         var localFolder = ApplicationData.Current.LocalFolder;
         var file = await localFolder.GetFileAsync(FILE_NAME);
         using (StreamWriter streamWriter = new StreamWriter(await file.OpenStreamForWriteAsync(), new UTF8Encoding(false)))
@@ -88,6 +116,10 @@ public class Settings : INotifyPropertyChanged
             var serializer = new JsonSerializer();
             serializer.Serialize(jsonWriter, this);
         }
+<<<<<<< HEAD
+=======
+        _canSave = true;
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
     }
     #endregion
 }

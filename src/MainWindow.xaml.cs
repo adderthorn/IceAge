@@ -30,6 +30,7 @@ public sealed partial class MainWindow : Window
 {
     private const string INSTANCE = "XXXXX";
 
+<<<<<<< HEAD
     public HttpClient HttpClient { get; set; }
     public MastodonClient MastodonClient { get; set; }
     public AuthenticationClient AuthenticationClient { get; set; }
@@ -47,12 +48,17 @@ public sealed partial class MainWindow : Window
     {
         this.InitializeComponent();
         this.HttpClient = new HttpClient();
+=======
+    public MainWindow()
+    {
+        this.InitializeComponent();
+>>>>>>> 72688a1 (WIP - Scaffolding for settings.)
     }
 
     private async void myButton_Click(object sender, RoutedEventArgs e)
     {
-        AppRegistration ??= await AuthenticationClient.CreateApp("IceAge", Scope.Read);
-        if (string.IsNullOrWhiteSpace(AuthCodeBox.Text))
+        Settings.AppRegistration ??= await AuthenticationClient.CreateApp("IceAge", Scope.Read);
+        if (string.IsNullOrWhiteSpace(Settings.AuthCode) || string.IsNullOrWhiteSpace(AuthCodeBox.Text))
         {
             myButton.Content = "Getting Auth Code...";
             var url = AuthenticationClient.OAuthUrl();
@@ -60,13 +66,18 @@ public sealed partial class MainWindow : Window
             myButton.Content = "Get Timeline";
             return;
         }
+        else if (!string.IsNullOrWhiteSpace(Settings.AuthCode))
+        {
+            Settings.AuthCode = AuthCodeBox.Text;
+        }
         myButton.Content = "Getting Toots...";
-        Auth ??= await AuthenticationClient.ConnectWithCode(AuthCodeBox.Text);
+        Auth ??= await AuthenticationClient.ConnectWithCode(Settings.AuthCode);
         MastodonClient ??= new MastodonClient(INSTANCE, Auth.AccessToken, HttpClient);
         var timeline = await MastodonClient.GetHomeTimeline();
         foreach (var item in timeline)
         {
-            Debug.WriteLine(item);
+            TootsBox.Text += item.Content;
+            TootsBox.Text += "\r\n\r\n";
         }
         myButton.Content = "Refresh";
     }
