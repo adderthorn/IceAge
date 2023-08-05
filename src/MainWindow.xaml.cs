@@ -17,6 +17,7 @@ using System.Net.Http;
 using Mastonet;
 using System.Diagnostics;
 using Mastonet.Entities;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,15 +32,21 @@ public sealed partial class MainWindow : Window
 
     public HttpClient HttpClient { get; set; }
     public MastodonClient MastodonClient { get; set; }
-    public AppRegistration AppRegistration { get; set; }
     public AuthenticationClient AuthenticationClient { get; set; }
     public Auth Auth { get; set; }
+    public Settings Settings { get; set; }
 
-    public MainWindow()
+    public static async Task<MainWindow> CreateMainWindowAsync()
+    {
+        var window = new MainWindow();
+        window.Settings = await Settings.LoadSettingsAsync();
+        return window;
+    }
+
+    private MainWindow()
     {
         this.InitializeComponent();
         this.HttpClient = new HttpClient();
-        AuthenticationClient = new AuthenticationClient(INSTANCE, HttpClient);
     }
 
     private async void myButton_Click(object sender, RoutedEventArgs e)
