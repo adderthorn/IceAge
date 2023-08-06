@@ -44,6 +44,7 @@ public partial class App : Application
         this.HttpClient = new HttpClient();
     }
 
+
     /// <summary>
     /// Invoked when the application is launched.
     /// </summary>
