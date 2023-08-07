@@ -33,6 +33,7 @@ public partial class App : Application
     public MastodonClient MastodonClient { get; set; }
     public AuthenticationClient AuthenticationClient { get; set; }
     public Auth Auth { get; set; }
+    public Settings Settings { get; set; }
 
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code
@@ -51,6 +52,7 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
+        Settings = await Settings.LoadSettingsAsync();
         m_window = new MainWindow();
         m_window.Activate();
     }

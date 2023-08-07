@@ -30,35 +30,23 @@ public sealed partial class MainWindow : Window
 {
     private const string INSTANCE = "XXXXX";
 
-<<<<<<< HEAD
     public HttpClient HttpClient { get; set; }
     public MastodonClient MastodonClient { get; set; }
     public AuthenticationClient AuthenticationClient { get; set; }
     public Auth Auth { get; set; }
-    public Settings Settings { get; set; }
+    public Settings Settings=> (App.Current as App).Settings;
 
-    public static async Task<MainWindow> CreateMainWindowAsync()
-    {
-        var window = new MainWindow();
-        window.Settings = await Settings.LoadSettingsAsync();
-        return window;
-    }
-
-    private MainWindow()
-    {
-        this.InitializeComponent();
-        this.HttpClient = new HttpClient();
-=======
     public MainWindow()
     {
         this.InitializeComponent();
->>>>>>> 72688a1 (WIP - Scaffolding for settings.)
+        this.HttpClient = new HttpClient();
+        this.AuthenticationClient = new AuthenticationClient(INSTANCE, HttpClient);
     }
 
     private async void myButton_Click(object sender, RoutedEventArgs e)
     {
-        Settings.AppRegistration ??= await AuthenticationClient.CreateApp("IceAge", Scope.Read);
-        if (string.IsNullOrWhiteSpace(Settings.AuthCode) || string.IsNullOrWhiteSpace(AuthCodeBox.Text))
+        Settings.AppRegistration ??= await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
+        if (string.IsNullOrWhiteSpace(Settings.AuthCode) && string.IsNullOrWhiteSpace(AuthCodeBox.Text))
         {
             myButton.Content = "Getting Auth Code...";
             var url = AuthenticationClient.OAuthUrl();
@@ -66,7 +54,7 @@ public sealed partial class MainWindow : Window
             myButton.Content = "Get Timeline";
             return;
         }
-        else if (!string.IsNullOrWhiteSpace(Settings.AuthCode))
+        else if (!string.IsNullOrWhiteSpace(AuthCodeBox.Text))
         {
             Settings.AuthCode = AuthCodeBox.Text;
         }
