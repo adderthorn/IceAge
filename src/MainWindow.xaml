@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IceAge"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:IceAge.Controls"
     mc:Ignorable="d">
 
     <NavigationView>
@@ -47,6 +47,7 @@
         </NavigationView.MenuItems>
         <Frame x:Name="ContentFrame">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <controls:TootControl MinWidth="700"/>
                 <TextBox x:Name="TootsBox" MinHeight="500" MinWidth="700" />
                 <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
                 <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="IceAge.Controls.TootControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IceAge.Controls"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <FontIcon Glyph="&#xE97A;"/>
+            <TextBlock Margin="10,0,0,0">Replied to BrianKrebs</TextBlock>
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Image Source="https://loremflickr.com/50/50" Width="50" Height="50"
+			   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
+            <TextBlock Text="Brian Krebs" Grid.Column="1" Grid.Row="0"/>
+            <TextBlock Text="@briankrebs" Grid.Column="1" Grid.Row="1"/>
+        </Grid>
+        <TextBlock TextWrapping="WrapWholeWords">
+		In 1997, billionaires deserved no pity because they owned planes.<LineBreak/><LineBreak/>Today, they own more satellites than The Pentagon.<LineBreak/><LineBreak/>I wonder what gazillionaires will own in 20 years that makes us go, "Never feel sorry for a man who owns a....what? Planet? Moon?
+        </TextBlock>
+        <toolkit:UniformGrid Orientation="Horizontal" Rows="1" Columns="4">
+            <StackPanel x:Name="B1" Orientation="Horizontal" HorizontalAlignment="Left">
+                <FontIcon Glyph="&#xE97A;"/>
+                <TextBlock Margin="5,0,0,0">1</TextBlock>
+            </StackPanel>
+            <StackPanel x:Name="B2" Orientation="Horizontal" HorizontalAlignment="Left">
+                <FontIcon Glyph="&#xE8F0;"/>
+                <TextBlock Margin="5,0,0,0">2</TextBlock>
+            </StackPanel>
+            <FontIcon x:Name="B3" Glyph="&#xE8F0;" HorizontalAlignment="Center"/>
+            <FontIcon x:Name="B4" Glyph="&#xE8F0;" HorizontalAlignment="Right"/>
+        </toolkit:UniformGrid>
+    </StackPanel>
+</UserControl>
