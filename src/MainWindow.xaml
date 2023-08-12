@@ -8,9 +8,49 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBox x:Name="TootsBox" MinHeight="500" MinWidth="700" />
-        <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-    </StackPanel>
+    <NavigationView>
+        <NavigationView.MenuItems>
+            <NavigationViewItem Tag="Home" Content="Home" Icon="Home" />
+            <NavigationViewItem Tag="Notifiations">
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon MinWidth="20" HorizontalAlignment="Center"
+                              Glyph="&#xE7E7;"/>
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center">Notifications</TextBlock>
+                </StackPanel>
+            </NavigationViewItem>
+            <NavigationViewItem>
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon MinWidth="20" HorizontalAlignment="Center"
+                              Glyph="&#x0023;" FontFamily="Segoe UI" FontWeight="Bold"/>
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center">Explore</TextBlock>
+                </StackPanel>
+            </NavigationViewItem>
+            <NavigationViewItem Icon="People" Content="Local" />
+            <NavigationViewItem Icon="Globe" Content="Federated" />
+            <NavigationViewItem>
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon MinWidth="20" HorizontalAlignment="Center"
+                              Glyph="&#xE8F2;"/>
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center">Direct Messages</TextBlock>
+                </StackPanel>
+            </NavigationViewItem>
+            <NavigationViewItem Content="Favorites" Icon="Favorite" />
+            <NavigationViewItem>
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon MinWidth="20" HorizontalAlignment="Center"
+                              Glyph="&#xE8FD;"/>
+                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center">Lists</TextBlock>
+                </StackPanel>
+            </NavigationViewItem>
+            <NavigationViewItemSeparator/>
+            <NavigationViewItem Content="New Toot" Icon="Add" />
+        </NavigationView.MenuItems>
+        <Frame x:Name="ContentFrame">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox x:Name="TootsBox" MinHeight="500" MinWidth="700" />
+                <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
+                <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+            </StackPanel>
+        </Frame>
+    </NavigationView>
 </Window>
