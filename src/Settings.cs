@@ -21,6 +21,7 @@ public class Settings : INotifyPropertyChanged
 
     private AppRegistration _appRegistration;
     private string _authCode;
+    private Auth _auth;
     #endregion
 
     #region Public Properties
@@ -52,6 +53,18 @@ public class Settings : INotifyPropertyChanged
             saveAsync().ConfigureAwait(false);
         }
     }
+
+    public Auth Auth
+    {
+        get => _auth;
+        set
+        {
+            if (_auth == value) return;
+            _auth = value;
+            RaisePropertyChanged(nameof(Auth));
+            saveAsync().ConfigureAwait(false);
+        }
+    }
     #endregion
 
     #region Constructors & Static Methods
@@ -66,7 +79,7 @@ public class Settings : INotifyPropertyChanged
             using (JsonReader reader = new JsonTextReader(streamReader))
             {
                 var serializer = new JsonSerializer();
-                var settings = serializer.Deserialize<Settings>(reader);
+                var settings = serializer.Deserialize<Settings>(reader) ?? new Settings();
                 settings._canSave = true;
                 return settings;
             }

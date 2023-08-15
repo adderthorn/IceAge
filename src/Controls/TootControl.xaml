@@ -10,14 +10,14 @@
     xmlns:ani="using:CommunityToolkit.WinUI.UI.Animations"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <conv:StringFormatConverter x:Key="StringFormatConverter"/>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" Margin="0,10">
+        <StackPanel Orientation="Horizontal" Margin="0,10" Visibility="{x:Bind IsBoostOrReply}">
             <FontIcon Glyph="&#xE97A;" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
-            <TextBlock Margin="10,0,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}">Replied to BrianKrebs</TextBlock>
+            <TextBlock Margin="10,0,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
         </StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -29,54 +29,88 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <PersonPicture Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="0,5,5,5" Width="50"
-                           ProfilePicture="https://loremflickr.com/50/50"/>
+                           ProfilePicture="{x:Bind ProfileImageUrl, Mode=OneWay}" DisplayName="{x:Bind DisplayName, Mode=OneWay}"/>
             <Grid Grid.Column="1" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Brian Krebs" Grid.Column="0"/>
+                <TextBlock Text="{x:Bind DisplayName, Mode=OneWay}" Grid.Column="0"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <FontIcon Glyph="&#xE774;"/>
-                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="18h"/>
+                    <FontIcon Glyph="{x:Bind StatusGlyph}"/>
+                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{x:Bind CreatedTimeAgo, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
-            <TextBlock Text="@briankrebs" Grid.Column="1" Grid.Row="1"
+            <TextBlock Text="{x:Bind Username, Mode=OneWay}" Grid.Column="1" Grid.Row="1"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
         </Grid>
-        <TextBlock TextWrapping="WrapWholeWords" Margin="0,5,0,5" IsTextSelectionEnabled="True">
+        <!--<TextBlock TextWrapping="WrapWholeWords" Margin="0,5,0,5" IsTextSelectionEnabled="True">
 		In 1997, billionaires deserved no pity because they owned planes.<LineBreak/><LineBreak/>Today, they own more satellites than The Pentagon.<LineBreak/><LineBreak/>I wonder what gazillionaires will own in 20 years that makes us go, "Never feel sorry for a man who owns a....what? Planet? Moon?
-        </TextBlock>
+        </TextBlock>-->
+        <WebView2 x:Name="ContentWebView" Margin="0,5,0,5" Width="700" Height="200"/>
         <toolkit:UniformGrid Orientation="Horizontal" Rows="1" Margin="0,5,0,5">
-            <StackPanel x:Name="B1" Orientation="Horizontal" HorizontalAlignment="Left">
-                <FontIcon Glyph="&#xE97A;"/>
-                <TextBlock Margin="5,0,0,0">1</TextBlock>
-            </StackPanel>
-            <StackPanel x:Name="BoostButton" Orientation="Horizontal" HorizontalAlignment="Left"
-                        PointerEntered="ActionButton_PointerEntered" Tapped="BoostButton_Tapped"
-                        ui:VisualExtensions.NormalizedCenterPoint="0.5">
+            <Button x:Name="ReplyButton" HorizontalAlignment="Left" BorderThickness="0" PointerEntered="ActionButton_PointerEntered">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE97A;"/>
+                        <TextBlock Margin="5,0,0,0" Text="{x:Bind ReplyCount}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button x:Name="BoostButton" HorizontalAlignment="Left" PointerEntered="ActionButton_PointerEntered" Tapped="BoostButton_Tapped"
+                    BorderThickness="0" ui:VisualExtensions.NormalizedCenterPoint="0.5">
                 <ani:Explicit.Animations>
                     <ani:AnimationSet x:Name="BoostScaleAnimation" IsSequential="True">
                         <ani:ScaleAnimation Duration="0:0:0.2" Delay="0:0:0" From="1" To="1.5"
-                            EasingMode="EaseOut" EasingType="Linear"/>
+                                            EasingMode="EaseOut" EasingType="Linear"/>
                         <ani:ScaleAnimation Duration="0:0:0.2" To="1" EasingMode="EaseOut" EasingType="Linear"/>
                     </ani:AnimationSet>
                 </ani:Explicit.Animations>
-                <SymbolIcon Symbol="ReShare" HorizontalAlignment="Center"/>
-                <TextBlock Margin="5,0,0,0" Text="{x:Bind BoostedCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}" FontWeight="{x:Bind BoostedWeight, Mode=OneWay}"/>
-            </StackPanel>
-            <Grid x:Name="FavoriteButton" PointerEntered="ActionButton_PointerEntered" Tapped="FavoriteButton_Tapped"
-                  ui:VisualExtensions.NormalizedCenterPoint="0.5">
-                <ani:Explicit.Animations>
-                    <ani:AnimationSet x:Name="FavoriteRotateAnimation">
-                        <ani:RotationInDegreesAnimation Duration="0:0:0.2" Delay="0:0:0" From="0" To="360"
-                            EasingMode="EaseOut" EasingType="Linear"/>
-                    </ani:AnimationSet>
-                </ani:Explicit.Animations>
-                <FontIcon Visibility="{x:Bind IsFavorite, Mode=OneWay}" FontFamily="Segoe Fluent Icons" Glyph="&#xE735;" HorizontalAlignment="Center" Foreground="Yellow"/>
-                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" HorizontalAlignment="Center"/>
-            </Grid>
-            <SymbolIcon Symbol="More" HorizontalAlignment="Right"/>
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="ReShare" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="{x:Bind BoostedWeight, Mode=OneWay}"
+                                   Text="{x:Bind BoostedCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button x:Name="FavoriteButton" PointerEntered="ActionButton_PointerEntered" Tapped="FavoriteButton_Tapped"
+                    BorderThickness="0" HorizontalAlignment="Center">
+                <Button.Content>
+                    <Grid ui:VisualExtensions.NormalizedCenterPoint="0.5">
+                        <ani:Explicit.Animations>
+                            <ani:AnimationSet x:Name="FavoriteRotateAnimation">
+                                <ani:RotationInDegreesAnimation Duration="0:0:0.2" Delay="0:0:0" From="0" To="360"
+                                                                EasingMode="EaseOut" EasingType="Linear"/>
+                            </ani:AnimationSet>
+                        </ani:Explicit.Animations>
+                        <FontIcon Visibility="{x:Bind IsFavorite, Mode=OneWay}" FontFamily="Segoe Fluent Icons" Glyph="&#xE735;"
+                                  HorizontalAlignment="Center" Foreground="Yellow"/>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;"/>
+                    </Grid>
+                </Button.Content>
+            </Button>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center" BorderThickness="0">
+                <Button.Content>
+                    <SymbolIcon Symbol="More"/>
+                </Button.Content>
+                <Button.Flyout>
+                    <CommandBarFlyout AlwaysExpanded="True" Placement="Bottom">
+                        <AppBarButton Icon="Share" Label="Share" ToolTipService.ToolTip="Share"/>
+                        <AppBarButton Icon="Go" Label="Open in Browser" ToolTipService.ToolTip="Open in Browser"/>
+                        <AppBarButton Icon="Copy" Label="Copy Link to Post" ToolTipService.ToolTip="Copy Link to Post"/>
+                        <AppBarButton Icon="Flag" Label="Report Post" ToolTipService.ToolTip="Report Post"/>
+                        <CommandBarFlyout.SecondaryCommands>
+                            <AppBarButton Label="Mention" ToolTipService.ToolTip="Mention"/>
+                            <AppBarButton Icon="Mail" Label="Direct Message" ToolTipService.ToolTip="Direct Message"/>
+                            <AppBarSeparator/>
+                            <AppBarButton Icon="Mute" Label="Mute" ToolTipService.ToolTip="Mute"/>
+                            <AppBarButton Icon="BlockContact" Label="Block" ToolTipService.ToolTip="Block"/>
+                            <AppBarButton Label="Block Domain" ToolTipService.ToolTip="Block Domain"/>
+                        </CommandBarFlyout.SecondaryCommands>
+                    </CommandBarFlyout>
+                </Button.Flyout>
+            </Button>
         </toolkit:UniformGrid>
     </StackPanel>
 </UserControl>

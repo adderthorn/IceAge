@@ -47,8 +47,8 @@
         </NavigationView.MenuItems>
         <Frame x:Name="ContentFrame">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <controls:TootControl MinWidth="700"/>
-                <TextBox x:Name="TootsBox" MinHeight="500" MinWidth="700" />
+                <StackPanel x:Name="TootsPanel" Orientation="Vertical" MinWidth="700"/>
+                <TextBox x:Name="InstanceBox" PlaceholderText="Instance"/>
                 <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
                 <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
             </StackPanel>

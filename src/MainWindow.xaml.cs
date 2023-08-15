@@ -18,6 +18,7 @@ using Mastonet;
 using System.Diagnostics;
 using Mastonet.Entities;
 using System.Threading.Tasks;
+using IceAge.Controls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,24 +29,41 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private const string INSTANCE = "XXXXX";
+    public HttpClient HttpClient
+    {
+        get; set;
+    }
+    public MastodonClient MastodonClient
+    {
+        get; set;
+    }
+    public AuthenticationClient AuthenticationClient
+    {
+        get; set;
+    }
 
-    public HttpClient HttpClient { get; set; }
-    public MastodonClient MastodonClient { get; set; }
-    public AuthenticationClient AuthenticationClient { get; set; }
-    public Auth Auth { get; set; }
-    public Settings Settings=> (App.Current as App).Settings;
+    public Settings Settings => (App.Current as App).Settings;
 
     public MainWindow()
     {
         this.InitializeComponent();
         this.HttpClient = new HttpClient();
-        this.AuthenticationClient = new AuthenticationClient(INSTANCE, HttpClient);
     }
 
     private async void myButton_Click(object sender, RoutedEventArgs e)
     {
-        Settings.AppRegistration ??= await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
+        if (this.AuthenticationClient == null)
+        {
+            if (Settings.AppRegistration == null && !string.IsNullOrWhiteSpace(InstanceBox.Text))
+            {
+                this.AuthenticationClient = new AuthenticationClient(InstanceBox.Text, HttpClient);
+            }
+            else
+            {
+                this.AuthenticationClient = new AuthenticationClient(Settings.AppRegistration.Instance, HttpClient);
+                Settings.AppRegistration = await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
+            }
+        }
         if (string.IsNullOrWhiteSpace(Settings.AuthCode) && string.IsNullOrWhiteSpace(AuthCodeBox.Text))
         {
             myButton.Content = "Getting Auth Code...";
@@ -59,13 +77,16 @@ public sealed partial class MainWindow : Window
             Settings.AuthCode = AuthCodeBox.Text;
         }
         myButton.Content = "Getting Toots...";
-        Auth ??= await AuthenticationClient.ConnectWithCode(Settings.AuthCode);
-        MastodonClient ??= new MastodonClient(INSTANCE, Auth.AccessToken, HttpClient);
-        var timeline = await MastodonClient.GetHomeTimeline();
-        foreach (var item in timeline)
+        if (Settings.Auth == null)
         {
-            TootsBox.Text += item.Content;
-            TootsBox.Text += "\r\n\r\n";
+            Settings.Auth = await AuthenticationClient.ConnectWithCode(Settings.AuthCode);
+        }
+        MastodonClient ??= new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, HttpClient);
+        var timeline = await MastodonClient.GetHomeTimeline();
+        for (int i = 0; i < 6; i++)
+        {
+            var tootControl = new TootControl(timeline[i]);
+            TootsPanel.Children.Add(tootControl);
         }
         myButton.Content = "Refresh";
     }
