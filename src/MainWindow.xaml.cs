@@ -19,6 +19,7 @@ using System.Diagnostics;
 using Mastonet.Entities;
 using System.Threading.Tasks;
 using IceAge.Controls;
+using System.Threading;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -48,6 +49,8 @@ public sealed partial class MainWindow : Window
     {
         this.InitializeComponent();
         this.HttpClient = new HttpClient();
+        ExtendsContentIntoTitleBar = true;
+        SystemBackdrop = new MicaBackdrop();
     }
 
     private async void myButton_Click(object sender, RoutedEventArgs e)
@@ -62,6 +65,7 @@ public sealed partial class MainWindow : Window
             {
                 this.AuthenticationClient = new AuthenticationClient(Settings.AppRegistration.Instance, HttpClient);
                 Settings.AppRegistration = await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
+                Thread.Sleep(5000);
             }
         }
         if (string.IsNullOrWhiteSpace(Settings.AuthCode) && string.IsNullOrWhiteSpace(AuthCodeBox.Text))
@@ -83,7 +87,7 @@ public sealed partial class MainWindow : Window
         }
         MastodonClient ??= new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, HttpClient);
         var timeline = await MastodonClient.GetHomeTimeline();
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 2; i++)
         {
             var tootControl = new TootControl(timeline[i]);
             TootsPanel.Children.Add(tootControl);
