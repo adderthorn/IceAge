@@ -94,4 +94,13 @@ public sealed partial class MainWindow : Window
         }
         myButton.Content = "Refresh";
     }
+
+    private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        // C# code to create a new window
+        var newWindow = new NewTootWindow();
+        newWindow.Activate();
+
+        // C# code to navigate in the new window
+    }
 }

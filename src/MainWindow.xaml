@@ -104,7 +104,7 @@
                 </StackPanel>
             </Frame>
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="New Toot" Icon="Add" />
+                <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
                 <NavigationViewItemSeparator/>
             </NavigationView.FooterMenuItems>
         </NavigationView>
