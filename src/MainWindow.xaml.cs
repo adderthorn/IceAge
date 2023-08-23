@@ -50,6 +50,7 @@ public sealed partial class MainWindow : Window
         this.InitializeComponent();
         this.HttpClient = new HttpClient();
         ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
     }
 
@@ -65,7 +66,6 @@ public sealed partial class MainWindow : Window
             {
                 this.AuthenticationClient = new AuthenticationClient(Settings.AppRegistration.Instance, HttpClient);
                 Settings.AppRegistration = await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
-                Thread.Sleep(5000);
             }
         }
         if (string.IsNullOrWhiteSpace(Settings.AuthCode) && string.IsNullOrWhiteSpace(AuthCodeBox.Text))
@@ -87,6 +87,7 @@ public sealed partial class MainWindow : Window
         }
         MastodonClient ??= new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, HttpClient);
         var timeline = await MastodonClient.GetHomeTimeline();
+        TootsPanel.Children.Clear();
         for (int i = 0; i < 2; i++)
         {
             var tootControl = new TootControl(timeline[i]);

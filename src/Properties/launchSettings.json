@@ -1,7 +1,8 @@
 {
   "profiles": {
     "IceAge (Package)": {
-      "commandName": "MsixPackage"
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
     },
     "IceAge (Unpackaged)": {
       "commandName": "Project"

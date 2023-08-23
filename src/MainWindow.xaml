@@ -44,22 +44,21 @@
         <Border
             x:Name="AppTitleBar"
             Grid.Column="1"
-            Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
-            Margin="48,0,0,0"
+            Height="{Binding ElementName=MainNavigationView, Path=CompactPaneLength}"
             VerticalAlignment="Stretch"
+            Margin="72,0,0,0"
             Canvas.ZIndex="1"
             IsHitTestVisible="True">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                 <Image Width="18" Source="ms-appx:///Assets/Tiles/TitlebarLogo.png" />
                 <TextBlock
                     x:Name="AppTitle"
-                    Margin="12,0,0,0"
                     VerticalAlignment="Center"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="IceAge" />
             </StackPanel>
         </Border>
-        <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2" Canvas.ZIndex="0"
+        <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2"  Canvas.ZIndex="0"
                         IsTabStop="False" IsTitleBarAutoPaddingEnabled="True">
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Home" Content="Home" Icon="Home" />
@@ -97,7 +96,7 @@
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <StackPanel x:Name="TootsPanel" Orientation="Vertical" MinWidth="700"/>
+                    <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" MinWidth="700" Padding="10"/>
                     <TextBox x:Name="InstanceBox" PlaceholderText="Instance"/>
                     <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
                     <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
