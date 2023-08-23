@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
 using IceAge.Interop;
+using Mastonet;
 using Mastonet.Entities;
 using Microsoft.UI.Input;
 using Microsoft.UI.Text;
@@ -26,15 +27,17 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private string _profileImageUrl;
     private string _username;
     private string _displayName;
+    private readonly MastodonClient _client;
     private readonly string _content;
     private DateTime _created;
     private Status _status;
     private readonly RichTextInterop _interop;
     private readonly DispatcherTimer _timer;
 
-    public TootControl(Status status)
+    public TootControl(Status status, MastodonClient client)
     {
         this.InitializeComponent();
+        _client = client;
         _interop = new RichTextInterop(ContentBlock);
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(30);
@@ -218,7 +221,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
 
     public string ReplyCount => "1+";
 
-    public Visibility BoostedCountVisibility => BoostedCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+    public Microsoft.UI.Xaml.Visibility BoostedCountVisibility => BoostedCount > 0 ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 
     public FontWeight BoostedWeight => IsBoosted ? FontWeights.Bold : FontWeights.Normal;
 
@@ -236,6 +239,10 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     {
         FavoriteRotateAnimation.StartAsync();
         IsFavorite = !IsFavorite;
+        if (IsFavorite)
+            _client.Favourite(Status.Id);
+        else
+            _client.Unfavourite(Status.Id);
     }
 
     private void BoostButton_Tapped(object sender, TappedRoutedEventArgs e)
@@ -245,16 +252,17 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         if (IsBoosted)
         {
             BoostedCount++;
+            _client.Reblog(Status.Id);
         }
         else
         {
             BoostedCount--;
+            _client.Unreblog(Status.Id);
         }
     }
 
     private async void ContentWebView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
     {
-        Debug.WriteLine("AHHHH");
         if (_isNavigatingToNewPage || !args.IsUserInitiated)
             return;
         _isNavigatingToNewPage = true;

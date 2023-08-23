@@ -90,7 +90,7 @@ public sealed partial class MainWindow : Window
         TootsPanel.Children.Clear();
         for (int i = 0; i < 2; i++)
         {
-            var tootControl = new TootControl(timeline[i]);
+            var tootControl = new TootControl(timeline[i], MastodonClient);
             TootsPanel.Children.Add(tootControl);
         }
         myButton.Content = "Refresh";
