@@ -96,7 +96,9 @@
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" MinWidth="700" Padding="10"/>
+                    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled">
+                        <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" MinWidth="700" Padding="10"/>
+                    </ScrollViewer>
                     <TextBox x:Name="InstanceBox" PlaceholderText="Instance"/>
                     <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
                     <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>

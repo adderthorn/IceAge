@@ -28,7 +28,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private string _username;
     private string _displayName;
     private readonly MastodonClient _client;
-    private readonly string _content;
     private DateTime _created;
     private Status _status;
     private readonly RichTextInterop _interop;
