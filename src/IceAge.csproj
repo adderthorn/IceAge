@@ -15,6 +15,7 @@
     <None Remove="Assets\Default.htm" />
     <None Remove="Controls\NewTootControl.xaml" />
     <None Remove="Controls\TootControl.xaml" />
+    <None Remove="LoginPage.xaml" />
     <None Remove="NewTootWindow.xaml" />
   </ItemGroup>
 
@@ -64,6 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!-- 

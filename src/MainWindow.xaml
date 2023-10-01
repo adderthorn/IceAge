@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="TitleBarStates">
@@ -59,7 +59,7 @@
             </StackPanel>
         </Border>
         <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2"  Canvas.ZIndex="0"
-                        IsTabStop="False" IsTitleBarAutoPaddingEnabled="True">
+                        IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" HorizontalAlignment="Stretch">
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Home" Content="Home" Icon="Home" />
                 <NavigationViewItem Tag="Notifiations">
@@ -94,15 +94,15 @@
                     </StackPanel>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Frame x:Name="ContentFrame" HorizontalAlignment="Stretch">
+                <!--<StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled">
                         <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" MinWidth="700" Padding="10"/>
                     </ScrollViewer>
                     <TextBox x:Name="InstanceBox" PlaceholderText="Instance"/>
                     <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
                     <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-                </StackPanel>
+                </StackPanel>-->
             </Frame>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
