@@ -22,7 +22,8 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private bool _isFavorite;
     private bool _isBoosted;
     private bool _lockedAccount;
-    private long _boostedCount = 1540;
+    private long _boostedCount;
+    private long _replyCount;
     private bool _isNavigatingToNewPage = false;
     private string _profileImageUrl;
     private string _username;
@@ -61,6 +62,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             _interop.Content = Status.Content;
             IsFavorite = Status.Favourited.Value;
             IsBoosted = Status.Reblogged.Value;
+            ReplyCount = Status.RepliesCount;
             BoostedCount = Status.ReblogCount;
             LockedAccount = Status.Account.Locked;
             ProfileImageUrl = Status.Account.AvatarUrl;
@@ -218,7 +220,30 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
     }
 
-    public string ReplyCount => "1+";
+    public long ReplyCount
+    {
+        get => _replyCount;
+        set
+        {
+            if (_replyCount == value) return;
+            _replyCount = value;
+            NotifyPropertyChanged(nameof(ReplyCount));
+            NotifyPropertyChanged(nameof(ReplyCountText));
+        }
+    }
+
+    public string ReplyCountText
+    {
+        get
+        {
+            if (ReplyCount <= 0)
+                return string.Empty;
+            else if (ReplyCount == 1)
+                return "1";
+            else
+                return "1+";
+        }
+    }
 
     public Microsoft.UI.Xaml.Visibility BoostedCountVisibility => BoostedCount > 0 ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 

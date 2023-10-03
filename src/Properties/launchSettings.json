@@ -5,7 +5,8 @@
       "nativeDebugging": true
     },
     "IceAge (Unpackaged)": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": true
     }
   }
 }

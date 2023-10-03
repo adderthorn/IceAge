@@ -15,8 +15,8 @@
     <UserControl.Resources>
         <conv:StringFormatConverter x:Key="StringFormatConverter"/>
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal" Margin="0,10" Visibility="{x:Bind IsBoostOrReply}">
+    <StackPanel Orientation="Vertical" BorderBrush="{ThemeResource SystemColorControlAccentBrush}" BorderThickness="0,0,0,1" Margin="0,15,0,0">
+        <StackPanel Orientation="Horizontal" Visibility="{x:Bind BoostedCountVisibility, Mode=OneWay}">
             <FontIcon Glyph="&#xE97A;" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
             <TextBlock Margin="10,0,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
         </StackPanel>
@@ -48,18 +48,13 @@
             <TextBlock Text="{x:Bind Username, Mode=OneWay}" Grid.Column="1" Grid.Row="1"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
         </Grid>
-        <!--<TextBlock TextWrapping="WrapWholeWords" Margin="0,5,0,5" IsTextSelectionEnabled="True">
-		In 1997, billionaires deserved no pity because they owned planes.<LineBreak/><LineBreak/>Today, they own more satellites than The Pentagon.<LineBreak/><LineBreak/>I wonder what gazillionaires will own in 20 years that makes us go, "Never feel sorry for a man who owns a....what? Planet? Moon?
-        </TextBlock>-->
-        <!--<WebView2 x:Name="ContentWebView" Margin="0,5,0,5" Width="700" Height="200" Loaded="NavToDisplayContent"
-                  DefaultBackgroundColor="Transparent" CanDrag="False" NavigationStarting="ContentWebView_NavigationStarting"/>-->
-        <RichTextBlock x:Name="ContentBlock" Margin="0,5,0,5" Width="700" CanDrag="False" TextWrapping="WrapWholeWords"/>
-        <toolkit:UniformGrid Orientation="Horizontal" Rows="1" Margin="0,5,0,5">
+        <RichTextBlock x:Name="ContentBlock" Margin="0,5,0,5" CanDrag="False" TextWrapping="WrapWholeWords"/>
+        <toolkit:UniformGrid Orientation="Horizontal" Rows="1" Margin="0,5,0,15">
             <Button x:Name="ReplyButton" HorizontalAlignment="Left" BorderThickness="0" PointerEntered="ActionButton_PointerEntered">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <FontIcon Glyph="&#xE97A;"/>
-                        <TextBlock Margin="5,0,0,0" Text="{x:Bind ReplyCount}"/>
+                        <FontIcon Glyph="&#xE97A;" Margin="0,0,0,5"/>
+                        <TextBlock Text="{x:Bind ReplyCountText}"/>
                     </StackPanel>
                 </Button.Content>
             </Button>

@@ -88,7 +88,7 @@ public sealed partial class MainWindow : Window
         MastodonClient ??= new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, HttpClient);
         var timeline = await MastodonClient.GetHomeTimeline();
         TootsPanel.Children.Clear();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < timeline.Count; i++)
         {
             var tootControl = new TootControl(timeline[i], MastodonClient);
             TootsPanel.Children.Add(tootControl);

@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IceAge"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:IceAge.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:IceAge.Controls"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -95,14 +96,21 @@
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled">
-                        <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" MinWidth="700" Padding="10"/>
+                <Grid Margin="0,36,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled"
+                                  VerticalScrollBarVisibility="Visible">
+                        <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="10"/>
                     </ScrollViewer>
-                    <TextBox x:Name="InstanceBox" PlaceholderText="Instance"/>
-                    <TextBox x:Name="AuthCodeBox" PlaceholderText="AuthCode"/>
-                    <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-                </StackPanel>
+                    <TextBox x:Name="InstanceBox" Grid.Row="1" PlaceholderText="Instance"/>
+                    <TextBox x:Name="AuthCodeBox" Grid.Row="2" PlaceholderText="AuthCode"/>
+                    <Button x:Name="myButton" Grid.Row="3" Click="myButton_Click">Click Me</Button>
+                </Grid>
             </Frame>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
