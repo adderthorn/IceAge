@@ -16,6 +16,7 @@
     <None Remove="Assets\LaunchImage.png" />
     <None Remove="Controls\NewTootControl.xaml" />
     <None Remove="Controls\TootControl.xaml" />
+    <None Remove="LoginPage.xaml" />
     <None Remove="NewTootWindow.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="WelcomeWindow.xaml" />
@@ -67,6 +68,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Themes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="WelcomeWindow.xaml">

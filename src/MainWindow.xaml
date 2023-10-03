@@ -109,7 +109,6 @@
                     </ScrollViewer>
                     <TextBox x:Name="InstanceBox" Grid.Row="1" PlaceholderText="Instance"/>
                     <TextBox x:Name="AuthCodeBox" Grid.Row="2" PlaceholderText="AuthCode"/>
-                    <Button x:Name="myButton" Grid.Row="3" Click="myButton_Click">Click Me</Button>
                 </Grid>
             </Frame>
             <NavigationView.FooterMenuItems>
