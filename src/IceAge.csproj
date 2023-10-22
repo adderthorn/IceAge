@@ -67,6 +67,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Pages\" />
     <Folder Include="Themes\" />
   </ItemGroup>
   <ItemGroup>
@@ -93,4 +94,10 @@
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
   </PropertyGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\source\IceAge\src\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\source\IceAge\src\.editorconfig" />
+  </ItemGroup>
 </Project>

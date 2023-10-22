@@ -52,50 +52,8 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
-        ContentFrame.Navigate(typeof(LoginPage));
+        ContentFrame.Navigate(typeof(Pages.LoginPage));
     }
-
-    //private async void myButton_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (this.AuthenticationClient == null)
-    //    {
-    //        if (Settings.AppRegistration == null && !string.IsNullOrWhiteSpace(InstanceBox.Text))
-    //        {
-    //            this.AuthenticationClient = new AuthenticationClient(InstanceBox.Text, HttpClient);
-    //        }
-    //        else
-    //        {
-    //            this.AuthenticationClient = new AuthenticationClient(Settings.AppRegistration.Instance, HttpClient);
-    //            Settings.AppRegistration = await AuthenticationClient.CreateApp("IceAge", Scope.Read | Scope.Write | Scope.Follow);
-    //        }
-    //    }
-    //    if (string.IsNullOrWhiteSpace(Settings.AuthCode) && string.IsNullOrWhiteSpace(AuthCodeBox.Text))
-    //    {
-    //        myButton.Content = "Getting Auth Code...";
-    //        var url = AuthenticationClient.OAuthUrl();
-    //        await Windows.System.Launcher.LaunchUriAsync(new Uri(url));
-    //        myButton.Content = "Get Timeline";
-    //        return;
-    //    }
-    //    else if (!string.IsNullOrWhiteSpace(AuthCodeBox.Text))
-    //    {
-    //        Settings.AuthCode = AuthCodeBox.Text;
-    //    }
-    //    myButton.Content = "Getting Toots...";
-    //    if (Settings.Auth == null)
-    //    {
-    //        Settings.Auth = await AuthenticationClient.ConnectWithCode(Settings.AuthCode);
-    //    }
-    //    MastodonClient ??= new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, HttpClient);
-    //    var timeline = await MastodonClient.GetHomeTimeline();
-    //    TootsPanel.Children.Clear();
-    //    for (int i = 0; i < 5; i++)
-    //    {
-    //        var tootControl = new TootControl(timeline[i], MastodonClient);
-    //        TootsPanel.Children.Add(tootControl);
-    //    }
-    //    myButton.Content = "Refresh";
-    //}
 
     private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
     {

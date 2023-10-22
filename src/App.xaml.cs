@@ -53,14 +53,7 @@ public partial class App : Application
     protected async override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         Settings = await Settings.LoadSettingsAsync();
-        if (Settings.AppRegistration == null)
-        {
-            m_window = new WelcomeWindow();
-        }
-        else
-        {
-            m_window = new MainWindow();
-        }
+        m_window = new MainWindow();
         m_window.Activate();
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="IceAge.LoginPage"
+    x:Class="IceAge.Pages.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:IceAge"
@@ -19,19 +19,21 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Right"
-                   VerticalAlignment="Center" FontWeight="Bold">Handle:</TextBlock>
-        <TextBox x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5" PlaceholderText="user@example.com"/>
+                   VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind LabelText, Mode=OneWay}"/>
+        <TextBox x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5" PlaceholderText="user@example.com"
+                 Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}"/>
+        <TextBox x:Name="AutoCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
         <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
-                    Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}">Signup</Button>
+                    Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" Click="SignupButton_Click">Signup</Button>
             <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100"
                     Click="LoginButton_Click" Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}">Login</Button>
-            <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100"
-                    Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}">Continue</Button>
+            <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
+                    Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}">Continue...</Button>
         </Grid>
         <TeachingTip x:Name="InvalidHandleTip" Target="{x:Bind HandleTextBox}"
                      Title="Invalid Handle" Subtitle="Your handle is inavlid, it should be in the format of @user@example.com">
