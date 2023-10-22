@@ -96,6 +96,6 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
         Settings.AppRegistration = await _authClient.CreateApp(kAppName, Scope.Read | Scope.Write | Scope.Follow);
         Settings.AuthCode = AutoCodeTextBox.Text.Trim();
         Settings.Auth = await _authClient.ConnectWithCode(Settings.AuthCode);
-        Frame.Navigate(typeof(MainWindow));
+        Frame.Navigate(typeof(TimelinePage));
     }
 }

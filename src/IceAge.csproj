@@ -18,6 +18,7 @@
     <None Remove="Controls\TootControl.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="NewTootWindow.xaml" />
+    <None Remove="Pages\TimelinePage.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="WelcomeWindow.xaml" />
   </ItemGroup>
@@ -67,7 +68,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Pages\" />
     <Folder Include="Themes\" />
   </ItemGroup>
   <ItemGroup>
@@ -99,5 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="D:\source\IceAge\src\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\TimelinePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

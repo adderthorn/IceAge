@@ -95,22 +95,7 @@
                     </StackPanel>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame">
-                <Grid Margin="0,36,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <ScrollViewer Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled"
-                                  VerticalScrollBarVisibility="Visible">
-                        <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="10"/>
-                    </ScrollViewer>
-                    <TextBox x:Name="InstanceBox" Grid.Row="1" PlaceholderText="Instance"/>
-                    <TextBox x:Name="AuthCodeBox" Grid.Row="2" PlaceholderText="AuthCode"/>
-                </Grid>
-            </Frame>
+            <Frame x:Name="ContentFrame"/>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
                 <NavigationViewItemSeparator/>

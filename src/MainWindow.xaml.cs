@@ -20,6 +20,7 @@ using Mastonet.Entities;
 using System.Threading.Tasks;
 using IceAge.Controls;
 using System.Threading;
+using IceAge.Pages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -52,7 +53,14 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
-        ContentFrame.Navigate(typeof(Pages.LoginPage));
+        if (Settings.Auth != null)
+        {
+            ContentFrame.Navigate(typeof(TimelinePage));
+        }
+        else
+        {
+            ContentFrame.Navigate(typeof(Pages.LoginPage));
+        }
     }
 
     private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
