@@ -42,11 +42,13 @@ public sealed partial class MainWindow : Window
         SystemBackdrop = new MicaBackdrop();
         if (ThisApp.Settings.Auth != null)
         {
+            ThisApp.Auth = ThisApp.Settings.Auth;
+            ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken);
             ContentFrame.Navigate(typeof(TimelinePage));
         }
         else
         {
-            ContentFrame.Navigate(typeof(Pages.LoginPage));
+            ContentFrame.Navigate(typeof(LoginPage));
         }
     }
 

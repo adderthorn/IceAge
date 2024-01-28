@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using HtmlAgilityPack;
 using System.Diagnostics;
+using Microsoft.Windows.ApplicationModel.Resources;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -43,6 +44,8 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
     private bool _waitingOnAuthCode;
     private bool _isLoggingIn;
     private AuthenticationClient _authClient;
+
+    private readonly ResourceLoader resourceLoader;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -87,6 +90,7 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
     {
         this.InitializeComponent();
         ThisApp.HttpClient = new HttpClient();
+        resourceLoader = new ResourceLoader();
         _waitingOnAuthCode = false;
         _isLoggingIn = false;
     }
@@ -121,20 +125,26 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
     private async void LoginButton_Click(object sender, RoutedEventArgs e)
     {
         IsLoggingIn = true;
-        //WaitingOnAuthCode = await AttemptLogin();
         switch (await AttemptLogin())
         {
             case LoginAttemptStatus.InvalidHandle:
+                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/InvalidHandle/Title");
+                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/InvalidHandle/Subtitle");
                 InvalidHandleTip.IsOpen = true;
                 break;
             case LoginAttemptStatus.UnhandledError:
+                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/Error/Title");
+                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/Error/Subtitle");
+                InvalidHandleTip.IsOpen = true;
                 break;
             case LoginAttemptStatus.Failure:
+                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/Failure/Title");
+                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/Failure/Subtitle");
+                InvalidHandleTip.IsOpen = true;
                 break;
             case LoginAttemptStatus.Success:
+                InvalidHandleTip.IsOpen = false;
                 WaitingOnAuthCode = true;
-                break;
-            default:
                 break;
         }
         IsLoggingIn = false;
@@ -150,10 +160,11 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
 
     private async void AuthCodeButton_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(AutoCodeTextBox.Text))
+        if (string.IsNullOrWhiteSpace(AuthCodeTextBox.Text))
             return;
-        ThisApp.Settings.AuthCode = AutoCodeTextBox.Text.Trim();
+        ThisApp.Settings.AuthCode = AuthCodeTextBox.Text.Trim();
         ThisApp.Settings.Auth = await _authClient.ConnectWithCode(ThisApp.Settings.AuthCode);
+        ThisApp.MastodonClient = new MastodonClient(_authClient.Instance, ThisApp.Settings.Auth.AccessToken);
         Frame.Navigate(typeof(TimelinePage));
     }
 
@@ -161,7 +172,14 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
     {
         if (e.Key == Windows.System.VirtualKey.Enter)
         {
-            LoginButton_Click(sender, e);
+            if (WaitingOnAuthCode)
+            {
+                AuthCodeButton_Click(sender, e);
+            }
+            else
+            {
+                LoginButton_Click(sender, e);
+            }
         }
     }
 }
