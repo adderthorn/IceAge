@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -21,7 +22,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Right"
                    VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind LabelText, Mode=OneWay}"/>
         <TextBox x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5" PlaceholderText="user@example.com"
-                 Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}"/>
+                 Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" KeyUp="HandleTextBox_KeyUp"/>
         <TextBox x:Name="AutoCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
         <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
             <Grid.ColumnDefinitions>
@@ -29,9 +30,16 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
-                    Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" Click="SignupButton_Click">Signup</Button>
+                    Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" Click="SignupButton_Click"
+                    IsEnabled="{x:Bind NotLoggingIn}">Signup</Button>
             <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100"
-                    Click="LoginButton_Click" Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}">Login</Button>
+                    Click="LoginButton_Click" Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}"
+                    IsEnabled="{x:Bind NotLoggingIn}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Visibility="{x:Bind NotLoggingIn}">Login</TextBlock>
+                    <ProgressRing Height="10" Width="10" Visibility="{x:Bind IsLoggingIn}"/>
+                </StackPanel>
+            </Button>
             <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
                     Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}">Continue...</Button>
         </Grid>

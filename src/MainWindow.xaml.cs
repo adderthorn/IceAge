@@ -31,29 +31,16 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    public HttpClient HttpClient
-    {
-        get; set;
-    }
-    public MastodonClient MastodonClient
-    {
-        get; set;
-    }
-    public AuthenticationClient AuthenticationClient
-    {
-        get; set;
-    }
-
-    public Settings Settings => (App.Current as App).Settings;
+    public App ThisApp => App.Current as App;
 
     public MainWindow()
     {
         this.InitializeComponent();
-        this.HttpClient = new HttpClient();
+        ThisApp.HttpClient = new HttpClient();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
-        if (Settings.Auth != null)
+        if (ThisApp.Settings.Auth != null)
         {
             ContentFrame.Navigate(typeof(TimelinePage));
         }
