@@ -57,7 +57,11 @@ internal class RichTextInterop
                         paragraph.Inlines.Add(new LineBreak());
                         break;
                     default:
-                        paragraph.Inlines.Add(GetRun(child));
+                        var run = GetRun(child);
+                        if (run != null)
+                        {
+                            paragraph.Inlines.Add(run);
+                        }
                         break;
                 }
                 if (child.HasChildNodes)
