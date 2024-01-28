@@ -12,6 +12,15 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using IceAge.Interconnect;
+using System.Net.Http;
+using Mastonet;
+using System.Diagnostics;
+using Mastonet.Entities;
+using System.Threading.Tasks;
+using IceAge.Controls;
+using System.Threading;
+using IceAge.Pages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -22,13 +31,33 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
+    public App ThisApp => App.Current as App;
+
     public MainWindow()
     {
         this.InitializeComponent();
+        ThisApp.HttpClient = new HttpClient();
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
+        SystemBackdrop = new MicaBackdrop();
+        if (ThisApp.Settings.Auth != null)
+        {
+            ThisApp.Auth = ThisApp.Settings.Auth;
+            ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken);
+            ContentFrame.Navigate(typeof(TimelinePage));
+        }
+        else
+        {
+            ContentFrame.Navigate(typeof(LoginPage));
+        }
     }
 
-    private void myButton_Click(object sender, RoutedEventArgs e)
+    private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
     {
-        myButton.Content = "Clicked";
+        // C# code to create a new window
+        var newWindow = new NewTootWindow();
+        newWindow.Activate();
+
+        // C# code to navigate in the new window
     }
 }

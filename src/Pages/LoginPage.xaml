@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="IceAge.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:IceAge"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid VerticalAlignment="Center" MaxWidth="400">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Right"
+                   VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind LabelText, Mode=OneWay}"/>
+        <TextBox x:Uid="HandleTextBox" x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5"
+                 Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" KeyUp="HandleTextBox_KeyUp"
+                 IsEnabled="{x:Bind NotLoggingIn, Mode=OneWay}"/>
+        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
+                    Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" Click="SignupButton_Click"
+                    x:Uid="SignupButton" IsEnabled="{x:Bind NotLoggingIn, Mode=OneWay}"/>
+            <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100"
+                    Click="LoginButton_Click" Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}"
+                    IsEnabled="{x:Bind NotLoggingIn, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Uid="LoginButtonContent" Visibility="{x:Bind NotLoggingIn, Mode=OneWay}"/>
+                    <ProgressRing Height="10" Width="10" Visibility="{x:Bind IsLoggingIn, Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
+                    x:Uid="AuthCodeButton" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
+        </Grid>
+        <TeachingTip x:Name="InvalidHandleTip" Target="{x:Bind HandleTextBox}">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Flag"/>
+            </TeachingTip.IconSource>
+        </TeachingTip>
+    </Grid>
+</Page>

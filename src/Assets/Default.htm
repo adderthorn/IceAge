@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script type="text/javascript">
+            function setText(content) {
+                document.getElementById('main').innerHTML = content;
+                return;
+            }
+        </script>
+        <style type="text/css">
+            body {
+                    font-family: 'Segoe UI', sans-serif;
+                    font-size: 12pt;
+                }
+
+            .light {
+                color: black;
+            }
+
+            .invisible {
+                font-size: 0;
+                line-height: 0;
+                display: inline-block;
+                width: 0;
+                height: 0;
+                position: absolute;
+            }
+
+            .ellipsis::after {
+                content: '…';
+            }
+        </style>
+        <title>Toot</title>
+    </head>
+    <body>
+        <div class="light" id="main">&nbsp;</div>
+    </body>
+</html>
