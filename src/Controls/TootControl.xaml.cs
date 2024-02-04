@@ -10,6 +10,7 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -293,5 +294,10 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         args.Cancel = true;
         await Launcher.LaunchUriAsync(new Uri(args.Uri));
         _isNavigatingToNewPage = false;
+    }
+
+    private void StackPanel_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        Debug.WriteLine(Status);
     }
 }

@@ -16,6 +16,12 @@
         <conv:StringFormatConverter x:Key="StringFormatConverter"/>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical" BorderBrush="{ThemeResource SystemColorControlAccentBrush}" BorderThickness="0,0,0,1" Margin="0,15,0,0">
+        <StackPanel Orientation="Horizontal" Margin="0,5">
+            <SymbolIcon Symbol="ReShare" Margin="5,0"/>
+            <TextBlock TextDecorations="Underline" Text="{x:Bind DisplayName, Mode=OneWay}"
+                       PointerEntered="ActionButton_PointerEntered"/>
+            <TextBlock Margin="4,0">boosted</TextBlock>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Visibility="{x:Bind BoostedCountVisibility, Mode=OneWay}">
             <FontIcon Glyph="&#xE97A;" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
             <TextBlock Margin="10,0,0,0" Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
@@ -37,7 +43,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{x:Bind DisplayName, Mode=OneWay}" Grid.Column="0"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" DoubleTapped="StackPanel_DoubleTapped">
                     <ToolTipService.ToolTip>
                         <ToolTip Content="{x:Bind Created}"/>
                     </ToolTipService.ToolTip>
