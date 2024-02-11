@@ -52,7 +52,9 @@ public sealed partial class TimelinePage : Page
             TootControl toot = new(item, ThisApp.MastodonClient);
             TootsPanel.Children.Add(toot);
         }
-        await Streaming.Start();
+        // TODO: need to fix this, right now streaming will close after some time without warning
+        // and throw an exception
+        //await Streaming.Start();
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)

@@ -120,6 +120,9 @@
   <data name="AuthCodeButton.Content" xml:space="preserve">
     <value>Continue...</value>
   </data>
+  <data name="BoostedBlock.Text" xml:space="preserve">
+    <value>boosted</value>
+  </data>
   <data name="HandleTextBox.PlaceholderText" xml:space="preserve">
     <value>user@example.com</value>
   </data>
