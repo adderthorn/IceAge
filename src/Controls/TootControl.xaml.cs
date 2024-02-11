@@ -26,9 +26,12 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private long _boostedCount;
     private long _replyCount;
     private bool _isNavigatingToNewPage = false;
+    private bool _isContentBoost;
     private string _profileImageUrl;
     private string _username;
     private string _displayName;
+    private string _originalUsername;
+    private string _originalDisplayName;
     private readonly MastodonClient _client;
     private DateTime _created;
     private Status _status;
@@ -44,6 +47,10 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         _timer.Interval = TimeSpan.FromSeconds(30);
         _timer.Tick += (s, e) =>
         {
+            if (Created.AddHours(2) <= DateTime.Now)
+            {
+                _timer.Stop();
+            }
             NotifyPropertyChanged(nameof(Created));
             NotifyPropertyChanged(nameof(CreatedTimeAgo));
         };
@@ -57,24 +64,57 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         {
             if (_status == value)
                 return;
-            if (_timer.IsEnabled)
-                _timer.Stop();
-            _status = value;
-            _interop.Content = Status.Content;
-            IsFavorite = Status.Favourited.Value;
-            IsBoosted = Status.Reblogged.Value;
-            ReplyCount = Status.RepliesCount;
-            BoostedCount = Status.ReblogCount;
+            setStatusContent(value);
+            NotifyPropertyChanged(nameof(Status));
+        }
+    }
+
+    private void setStatusContent(Status value)
+    {
+        if (_timer.IsEnabled)
+            _timer.Stop();
+        _status = value;
+        IsFavorite = Status.Favourited.Value;
+        IsBoosted = Status.Reblogged.Value;
+        ReplyCount = Status.RepliesCount;
+        BoostedCount = Status.ReblogCount;
+        Created = Status.CreatedAt;
+        OriginalDisplayName = Status.Account.DisplayName;
+        OriginalUsername = $"@{Status.Account.AccountName}";
+
+        if (Status.Reblog == null)
+        {
             LockedAccount = Status.Account.Locked;
             ProfileImageUrl = Status.Account.AvatarUrl;
             Username = $"@{Status.Account.AccountName}";
             DisplayName = Status.Account.DisplayName;
-            Created = Status.CreatedAt;
-            _timer.Start();
+            _interop.Content = Status.Content;
+            IsContentBoost = false;
         }
+        else
+        {
+            LockedAccount = Status.Reblog.Account.Locked;
+            ProfileImageUrl = Status.Reblog.Account.AvatarUrl;
+            Username = $"@{Status.Reblog.Account.AccountName}";
+            DisplayName = Status.Reblog.Account.DisplayName;
+            _interop.Content = Status.Reblog.Content;
+            IsContentBoost = true;
+        }
+
+        _timer.Start();
     }
 
-    public bool IsBoostOrReply => true;
+    public bool IsContentBoost
+    {
+        get => _isContentBoost;
+        set
+        {
+            if ( _isContentBoost == value)
+                return;
+            _isContentBoost = value;
+            NotifyPropertyChanged(nameof(IsContentBoost));
+        }
+    }
 
     public bool IsFavorite
     {
@@ -111,7 +151,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                 return;
             _boostedCount = value;
             NotifyPropertyChanged(nameof(BoostedCount));
-            NotifyPropertyChanged(nameof(BoostedCountVisibility));
         }
     }
 
@@ -173,6 +212,30 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                 return;
             _displayName = value;
             NotifyPropertyChanged(nameof(DisplayName));
+        }
+    }
+
+    public string OriginalUsername
+    {
+        get => _originalUsername;
+        set
+        {
+            if (value == _originalUsername)
+                return;
+            _originalUsername = value;
+            NotifyPropertyChanged(nameof(OriginalUsername));
+        }
+    }
+
+    public string OriginalDisplayName
+    {
+        get => _originalDisplayName;
+        set
+        {
+            if (OriginalDisplayName == value)
+                return;
+            _originalDisplayName = value;
+            NotifyPropertyChanged(nameof(OriginalDisplayName));
         }
     }
 
@@ -245,8 +308,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                 return "1+";
         }
     }
-
-    public Microsoft.UI.Xaml.Visibility BoostedCountVisibility => BoostedCount > 0 ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 
     public FontWeight BoostedWeight => IsBoosted ? FontWeights.Bold : FontWeights.Normal;
 

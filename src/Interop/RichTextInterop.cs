@@ -8,12 +8,13 @@ using HtmlAgilityPack;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Text;
 using Windows.UI.Text;
+using System.Diagnostics;
 
 namespace IceAge.Interop;
 internal class RichTextInterop
 {
     private string _content;
-    private HtmlDocument _htmlDocument;
+    private readonly HtmlDocument _htmlDocument;
 
     public RichTextBlock RichTextBlock { get; set; }
     public string Content
@@ -78,7 +79,7 @@ internal class RichTextInterop
     {
         if (string.IsNullOrWhiteSpace(node.InnerText))
             return null;
-        var run = new Run { Text = node.InnerText };
+        var run = new Run { Text = HtmlEntity.DeEntitize(node.InnerText) };
         switch (node.Name.ToLower())
         {
             case "em":
