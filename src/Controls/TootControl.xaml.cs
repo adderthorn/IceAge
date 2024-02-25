@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Timers;
+using System.Linq;
 using IceAge.Interop;
 using Mastonet;
 using Mastonet.Entities;
@@ -10,7 +11,6 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -69,7 +69,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
     }
 
-    private void setStatusContent(Status value)
+    private async void setStatusContent(Status value)
     {
         if (_timer.IsEnabled)
             _timer.Stop();
@@ -81,6 +81,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         Created = Status.CreatedAt;
         OriginalDisplayName = Status.Account.DisplayName;
         OriginalUsername = $"@{Status.Account.AccountName}";
+        List<Attachment> mediaAttachments;
 
         if (Status.Reblog == null)
         {
@@ -90,6 +91,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             DisplayName = Status.Account.DisplayName;
             _interop.Content = Status.Content;
             IsContentBoost = false;
+            mediaAttachments = Status.MediaAttachments.ToList();
         }
         else
         {
@@ -99,6 +101,31 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             DisplayName = Status.Reblog.Account.DisplayName;
             _interop.Content = Status.Reblog.Content;
             IsContentBoost = true;
+            mediaAttachments = Status.Reblog.MediaAttachments.ToList();
+        }
+
+        if (mediaAttachments?.Count > 0)
+        {
+            var bitmapIrrop = new BitmapInterop(200, 200);
+            foreach (var item in mediaAttachments)
+            {
+                switch (item.Type)
+                {
+                    case "image":
+                        var img = new Image() { Width = 200, Height = 200 };
+                        img.Source = await bitmapIrrop.CreateImageFromBlurhashAsync(item.BlurHash);
+                        AttachmentBlock.Items.Add(img);
+                        break;
+                    case "gifv":
+                        break;
+                    case "video":
+                        break;
+                    case "audio":
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         _timer.Start();
