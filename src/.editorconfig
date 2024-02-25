@@ -74,7 +74,7 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
 [*.cs]
 csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_simple_using_statement = true:warning
+csharp_prefer_simple_using_statement = false
 csharp_prefer_braces = true:suggestion
 csharp_style_namespace_declarations = file_scoped:warning
 csharp_style_prefer_method_group_conversion = true:silent

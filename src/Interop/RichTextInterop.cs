@@ -77,7 +77,7 @@ internal class RichTextInterop
 
     private Run GetRun(HtmlNode node)
     {
-        if (string.IsNullOrWhiteSpace(node.InnerText))
+        if (string.IsNullOrEmpty(node.InnerText))
             return null;
         var run = new Run { Text = HtmlEntity.DeEntitize(node.InnerText) };
         switch (node.Name.ToLower())

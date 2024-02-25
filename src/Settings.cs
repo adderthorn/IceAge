@@ -88,7 +88,7 @@ public class Settings : INotifyPropertyChanged
         {
             file = await localFolder.CreateFileAsync(FILE_NAME);
             var settings = new Settings();
-            await settings.saveAsync();
+            await settings.saveAsync(file);
             return settings;
         }
     }
@@ -108,10 +108,19 @@ public class Settings : INotifyPropertyChanged
 
     private async Task saveAsync()
     {
-        if (!_canSave) return;
+        if (!_canSave)
+            return;
         _canSave = false;
         var localFolder = ApplicationData.Current.LocalFolder;
         var file = await localFolder.GetFileAsync(FILE_NAME);
+        await saveAsync(file);
+    }
+
+    private async Task saveAsync(StorageFile file)
+    {
+        if (!_canSave)
+            return;
+        _canSave = false;
         using (StreamWriter streamWriter = new StreamWriter(await file.OpenStreamForWriteAsync(), new UTF8Encoding(false)))
         using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
         {
