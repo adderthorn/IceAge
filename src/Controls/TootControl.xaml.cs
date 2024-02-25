@@ -11,6 +11,7 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -82,6 +83,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         OriginalDisplayName = Status.Account.DisplayName;
         OriginalUsername = $"@{Status.Account.AccountName}";
         List<Attachment> mediaAttachments;
+        bool isSensitive = Status.Sensitive == true || Status.Reblog?.Sensitive == true;
 
         if (Status.Reblog == null)
         {
@@ -106,14 +108,20 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
 
         if (mediaAttachments?.Count > 0)
         {
-            var bitmapIrrop = new BitmapInterop(200, 200);
             foreach (var item in mediaAttachments)
             {
                 switch (item.Type)
                 {
                     case "image":
-                        var img = new Image() { Width = 200, Height = 200 };
-                        img.Source = await bitmapIrrop.CreateImageFromBlurhashAsync(item.BlurHash);
+                        uint width = (uint)(item.Meta.Small.Width ?? 200);
+                        uint height = (uint)(item.Meta.Small.Height ?? 200);
+
+                        if (mediaAttachments.Count > 1)
+                        {
+                            width = height = 200;
+                        }
+
+                        var img = new MediaAttachmentControl(item, isSensitive, width, height);
                         AttachmentBlock.Items.Add(img);
                         break;
                     case "gifv":
