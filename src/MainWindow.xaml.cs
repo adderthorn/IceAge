@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using IceAge.Controls;
 using System.Threading;
 using IceAge.Pages;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -49,6 +50,21 @@ public sealed partial class MainWindow : Window
         else
         {
             ContentFrame.Navigate(typeof(LoginPage));
+        }
+
+        this.AppWindow.Closing += async (s, e) =>
+        {
+            if (AppWindow.Size.Width > 0 && AppWindow.Size.Height > 0)
+            {
+                var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
+                ThisApp.Settings.WindowSizeAndPosition = rect;
+                await ThisApp.Settings.SaveAsync();
+            }
+        };
+
+        if (ThisApp.Settings.WindowSizeAndPosition.Width > 0 && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
+        {
+            AppWindow.MoveAndResize(ThisApp.Settings.WindowSizeAndPosition);
         }
     }
 

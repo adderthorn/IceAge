@@ -123,6 +123,9 @@
   <data name="BoostedBlock.Text" xml:space="preserve">
     <value>boosted</value>
   </data>
+  <data name="BotToolTip.Content" xml:space="preserve">
+    <value>Bot Account</value>
+  </data>
   <data name="HandleTextBox.PlaceholderText" xml:space="preserve">
     <value>user@example.com</value>
   </data>

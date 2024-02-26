@@ -10,6 +10,7 @@ using Mastonet.Entities;
 using System.Xml.Linq;
 using System.IO;
 using Mastonet;
+using Windows.Graphics;
 
 namespace IceAge;
 
@@ -22,6 +23,7 @@ public class Settings : INotifyPropertyChanged
     private AppRegistration _appRegistration;
     private string _authCode;
     private Auth _auth;
+    private RectInt32 _windowSizeAndPosition;
     #endregion
 
     #region Public Properties
@@ -38,7 +40,7 @@ public class Settings : INotifyPropertyChanged
             if (_appRegistration == value) return;
             _appRegistration = value;
             RaisePropertyChanged(nameof(AppRegistration));
-            saveAsync().ConfigureAwait(false);
+            SaveAsync().ConfigureAwait(false);
         }
     }
 
@@ -50,7 +52,7 @@ public class Settings : INotifyPropertyChanged
             if (_authCode == value) return;
             _authCode = value;
             RaisePropertyChanged(nameof(AuthCode));
-            saveAsync().ConfigureAwait(false);
+            SaveAsync().ConfigureAwait(false);
         }
     }
 
@@ -62,7 +64,18 @@ public class Settings : INotifyPropertyChanged
             if (_auth == value) return;
             _auth = value;
             RaisePropertyChanged(nameof(Auth));
-            saveAsync().ConfigureAwait(false);
+            SaveAsync().ConfigureAwait(false);
+        }
+    }
+
+    public RectInt32 WindowSizeAndPosition
+    {
+        get => _windowSizeAndPosition;
+        set
+        {
+            if (value == _windowSizeAndPosition) return;
+            _windowSizeAndPosition = value;
+            RaisePropertyChanged(nameof(WindowSizeAndPosition));
         }
     }
     #endregion
@@ -106,11 +119,8 @@ public class Settings : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private async Task saveAsync()
+    public async Task SaveAsync()
     {
-        if (!_canSave)
-            return;
-        _canSave = false;
         var localFolder = ApplicationData.Current.LocalFolder;
         var file = await localFolder.GetFileAsync(FILE_NAME);
         await saveAsync(file);

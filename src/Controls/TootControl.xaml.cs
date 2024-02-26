@@ -28,6 +28,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private long _replyCount;
     private bool _isNavigatingToNewPage = false;
     private bool _isContentBoost;
+    private bool _isBotAccount;
     private string _profileImageUrl;
     private string _username;
     private string _displayName;
@@ -70,13 +71,14 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
     }
 
-    private async void setStatusContent(Status value)
+    private void setStatusContent(Status value)
     {
         if (_timer.IsEnabled)
             _timer.Stop();
         _status = value;
         IsFavorite = Status.Favourited.Value;
         IsBoosted = Status.Reblogged.Value;
+        IsBotAccount = Status.Account.Bot == true;
         ReplyCount = Status.RepliesCount;
         BoostedCount = Status.ReblogCount;
         Created = Status.CreatedAt;
@@ -122,6 +124,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                         }
 
                         var img = new MediaAttachmentControl(item, isSensitive, width, height);
+                        img.Tapped += Img_Tapped;
                         AttachmentBlock.Items.Add(img);
                         break;
                     case "gifv":
@@ -137,6 +140,11 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
 
         _timer.Start();
+    }
+
+    private void Img_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+
     }
 
     public bool IsContentBoost
@@ -341,6 +349,17 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                 return "1";
             else
                 return "1+";
+        }
+    }
+
+    public bool IsBotAccount
+    {
+        get => _isBotAccount;
+        set
+        {
+            if (_isBotAccount == value) return;
+            _isBotAccount = value;
+            NotifyPropertyChanged(nameof(IsBotAccount));
         }
     }
 
