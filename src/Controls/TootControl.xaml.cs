@@ -142,9 +142,14 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         _timer.Start();
     }
 
-    private void Img_Tapped(object sender, TappedRoutedEventArgs e)
+    private async void Img_Tapped(object sender, TappedRoutedEventArgs e)
     {
-
+        var img = sender as MediaAttachmentControl;
+        var dialog = new ImageContentDialog(img.MediaAttachment)
+        {
+            XamlRoot = this.XamlRoot
+        };
+        await dialog.ShowAsync();
     }
 
     public bool IsContentBoost

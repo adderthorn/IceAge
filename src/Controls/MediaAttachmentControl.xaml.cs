@@ -20,6 +20,7 @@ using Windows.UI.WebUI;
 using Windows.Graphics.Imaging;
 using System.Threading.Tasks;
 using ABI.Windows.Devices.Geolocation;
+using Blurhash;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -27,9 +28,6 @@ using ABI.Windows.Devices.Geolocation;
 namespace IceAge.Controls;
 public sealed partial class MediaAttachmentControl : UserControl, INotifyPropertyChanged
 {
-    private const double DPI = 96;
-    private const uint DEFAULT_WIDTH_HEIGHT = 200;
-
     private readonly Attachment _mediaAttachment;
     private bool _isSensitive;
     private uint _width;
@@ -109,8 +107,10 @@ public sealed partial class MediaAttachmentControl : UserControl, INotifyPropert
     private async void initImage()
     {
         var img = new BitmapImage();
+        Pixel[,] pixels = new Pixel[_width, _height];
+        Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
         
-        await img.SetSourceAsync(await createBitmapStreamFromBlurAsync());
+        await img.SetSourceAsync(await pixels.CreateStreamAsync());
         DisplayImage.Source = img;
 
         if (!IsSensitive)
@@ -120,38 +120,11 @@ public sealed partial class MediaAttachmentControl : UserControl, INotifyPropert
             previewImg.ImageFailed += async (s, e) =>
             {
                 var failedImg = s as BitmapImage;
-                await failedImg.SetSourceAsync(await createBitmapStreamFromBlurAsync());
+                await failedImg.SetSourceAsync(await pixels.CreateStreamAsync());
             };
             previewImg.UriSource = new Uri(MediaAttachment.PreviewUrl);
             DisplayImage.Source = previewImg;
         }
-    }
-
-    private async Task<IRandomAccessStream> createBitmapStreamFromBlurAsync()
-    {
-        Blurhash.Pixel[,] pixels = new Blurhash.Pixel[_width, _height];
-        Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
-        var stream = new InMemoryRandomAccessStream();
-
-        var pixelData = new byte[_width * _height * 4];
-        int i = 0;
-
-        for (var y = 0; y < _height; y++)
-        for (var x = 0; x < _width; x++)
-        {
-                var pixel = pixels[x, y];
-                pixelData[i++] = pixel.Blue.AssRgb();
-                pixelData[i++] = pixel.Green.AssRgb();
-                pixelData[i++] = pixel.Red.AssRgb();
-                pixelData[i++] = 0;
-        }
-
-        var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.BmpEncoderId, stream);
-        encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, _width, _height, DPI, DPI, pixelData);
-        await encoder.FlushAsync();
-
-        stream.Seek(0);
-        return stream;
     }
 
     private void NotifyPropertyChanged(string propertyName) =>
