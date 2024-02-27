@@ -39,9 +39,12 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
                 _mediaAttachment = value;
                 NotifyPropertyChanged(nameof(MediaAttachment));
                 NotifyPropertyChanged(nameof(BitmapImage));
+                NotifyPropertyChanged(nameof(HasAltText));
             }
         }
     }
+
+    public bool HasAltText => _mediaAttachment.Description?.Length > 0;
 
     public ImageContentDialog(Attachment MediaAttachment)
     {

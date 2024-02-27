@@ -12,11 +12,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Image x:Name="DisplayImage" Grid.RowSpan="2"/>
+        <Image x:Name="DisplayImage" Grid.RowSpan="3"/>
         <Button x:Name="CloseButton" HorizontalAlignment="Right" Margin="5"
-                Tapped="CloseButton_Tapped">
+                Tapped="CloseButton_Tapped" Grid.Row="0">
             <SymbolIcon Symbol="Cancel"/>
         </Button>
+        <Rectangle Visibility="{x:Bind HasAltText, Mode=OneWay}" Fill="{ThemeResource OverlayAcrylicBrush}" Grid.Row="2"/>
+        <TextBlock Grid.Row="2" Text="{x:Bind MediaAttachment.Description, Mode=OneWay}"
+                   TextWrapping="WrapWholeWords" Margin="5" Foreground="White" IsTextSelectionEnabled="True"/>
     </Grid>
 </ContentDialog>
