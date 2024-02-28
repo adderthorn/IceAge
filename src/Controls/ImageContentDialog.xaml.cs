@@ -1,17 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System.ComponentModel;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Mastonet.Entities;
@@ -25,7 +14,6 @@ namespace IceAge.Controls;
 public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyChanged
 {
     private Attachment _mediaAttachment;
-    private bool isLoaded;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -50,7 +38,6 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
     {
         this.InitializeComponent();
         this.MediaAttachment = MediaAttachment;
-        isLoaded = false;
         initImage();
     }
 
@@ -69,18 +56,10 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
         Pixel[,] pixels = new Pixel[width, height];
         Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
         var image = new BitmapImage();
-        image.ImageOpened += Image_ImageOpened;
         await image.SetSourceAsync(await pixels.CreateStreamAsync());
-        DisplayImage.Source = image;
-    }
-
-    private void Image_ImageOpened(object sender, RoutedEventArgs e)
-    {
-        if (!isLoaded)
-        {
-            var img = sender as BitmapImage;
-            img.UriSource = new Uri(MediaAttachment.Url);
-            isLoaded = true;
-        }
+        BlurImage.Source = image;
+        
+        var remoteImg = new BitmapImage() { UriSource = new Uri(MediaAttachment.Url) };
+        RemoteImage.Source = remoteImg;
     }
 }

@@ -26,7 +26,7 @@ using Blurhash;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace IceAge.Controls;
-public sealed partial class MediaAttachmentControl : UserControl, INotifyPropertyChanged
+public sealed partial class ImageAttachmentControl : UserControl, INotifyPropertyChanged
 {
     private readonly Attachment _mediaAttachment;
     private bool _isSensitive;
@@ -93,7 +93,7 @@ public sealed partial class MediaAttachmentControl : UserControl, INotifyPropert
 
     public bool HasAltText => AltText?.Length > 0;
 
-    public MediaAttachmentControl(Attachment attachment, bool isSensitive, uint width, uint height)
+    public ImageAttachmentControl(Attachment attachment, bool isSensitive, uint width, uint height)
     {
         InitializeComponent();
         _mediaAttachment = attachment;

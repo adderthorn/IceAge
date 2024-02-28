@@ -14,7 +14,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Image x:Name="DisplayImage" Grid.RowSpan="3"/>
+        <Image x:Name="BlurImage" Grid.RowSpan="3"/>
+        <Image x:Name="RemoteImage" Grid.RowSpan="3"/>
         <Button x:Name="CloseButton" HorizontalAlignment="Right" Margin="5"
                 Tapped="CloseButton_Tapped" Grid.Row="0">
             <SymbolIcon Symbol="Cancel"/>

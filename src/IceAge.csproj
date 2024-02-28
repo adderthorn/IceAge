@@ -15,8 +15,8 @@
   <ItemGroup>
     <None Remove="Assets\Default.htm" />
     <None Remove="Assets\LaunchImage.png" />
+    <None Remove="Controls\ImageAttachmentControl.xaml" />
     <None Remove="Controls\ImageContentDialog.xaml" />
-    <None Remove="Controls\MediaAttachmentControl.xaml" />
     <None Remove="Controls\NewTootControl.xaml" />
     <None Remove="Controls\TootControl.xaml" />
     <None Remove="LoginPage.xaml" />
@@ -105,7 +105,7 @@
     <None Include="D:\source\IceAge\src\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Controls\MediaAttachmentControl.xaml">
+    <Page Update="Controls\ImageAttachmentControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Controls\ImageContentDialog.xaml">

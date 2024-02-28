@@ -112,22 +112,23 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         {
             foreach (var item in mediaAttachments)
             {
+                uint width = (uint)(item.Meta.Small.Width ?? 200);
+                uint height = (uint)(item.Meta.Small.Height ?? 200);
+
+                if (mediaAttachments.Count > 1)
+                {
+                    width = height = 200;
+                }
+
                 switch (item.Type)
                 {
                     case "image":
-                        uint width = (uint)(item.Meta.Small.Width ?? 200);
-                        uint height = (uint)(item.Meta.Small.Height ?? 200);
-
-                        if (mediaAttachments.Count > 1)
-                        {
-                            width = height = 200;
-                        }
-
-                        var img = new MediaAttachmentControl(item, isSensitive, width, height);
+                        var img = new ImageAttachmentControl(item, isSensitive, width, height);
                         img.Tapped += Img_Tapped;
                         AttachmentBlock.Items.Add(img);
                         break;
                     case "gifv":
+                        
                         break;
                     case "video":
                         break;
@@ -144,7 +145,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
 
     private async void Img_Tapped(object sender, TappedRoutedEventArgs e)
     {
-        var img = sender as MediaAttachmentControl;
+        var img = sender as ImageAttachmentControl;
         var dialog = new ImageContentDialog(img.MediaAttachment)
         {
             XamlRoot = this.XamlRoot
