@@ -44,6 +44,7 @@ public class Settings : INotifyPropertyChanged
         }
     }
 
+    [JsonProperty]
     public string AuthCode
     {
         get => _authCode;
@@ -56,6 +57,7 @@ public class Settings : INotifyPropertyChanged
         }
     }
 
+    [JsonProperty]
     public Auth Auth
     {
         get => _auth;
@@ -68,6 +70,7 @@ public class Settings : INotifyPropertyChanged
         }
     }
 
+    [JsonProperty]
     public RectInt32 WindowSizeAndPosition
     {
         get => _windowSizeAndPosition;
