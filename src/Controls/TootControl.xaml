@@ -18,8 +18,7 @@
     <StackPanel Orientation="Vertical" BorderBrush="{ThemeResource SystemColorControlAccentBrush}" BorderThickness="0,0,0,1" Margin="0,15,0,0">
         <StackPanel Visibility="{x:Bind IsContentBoost, Mode=OneWay}" Orientation="Horizontal" Margin="0,5">
             <SymbolIcon Symbol="ReShare" Margin="5,0"/>
-            <TextBlock TextDecorations="Underline" Text="{x:Bind OriginalDisplayName, Mode=OneWay}"
-                       PointerEntered="ActionButton_PointerEntered"/>
+            <TextBlock Text="{x:Bind OriginalDisplayName, Mode=OneWay}" PointerEntered="ActionButton_PointerEntered"/>
             <TextBlock x:Uid="BoostedBlock" Margin="4,0"/>
         </StackPanel>
         <Grid>
@@ -31,7 +30,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <PersonPicture Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,0" Width="50"
+            <PersonPicture Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,0" Width="50" PointerEntered="ActionButton_PointerEntered"
                            ProfilePicture="{x:Bind ProfileImageUrl, Mode=OneWay}" DisplayName="{x:Bind DisplayName, Mode=OneWay}"/>
             <Grid Grid.Column="1" Grid.Row="0">
                 <Grid.ColumnDefinitions>

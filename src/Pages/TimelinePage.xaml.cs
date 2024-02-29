@@ -42,7 +42,8 @@ public sealed partial class TimelinePage : Page
 
     private void Streaming_OnUpdate(object sender, StreamUpdateEventArgs e)
     {
-        Debug.WriteLine("Updated: {0}", e.Status);
+        TootsPanel.Children.Remove(TootsPanel.Children.Last());
+        TootsPanel.Children.Add(new TootControl(e.Status, ThisApp.MastodonClient));
     }
 
     protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -87,7 +88,7 @@ public sealed partial class TimelinePage : Page
         }
         // TODO: need to fix this, right now streaming will close after some time without warning
         // and throw an exception
-        //await Streaming.Start();
+        await Streaming.Start();
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)
