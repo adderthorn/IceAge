@@ -46,6 +46,7 @@ public sealed partial class MainWindow : Window
             ThisApp.Auth = ThisApp.Settings.Auth;
             ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken);
             ContentFrame.Navigate(typeof(TimelinePage));
+            MainNavigationView.SelectedItem = MainNavigationView.MenuItems.FirstOrDefault(i => (i as NavigationViewItem).Tag.ToString() == "Home");
         }
         else
         {

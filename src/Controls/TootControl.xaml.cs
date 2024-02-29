@@ -128,7 +128,9 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                         AttachmentBlock.Items.Add(img);
                         break;
                     case "gifv":
-                        
+                        var ctrl = new AnimatedPreviewAttachmentControl(item, isSensitive, width, height, autoplay: false);
+                        ctrl.Tapped += Animated_Tapped;
+                        AttachmentBlock.Items.Add(ctrl);
                         break;
                     case "video":
                         break;
@@ -150,6 +152,13 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         {
             XamlRoot = this.XamlRoot
         };
+        await dialog.ShowAsync();
+    }
+
+    private async void Animated_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        var ctrl = sender as AnimatedPreviewAttachmentControl;
+        var dialog = new AnimatedContentDialog(ctrl.MediaAttachment) { XamlRoot = this.XamlRoot };
         await dialog.ShowAsync();
     }
 

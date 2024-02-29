@@ -150,6 +150,9 @@
   <data name="LoginStatus.InvalidHandle.Title" xml:space="preserve">
     <value>Invalid Handle</value>
   </data>
+  <data name="SensitiveToolTip.Content" xml:space="preserve">
+    <value>Sesitive content. Click to show.</value>
+  </data>
   <data name="SignupButton.Content" xml:space="preserve">
     <value>Signup</value>
   </data>
