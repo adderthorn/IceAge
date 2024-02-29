@@ -11,6 +11,7 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -27,6 +28,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private long _replyCount;
     private bool _isNavigatingToNewPage = false;
     private bool _isContentBoost;
+    private bool _isBotAccount;
     private string _profileImageUrl;
     private string _username;
     private string _displayName;
@@ -69,19 +71,21 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
     }
 
-    private async void setStatusContent(Status value)
+    private void setStatusContent(Status value)
     {
         if (_timer.IsEnabled)
             _timer.Stop();
         _status = value;
         IsFavorite = Status.Favourited.Value;
         IsBoosted = Status.Reblogged.Value;
+        IsBotAccount = Status.Account.Bot == true;
         ReplyCount = Status.RepliesCount;
         BoostedCount = Status.ReblogCount;
         Created = Status.CreatedAt;
         OriginalDisplayName = Status.Account.DisplayName;
         OriginalUsername = $"@{Status.Account.AccountName}";
         List<Attachment> mediaAttachments;
+        bool isSensitive = Status.Sensitive == true || Status.Reblog?.Sensitive == true;
 
         if (Status.Reblog == null)
         {
@@ -106,19 +110,32 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
 
         if (mediaAttachments?.Count > 0)
         {
-            var bitmapIrrop = new BitmapInterop(200, 200);
             foreach (var item in mediaAttachments)
             {
+                uint width = (uint)(item.Meta.Small.Width ?? 200);
+                uint height = (uint)(item.Meta.Small.Height ?? 200);
+
+                if (mediaAttachments.Count > 1)
+                {
+                    width = height = 200;
+                }
+
                 switch (item.Type)
                 {
                     case "image":
-                        var img = new Image() { Width = 200, Height = 200 };
-                        img.Source = await bitmapIrrop.CreateImageFromBlurhashAsync(item.BlurHash);
+                        var img = new ImageAttachmentControl(item, isSensitive, width, height);
+                        img.Tapped += Img_Tapped;
                         AttachmentBlock.Items.Add(img);
                         break;
                     case "gifv":
+                        var ctrl = new AnimatedPreviewAttachmentControl(item, isSensitive, width, height, autoplay: false);
+                        ctrl.Tapped += Animated_Tapped;
+                        AttachmentBlock.Items.Add(ctrl);
                         break;
                     case "video":
+                        var vidCtrl = new AnimatedPreviewAttachmentControl(item, isSensitive, width, height, autoplay: false);
+                        vidCtrl.Tapped += Animated_Tapped;
+                        AttachmentBlock.Items.Add(vidCtrl);
                         break;
                     case "audio":
                         break;
@@ -129,6 +146,23 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
 
         _timer.Start();
+    }
+
+    private async void Img_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        var img = sender as ImageAttachmentControl;
+        var dialog = new ImageContentDialog(img.MediaAttachment)
+        {
+            XamlRoot = this.XamlRoot
+        };
+        await dialog.ShowAsync();
+    }
+
+    private async void Animated_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        var ctrl = sender as AnimatedPreviewAttachmentControl;
+        var dialog = new AnimatedContentDialog(ctrl.MediaAttachment) { XamlRoot = this.XamlRoot };
+        await dialog.ShowAsync();
     }
 
     public bool IsContentBoost
@@ -333,6 +367,17 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                 return "1";
             else
                 return "1+";
+        }
+    }
+
+    public bool IsBotAccount
+    {
+        get => _isBotAccount;
+        set
+        {
+            if (_isBotAccount == value) return;
+            _isBotAccount = value;
+            NotifyPropertyChanged(nameof(IsBotAccount));
         }
     }
 

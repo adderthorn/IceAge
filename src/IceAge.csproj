@@ -1,19 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>IceAge</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
-    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-    <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <PublishProfile>win-$(Platform).pubxml</PublishProfile>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+	<UseRidGraph>true</UseRidGraph>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Default.htm" />
     <None Remove="Assets\LaunchImage.png" />
+    <None Remove="Controls\AnimatedContentDialog.xaml" />
+    <None Remove="Controls\AnimatedPreviewAttachmentControl.xaml" />
+    <None Remove="Controls\ImageAttachmentControl.xaml" />
+    <None Remove="Controls\ImageContentDialog.xaml" />
     <None Remove="Controls\NewTootControl.xaml" />
     <None Remove="Controls\TootControl.xaml" />
     <None Remove="LoginPage.xaml" />
@@ -69,9 +74,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Themes\" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,7 +101,27 @@
     <EditorConfigFiles Remove="D:\source\IceAge\src\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="Themes\Generic.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="D:\source\IceAge\src\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\ImageAttachmentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\ImageContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\AnimatedPreviewAttachmentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\AnimatedContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <None Update="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\TimelinePage.xaml">
