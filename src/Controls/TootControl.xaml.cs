@@ -133,6 +133,9 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                         AttachmentBlock.Items.Add(ctrl);
                         break;
                     case "video":
+                        var vidCtrl = new AnimatedPreviewAttachmentControl(item, isSensitive, width, height, autoplay: false);
+                        vidCtrl.Tapped += Animated_Tapped;
+                        AttachmentBlock.Items.Add(vidCtrl);
                         break;
                     case "audio":
                         break;
