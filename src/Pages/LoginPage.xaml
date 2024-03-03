@@ -23,8 +23,9 @@
                    VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind LabelText, Mode=OneWay}"/>
         <TextBox x:Uid="HandleTextBox" x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5"
                  Visibility="{x:Bind NotWaitingOnAuthCode, Mode=OneWay}" KeyUp="HandleTextBox_KeyUp"
-                 IsEnabled="{x:Bind NotLoggingIn, Mode=OneWay}"/>
-        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
+                 IsEnabled="{x:Bind NotLoggingIn, Mode=OneWay}" IsSpellCheckEnabled="False"/>
+        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"
+                 IsSpellCheckEnabled="False"/>
         <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
