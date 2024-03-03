@@ -40,11 +40,11 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private readonly RichTextInterop _interop;
     private readonly DispatcherTimer _timer;
 
-    public TootControl(Status status, MastodonClient client)
+    public TootControl(Status status, MastodonClient client, bool shortenHyperlinks)
     {
         this.InitializeComponent();
         _client = client;
-        _interop = new RichTextInterop(ContentBlock);
+        _interop = new RichTextInterop(ContentBlock, shortenHyperlinks);
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(30);
         _timer.Tick += (s, e) =>
