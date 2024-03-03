@@ -51,13 +51,16 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
 
     private async void initImage()
     {
-        uint width = (uint)(MediaAttachment.Meta.Original.Width ?? 700);
-        uint height = (uint)(MediaAttachment.Meta.Original.Height ?? 700);
-        Pixel[,] pixels = new Pixel[width, height];
-        Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
-        var image = new BitmapImage();
-        await image.SetSourceAsync(await pixels.CreateStreamAsync());
-        BlurImage.Source = image;
+        if (!string.IsNullOrEmpty(MediaAttachment.BlurHash))
+        {
+            uint width = (uint)(MediaAttachment.Meta.Original.Width ?? 700);
+            uint height = (uint)(MediaAttachment.Meta.Original.Height ?? 700);
+            Pixel[,] pixels = new Pixel[width, height];
+            Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
+            var image = new BitmapImage();
+            await image.SetSourceAsync(await pixels.CreateStreamAsync());
+            BlurImage.Source = image;
+        }
         
         var remoteImg = new BitmapImage() { UriSource = new Uri(MediaAttachment.Url) };
         RemoteImage.Source = remoteImg;

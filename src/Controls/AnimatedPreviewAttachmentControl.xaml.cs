@@ -126,12 +126,15 @@ public sealed partial class AnimatedPreviewAttachmentControl : UserControl, INot
 
     private async void initImage()
     {
-        var img = new BitmapImage();
-        Pixel[,] pixels = new Pixel[_width, _height];
-        Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
+        if (!string.IsNullOrEmpty(MediaAttachment.BlurHash))
+        {
+            var img = new BitmapImage();
+            Pixel[,] pixels = new Pixel[_width, _height];
+            Blurhash.Core.Decode(MediaAttachment.BlurHash, pixels);
 
-        await img.SetSourceAsync(await pixels.CreateStreamAsync());
-        BlurImage.Source = img;
+            await img.SetSourceAsync(await pixels.CreateStreamAsync());
+            BlurImage.Source = img;
+        }
 
         if (!IsSensitive)
         {
