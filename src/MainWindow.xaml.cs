@@ -44,9 +44,8 @@ public sealed partial class MainWindow : Window
         if (ThisApp.Settings.Auth != null)
         {
             ThisApp.Auth = ThisApp.Settings.Auth;
-            ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken);
-            ContentFrame.Navigate(typeof(TimelinePage));
-            MainNavigationView.SelectedItem = MainNavigationView.MenuItems.FirstOrDefault(i => (i as NavigationViewItem).Tag.ToString() == "Home");
+            ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken, ThisApp.HttpClient);
+            MainNavigationView.SelectedItem = MainNavigationView.MenuItems.FirstOrDefault(i => (i as NavigationViewItem).Name == "Home");
         }
         else
         {
@@ -77,5 +76,16 @@ public sealed partial class MainWindow : Window
         newWindow.Activate();
 
         // C# code to navigate in the new window
+    }
+
+    private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        var item = args.SelectedItem as NavigationViewItem;
+        switch (item?.Name)
+        {
+            case "Home":
+                ContentFrame.Navigate(typeof(TimelinePage));
+                break;
+        }
     }
 }

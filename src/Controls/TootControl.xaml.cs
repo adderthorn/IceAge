@@ -40,11 +40,11 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private readonly RichTextInterop _interop;
     private readonly DispatcherTimer _timer;
 
-    public TootControl(Status status, MastodonClient client)
+    public TootControl(Status status, MastodonClient client, bool shortenHyperlinks)
     {
         this.InitializeComponent();
         _client = client;
-        _interop = new RichTextInterop(ContentBlock);
+        _interop = new RichTextInterop(ContentBlock, shortenHyperlinks);
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromSeconds(30);
         _timer.Tick += (s, e) =>
@@ -81,7 +81,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         IsBotAccount = Status.Account.Bot == true;
         ReplyCount = Status.RepliesCount;
         BoostedCount = Status.ReblogCount;
-        Created = Status.CreatedAt;
         OriginalDisplayName = Status.Account.DisplayName;
         OriginalUsername = $"@{Status.Account.AccountName}";
         List<Attachment> mediaAttachments;
@@ -89,6 +88,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
 
         if (Status.Reblog == null)
         {
+            Created = Status.CreatedAt;
             LockedAccount = Status.Account.Locked;
             ProfileImageUrl = Status.Account.AvatarUrl;
             Username = $"@{Status.Account.AccountName}";
@@ -99,6 +99,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         }
         else
         {
+            Created = Status.Reblog.CreatedAt;
             LockedAccount = Status.Reblog.Account.Locked;
             ProfileImageUrl = Status.Reblog.Account.AvatarUrl;
             Username = $"@{Status.Reblog.Account.AccountName}";
@@ -138,8 +139,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
                         AttachmentBlock.Items.Add(vidCtrl);
                         break;
                     case "audio":
-                        break;
-                    default:
                         break;
                 }
             }

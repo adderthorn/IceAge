@@ -24,6 +24,7 @@ public class Settings : INotifyPropertyChanged
     private string _authCode;
     private Auth _auth;
     private RectInt32 _windowSizeAndPosition;
+    private bool _shortenHyperlinks;
     #endregion
 
     #region Public Properties
@@ -37,10 +38,12 @@ public class Settings : INotifyPropertyChanged
         get => _appRegistration;
         set
         {
-            if (_appRegistration == value) return;
-            _appRegistration = value;
-            RaisePropertyChanged(nameof(AppRegistration));
-            SaveAsync().ConfigureAwait(false);
+            if (value != _appRegistration)
+            {
+                _appRegistration = value;
+                RaisePropertyChanged(nameof(AppRegistration));
+                SaveAsync().ConfigureAwait(false);
+            }
         }
     }
 
@@ -50,10 +53,12 @@ public class Settings : INotifyPropertyChanged
         get => _authCode;
         set
         {
-            if (_authCode == value) return;
-            _authCode = value;
-            RaisePropertyChanged(nameof(AuthCode));
-            SaveAsync().ConfigureAwait(false);
+            if (value != _authCode)
+            {
+                _authCode = value;
+                RaisePropertyChanged(nameof(AuthCode));
+                SaveAsync().ConfigureAwait(false);
+            }
         }
     }
 
@@ -63,10 +68,12 @@ public class Settings : INotifyPropertyChanged
         get => _auth;
         set
         {
-            if (_auth == value) return;
-            _auth = value;
-            RaisePropertyChanged(nameof(Auth));
-            SaveAsync().ConfigureAwait(false);
+            if (value != _auth)
+            {
+                _auth = value;
+                RaisePropertyChanged(nameof(Auth));
+                SaveAsync().ConfigureAwait(false);
+            }
         }
     }
 
@@ -76,9 +83,26 @@ public class Settings : INotifyPropertyChanged
         get => _windowSizeAndPosition;
         set
         {
-            if (value == _windowSizeAndPosition) return;
-            _windowSizeAndPosition = value;
-            RaisePropertyChanged(nameof(WindowSizeAndPosition));
+            if (value != _windowSizeAndPosition)
+            {
+                _windowSizeAndPosition = value;
+                RaisePropertyChanged(nameof(WindowSizeAndPosition));
+            }
+        }
+    }
+
+    [JsonProperty]
+    public bool ShortenHyperlinks
+    {
+        get => _shortenHyperlinks;
+        set
+        {
+            if (value != _shortenHyperlinks)
+            {
+                _shortenHyperlinks = value;
+                RaisePropertyChanged(nameof(ShortenHyperlinks));
+                SaveAsync().ConfigureAwait(false);
+            }
         }
     }
     #endregion

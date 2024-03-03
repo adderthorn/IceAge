@@ -105,9 +105,9 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
         }
         try
         {
-            string instance = match.Groups.Values.LastOrDefault().Value;//string.Concat("https://", match.Groups.Values.Last());
+            string instance = match.Groups.Values.LastOrDefault().Value;
             _authClient = new AuthenticationClient(instance, ThisApp.HttpClient);
-            ThisApp.Settings.AppRegistration = await _authClient.CreateApp(kAppName, Scope.Read | Scope.Write | Scope.Follow);
+            ThisApp.Settings.AppRegistration = await _authClient.CreateApp(kAppName, null, null, GranularScope.Read, GranularScope.Write, GranularScope.Follow, GranularScope.Push);
             var url = _authClient.OAuthUrl();
             if (await Windows.System.Launcher.LaunchUriAsync(new Uri(url)))
             {

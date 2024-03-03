@@ -13,7 +13,7 @@ namespace IceAge;
 
 public static class IceAgeHelper
 {
-    private const int DPI = 96;
+    private const int kDPI = 96;
 
     public const string UsernameRegex = @"@?\b([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,})\b";
     public const RegexOptions UsernameRegexOptions = RegexOptions.IgnoreCase;
@@ -40,7 +40,7 @@ public static class IceAgeHelper
             }
 
         var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.BmpEncoderId, stream);
-        encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, width, height, DPI, DPI, pixelData);
+        encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, width, height, kDPI, kDPI, pixelData);
         await encoder.FlushAsync();
 
         stream.Seek(0);
