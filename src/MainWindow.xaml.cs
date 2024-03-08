@@ -22,6 +22,7 @@ using IceAge.Controls;
 using System.Threading;
 using IceAge.Pages;
 using Windows.Graphics;
+using Microsoft.UI.Xaml.Media.Animation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -45,11 +46,11 @@ public sealed partial class MainWindow : Window
         {
             ThisApp.Auth = ThisApp.Settings.Auth;
             ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken, ThisApp.HttpClient);
-            MainNavigationView.SelectedItem = MainNavigationView.MenuItems.FirstOrDefault(i => (i as NavigationViewItem).Name == "Home");
+            Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
         }
         else
         {
-            ContentFrame.Navigate(typeof(LoginPage));
+            Navigate(typeof(LoginPage));
         }
 
         this.AppWindow.Closing += async (s, e) =>
@@ -69,6 +70,34 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    public void Navigate(Type typeToNavigateTo, NavigationTransitionInfo transitionInfo = null)
+    {
+        Type typeBeforeNavigation = ContentFrame.CurrentSourcePageType;
+
+        if (typeToNavigateTo is not null && !Type.Equals(typeBeforeNavigation, typeToNavigateTo))
+        {
+            if (transitionInfo == null)
+                ContentFrame.Navigate(typeToNavigateTo);
+            else
+                ContentFrame.Navigate(typeToNavigateTo, null, transitionInfo);
+        }
+    }
+
+    public bool TryGoBack()
+    {
+        if (!ContentFrame.CanGoBack)
+            return false;
+
+        if (MainNavigationView.IsPaneOpen && (
+            MainNavigationView.DisplayMode == NavigationViewDisplayMode.Compact || MainNavigationView.DisplayMode == NavigationViewDisplayMode.Minimal))
+        {
+            return false;
+        }
+
+        ContentFrame.GoBack();
+        return true;
+    }
+
     private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
     {
         // C# code to create a new window
@@ -80,12 +109,29 @@ public sealed partial class MainWindow : Window
 
     private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        var item = args.SelectedItem as NavigationViewItem;
-        switch (item?.Name)
+        if (args.SelectedItemContainer != null)
         {
-            case "Home":
-                ContentFrame.Navigate(typeof(TimelinePage));
-                break;
+            var pageType = Type.GetType(args.SelectedItemContainer.Name);
+            Navigate(pageType, args.RecommendedNavigationTransitionInfo);
+        }
+    }
+
+    private void MainNavigationView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args) =>
+        _ = TryGoBack();
+
+    private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
+    {
+
+    }
+
+    private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+    {
+        MainNavigationView.IsBackEnabled = ContentFrame.CanGoBack;
+        if (ContentFrame.SourcePageType is not null)
+        {
+            MainNavigationView.SelectedItem = MainNavigationView.MenuItems
+                .OfType<NavigationViewItem>()
+                .FirstOrDefault(i => i.Name == ContentFrame.SourcePageType.Name);
         }
     }
 }

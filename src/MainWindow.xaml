@@ -59,10 +59,11 @@
                     Text="IceAge" />
             </StackPanel>
         </Border>
-        <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2"  Canvas.ZIndex="0"
-                        IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" SelectionChanged="MainNavigationView_SelectionChanged">
+        <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2"  Canvas.ZIndex="0" 
+                        IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" SelectionChanged="MainNavigationView_SelectionChanged"
+                        BackRequested="MainNavigationView_BackRequested">
             <NavigationView.MenuItems>
-                <NavigationViewItem Name="Home" Content="Home" Icon="Home" />
+                <NavigationViewItem Name="TimelinePage" Content="Home" Icon="Home" />
                 <NavigationViewItem Name="Notifiations">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon MinWidth="20" HorizontalAlignment="Center"
@@ -95,7 +96,7 @@
                     </StackPanel>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame"/>
+            <Frame x:Name="ContentFrame" NavigationFailed="ContentFrame_NavigationFailed" Navigated="ContentFrame_Navigated"/>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
                 <NavigationViewItemSeparator/>
