@@ -65,4 +65,14 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
         var remoteImg = new BitmapImage() { UriSource = new Uri(MediaAttachment.Url) };
         RemoteImage.Source = remoteImg;
     }
+
+    private void PopoutButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void SaveButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
 }
