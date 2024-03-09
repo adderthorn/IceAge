@@ -9,8 +9,8 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <ScrollViewer Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled"
-              VerticalScrollBarVisibility="Visible" Padding="0,40,0,0">
+    <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" Padding="0,40,0,0"
+                  VerticalScrollBarVisibility="Visible" ViewChanged="ScrollViewer_ViewChangedAsync">
         <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="20"/>
     </ScrollViewer>
 </Page>
