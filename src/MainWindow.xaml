@@ -64,14 +64,15 @@
                         BackRequested="MainNavigationView_BackRequested">
             <NavigationView.MenuItems>
                 <NavigationViewItem Name="TimelinePage" Content="Home" Icon="Home" />
-                <NavigationViewItem Name="Notifiations">
-                    <StackPanel Orientation="Horizontal">
-                        <FontIcon MinWidth="20" HorizontalAlignment="Center"
-                          Glyph="&#xE7E7;"/>
-                        <TextBlock Margin="12,0,0,0" VerticalAlignment="Center">Notifications</TextBlock>
-                    </StackPanel>
+                <NavigationViewItem Name="Notifiations" Content="Notifications">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7E7;"/>
+                    </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem>
+                    <NavigationViewItem.Icon>
+                        <FontIcon
+                    </NavigationViewItem.Icon>
                     <StackPanel Orientation="Horizontal">
                         <FontIcon MinWidth="20" HorizontalAlignment="Center"
                           Glyph="&#x0023;" FontFamily="Segoe UI" FontWeight="Bold"/>
