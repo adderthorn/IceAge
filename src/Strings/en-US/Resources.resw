@@ -120,6 +120,12 @@
   <data name="AuthCodeButton.Content" xml:space="preserve">
     <value>Continue...</value>
   </data>
+  <data name="AutoplaySettingsCard.Description" xml:space="preserve">
+    <value>Autoply GIF and GIFV files in the timeline.</value>
+  </data>
+  <data name="AutoplaySettingsCard.Header" xml:space="preserve">
+    <value>Autoplay GIFs</value>
+  </data>
   <data name="BoostedBlock.Text" xml:space="preserve">
     <value>boosted</value>
   </data>
@@ -155,6 +161,12 @@
   </data>
   <data name="LoginStatus.InvalidHandle.Title" xml:space="preserve">
     <value>Invalid Handle</value>
+  </data>
+  <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
+    <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
+  </data>
+  <data name="NewWindowsSettingsCard.Header" xml:space="preserve">
+    <value>Open Attachments In New Window</value>
   </data>
   <data name="SensitiveToolTip.Content" xml:space="preserve">
     <value>Sesitive content. Click to show.</value>

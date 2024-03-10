@@ -28,4 +28,40 @@ public sealed partial class SettingsPage : Page
     {
         this.InitializeComponent();
     }
+
+    private void ColorRadioButton_Checked(object sender, RoutedEventArgs e)
+    {
+        var button = sender as RadioButton;
+        switch (button.Tag.ToString())
+        {
+            case "Default":
+                Settings.ElementTheme = ElementTheme.Default;
+                break;
+            case "Light":
+                Settings.ElementTheme = ElementTheme.Light;
+                break;
+            case "Dark":
+                Settings.ElementTheme = ElementTheme.Dark;
+                break;
+        }
+    }
+
+    private void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        string selectedTag;
+        switch (Settings.ElementTheme)
+        {
+            case ElementTheme.Light:
+                selectedTag = "Light";
+                break;
+            case ElementTheme.Dark:
+                selectedTag = "Dark";
+                break;
+            default:
+                selectedTag = "Default";
+                break;
+        }
+        ThemeSettingsCardButtons.SelectedItem = ThemeSettingsCardButtons.Items
+            .FirstOrDefault(i => (i as RadioButton).Tag.ToString() == selectedTag);
+    }
 }

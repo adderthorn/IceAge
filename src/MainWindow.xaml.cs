@@ -62,7 +62,9 @@ public sealed partial class MainWindow : Window
         this.AppWindow.Closing += async (s, e) =>
         {
             // TODO Prevent this if window is maximized.
-            if (AppWindow.Size.Width > 0 && AppWindow.Size.Height > 0)
+            if (ThisApp.Settings.SaveWindowSizeAndPosition
+                && AppWindow.Size.Width > 0
+                && AppWindow.Size.Height > 0)
             {
                 var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
                 ThisApp.Settings.WindowSizeAndPosition = rect;
@@ -70,7 +72,9 @@ public sealed partial class MainWindow : Window
             }
         };
 
-        if (ThisApp.Settings.WindowSizeAndPosition.Width > 0 && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
+        if (ThisApp.Settings.SaveWindowSizeAndPosition
+            && ThisApp.Settings.WindowSizeAndPosition.Width > 0
+            && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
         {
             AppWindow.MoveAndResize(ThisApp.Settings.WindowSizeAndPosition);
         }

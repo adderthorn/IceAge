@@ -60,15 +60,12 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
             {
                 _waitingOnAuthCode = value;
                 notifyPropertyChanged(nameof(WaitingOnAuthCode));
-                notifyPropertyChanged(nameof(NotWaitingOnAuthCode));
                 notifyPropertyChanged(nameof(LabelText));
             }
         }
     }
 
-    public string LabelText => NotWaitingOnAuthCode ? "Handle:" : "Auth Code:";
-
-    public bool NotWaitingOnAuthCode => !_waitingOnAuthCode;
+    public string LabelText => WaitingOnAuthCode ? "Auth Code:" : "Handle:";
 
     public bool IsLoggingIn
     {
@@ -79,12 +76,9 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
             {
                 _isLoggingIn = value;
                 notifyPropertyChanged(nameof(IsLoggingIn));
-                notifyPropertyChanged(nameof(NotLoggingIn));
             }
         }
     }
-
-    public bool NotLoggingIn => !_isLoggingIn;
 
     public LoginPage()
     {
