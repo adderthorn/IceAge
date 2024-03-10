@@ -63,7 +63,7 @@
                         IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" SelectionChanged="MainNavigationView_SelectionChanged"
                         BackRequested="MainNavigationView_BackRequested">
             <NavigationView.MenuItems>
-                <NavigationViewItem Name="TimelinePage" Content="Home" Icon="Home" />
+                <NavigationViewItem Name="Home" Content="Home" Icon="Home" />
                 <NavigationViewItem Name="Notifiations" Content="Notifications">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7E7;"/>

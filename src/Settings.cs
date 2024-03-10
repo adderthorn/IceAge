@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.IO;
 using Mastonet;
 using Windows.Graphics;
+using Microsoft.UI.Xaml;
 
 namespace IceAge;
 
@@ -23,6 +24,7 @@ public class Settings : INotifyPropertyChanged
     private AppRegistration _appRegistration;
     private string _authCode;
     private Auth _auth;
+    private ElementTheme _elementTheme;
     private RectInt32 _windowSizeAndPosition;
     private bool _shortenHyperlinks;
     #endregion
@@ -72,6 +74,20 @@ public class Settings : INotifyPropertyChanged
             {
                 _auth = value;
                 RaisePropertyChanged(nameof(Auth));
+                SaveAsync().ConfigureAwait(false);
+            }
+        }
+    }
+
+    public ElementTheme ElementTheme
+    {
+        get => _elementTheme;
+        set
+        {
+            if (value != _elementTheme)
+            {
+                _elementTheme = value;
+                RaisePropertyChanged(nameof(ElementTheme));
                 SaveAsync().ConfigureAwait(false);
             }
         }
