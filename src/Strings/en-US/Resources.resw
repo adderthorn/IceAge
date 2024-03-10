@@ -183,6 +183,9 @@
   <data name="SignupButton.Content" xml:space="preserve">
     <value>Signup</value>
   </data>
+  <data name="ThemeSettings.CardButtonsSettings.Text" xml:space="preserve">
+    <value>Windows color settings</value>
+  </data>
   <data name="ThemeSettingsCard.Description" xml:space="preserve">
     <value>Select which app theme to use.</value>
   </data>
@@ -193,7 +196,7 @@
     <value>Dark</value>
   </data>
   <data name="ThemeSettingsCardButtonsDefault.Content" xml:space="preserve">
-    <value>System default</value>
+    <value>Windows default</value>
   </data>
   <data name="ThemeSettingsCardButtonsLight.Content" xml:space="preserve">
     <value>Light</value>

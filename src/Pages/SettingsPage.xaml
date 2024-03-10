@@ -28,9 +28,9 @@
                         <FontIcon Glyph="&#xE790;"/>
                     </toolkit:SettingsCard.HeaderIcon>
                     <RadioButtons x:Name="ThemeSettingsCardButtons" x:Uid="ThemeSettingsCardButtons" >
-                        <RadioButton x:Uid="ThemeSettingsCardButtonsDefault" Tag="Default" Checked="ColorRadioButton_Checked"/>
                         <RadioButton x:Uid="ThemeSettingsCardButtonsLight" Tag="Light" Checked="ColorRadioButton_Checked"/>
                         <RadioButton x:Uid="ThemeSettingsCardButtonsDark" Tag="Dark" Checked="ColorRadioButton_Checked"/>
+                        <RadioButton x:Uid="ThemeSettingsCardButtonsDefault" Tag="Default" Checked="ColorRadioButton_Checked"/>
                     </RadioButtons>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard x:Uid="WindowSizeSettingsCard">
