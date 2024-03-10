@@ -35,6 +35,12 @@ public sealed partial class MainWindow : Window
 {
     public App ThisApp => App.Current as App;
 
+    public static readonly Dictionary<string, Type> NavigationPageDictionary = new()
+    {
+        { "Home", typeof(TimelinePage) },
+        { "Settings", typeof(SettingsPage) }
+    };
+
     public MainWindow()
     {
         this.InitializeComponent();
@@ -56,7 +62,9 @@ public sealed partial class MainWindow : Window
         this.AppWindow.Closing += async (s, e) =>
         {
             // TODO Prevent this if window is maximized.
-            if (AppWindow.Size.Width > 0 && AppWindow.Size.Height > 0)
+            if (ThisApp.Settings.SaveWindowSizeAndPosition
+                && AppWindow.Size.Width > 0
+                && AppWindow.Size.Height > 0)
             {
                 var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
                 ThisApp.Settings.WindowSizeAndPosition = rect;
@@ -64,7 +72,9 @@ public sealed partial class MainWindow : Window
             }
         };
 
-        if (ThisApp.Settings.WindowSizeAndPosition.Width > 0 && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
+        if (ThisApp.Settings.SaveWindowSizeAndPosition
+            && ThisApp.Settings.WindowSizeAndPosition.Width > 0
+            && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
         {
             AppWindow.MoveAndResize(ThisApp.Settings.WindowSizeAndPosition);
         }
@@ -109,10 +119,21 @@ public sealed partial class MainWindow : Window
 
     private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        if (args.SelectedItemContainer != null)
+        if (args.IsSettingsSelected)
         {
-            var pageType = Type.GetType(args.SelectedItemContainer.Name);
-            Navigate(pageType, args.RecommendedNavigationTransitionInfo);
+            Navigate(typeof(SettingsPage), args.RecommendedNavigationTransitionInfo);
+        }
+        else if (args.SelectedItemContainer != null)
+        {
+            Type pageType;
+            if (NavigationPageDictionary.TryGetValue(args.SelectedItemContainer.Name, out pageType))
+            {
+                Navigate(pageType, args.RecommendedNavigationTransitionInfo);
+            }
+            else
+            {
+                throw new ArgumentException($"No page type matching \"{args.SelectedItemContainer.Name}\"");
+            }
         }
     }
 
@@ -121,13 +142,18 @@ public sealed partial class MainWindow : Window
 
     private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
     {
-
+        throw new ArgumentException($"Failed to load page: {e.SourcePageType.FullName}");
     }
 
     private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
     {
         MainNavigationView.IsBackEnabled = ContentFrame.CanGoBack;
-        if (ContentFrame.SourcePageType is not null)
+
+        if (ContentFrame.SourcePageType == typeof(SettingsPage))
+        {
+            MainNavigationView.SelectedItem = MainNavigationView.SettingsItem;
+        }
+        else if (ContentFrame.SourcePageType is not null)
         {
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems
                 .OfType<NavigationViewItem>()

@@ -6,7 +6,6 @@ using System.Linq;
 using Mastonet.Entities;
 using Newtonsoft.Json;
 using Windows.Storage;
-using CommunityToolkit.WinUI.Helpers;
 using System;
 using System.IO;
 using System.Diagnostics;
@@ -53,7 +52,7 @@ public sealed partial class TimelinePage : Page
         TootsPanel.Children.Clear();
         var localFolder = ApplicationData.Current.LocalFolder;
         var serializer = new JsonSerializer();
-        StorageFile file;
+        StorageFile file = await localFolder.GetFileAsync("timeline.json");
 
         /**
          * This is a temporary measure to load a subset of the timeline and keep using
@@ -61,9 +60,9 @@ public sealed partial class TimelinePage : Page
          * changing on me in realtime. This way it caches a set of the timeline and will
          * use it on launch if the timeline file exists. This will be discarded eventually.
          **/
-        if (await localFolder.FileExistsAsync("timeline.json"))
+        if (file != null)
         {
-            file = await localFolder.GetFileAsync("timeline.json");
+            ;
             using (var reader = new StreamReader(await file.OpenStreamForReadAsync()))
             using (JsonReader jReader = new JsonTextReader(reader))
             {

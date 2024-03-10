@@ -6,10 +6,56 @@
     xmlns:local="using:IceAge"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    xmlns:conv="using:CommunityToolkit.WinUI.Converters"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Loaded="Page_Loaded">
+    <Page.Resources>
+        <conv:BoolNegationConverter x:Key="BoolNegConverter"/>
+    </Page.Resources>
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="SettingsTitle" Grid.Row="0" Margin="20,50,0,20" Style="{StaticResource TitleTextBlockStyle}"/>
+        <ScrollViewer Padding="20,0" Grid.Row="1" IsTabStop="False" UseSystemFocusVisuals="False">
+            <StackPanel Orientation="Vertical" Spacing="4">
+                <TextBlock x:Uid="SettingsAppSubtitle" Style="{StaticResource SubtitleTextBlockStyle}" Margin="5"/>
+                <toolkit:SettingsCard x:Uid="ThemeSettingsCard">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE790;"/>
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <RadioButtons x:Name="ThemeSettingsCardButtons" x:Uid="ThemeSettingsCardButtons" >
+                        <RadioButton x:Uid="ThemeSettingsCardButtonsLight" Tag="Light" Checked="ColorRadioButton_Checked"/>
+                        <RadioButton x:Uid="ThemeSettingsCardButtonsDark" Tag="Dark" Checked="ColorRadioButton_Checked"/>
+                        <RadioButton x:Uid="ThemeSettingsCardButtonsDefault" Tag="Default" Checked="ColorRadioButton_Checked"/>
+                    </RadioButtons>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="WindowSizeSettingsCard">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE743;"/>
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch IsOn="{x:Bind Settings.SaveWindowSizeAndPosition, Mode=TwoWay}"/>
+                </toolkit:SettingsCard>
+                <TextBlock x:Uid="SettingsTimelineSubtitle" Style="{StaticResource SubtitleTextBlockStyle}" Margin="5"/>
+                <toolkit:SettingsCard x:Uid="HyperlinkSettingsCard" HeaderIcon="Link">
+                    <ToggleSwitch IsOn="{x:Bind Settings.ShortenHyperlinks, Converter={StaticResource BoolNegConverter}, Mode=TwoWay}"/>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="AutoplaySettingsCard">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xF4A9;"/>
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch IsOn="{x:Bind Settings.AutoPlay, Mode=TwoWay}"/>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Uid="NewWindowsSettingsCard">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A7;"/>
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <ToggleSwitch IsOn="{x:Bind Settings.NewWindows, Mode=TwoWay}"/>
+                </toolkit:SettingsCard>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -120,6 +120,12 @@
   <data name="AuthCodeButton.Content" xml:space="preserve">
     <value>Continue...</value>
   </data>
+  <data name="AutoplaySettingsCard.Description" xml:space="preserve">
+    <value>Autoply GIF and GIFV files in the timeline.</value>
+  </data>
+  <data name="AutoplaySettingsCard.Header" xml:space="preserve">
+    <value>Autoplay GIFs</value>
+  </data>
   <data name="BoostedBlock.Text" xml:space="preserve">
     <value>boosted</value>
   </data>
@@ -128,6 +134,12 @@
   </data>
   <data name="HandleTextBox.PlaceholderText" xml:space="preserve">
     <value>user@example.com</value>
+  </data>
+  <data name="HyperlinkSettingsCard.Description" xml:space="preserve">
+    <value>By default, Mastodon will shorten hyperlinks. To see the full hyperlink in toots, check this box.</value>
+  </data>
+  <data name="HyperlinkSettingsCard.Header" xml:space="preserve">
+    <value>Display Full Hyperlink</value>
   </data>
   <data name="LoginButtonContent.Text" xml:space="preserve">
     <value>Login</value>
@@ -150,10 +162,49 @@
   <data name="LoginStatus.InvalidHandle.Title" xml:space="preserve">
     <value>Invalid Handle</value>
   </data>
+  <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
+    <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
+  </data>
+  <data name="NewWindowsSettingsCard.Header" xml:space="preserve">
+    <value>Open Attachments In New Window</value>
+  </data>
   <data name="SensitiveToolTip.Content" xml:space="preserve">
     <value>Sesitive content. Click to show.</value>
   </data>
+  <data name="SettingsAppSubtitle.Text" xml:space="preserve">
+    <value>Application Settings</value>
+  </data>
+  <data name="SettingsTimelineSubtitle.Text" xml:space="preserve">
+    <value>Timeline Settings</value>
+  </data>
+  <data name="SettingsTitle.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
   <data name="SignupButton.Content" xml:space="preserve">
     <value>Signup</value>
+  </data>
+  <data name="ThemeSettings.CardButtonsSettings.Text" xml:space="preserve">
+    <value>Windows color settings</value>
+  </data>
+  <data name="ThemeSettingsCard.Description" xml:space="preserve">
+    <value>Select which app theme to use.</value>
+  </data>
+  <data name="ThemeSettingsCard.Header" xml:space="preserve">
+    <value>App Theme</value>
+  </data>
+  <data name="ThemeSettingsCardButtonsDark.Content" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ThemeSettingsCardButtonsDefault.Content" xml:space="preserve">
+    <value>Windows default</value>
+  </data>
+  <data name="ThemeSettingsCardButtonsLight.Content" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="WindowSizeSettingsCard.Description" xml:space="preserve">
+    <value>Save your window size and position when you close the app.</value>
+  </data>
+  <data name="WindowSizeSettingsCard.Header" xml:space="preserve">
+    <value>Remember Window Size</value>
   </data>
 </root>

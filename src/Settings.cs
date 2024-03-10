@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.IO;
 using Mastonet;
 using Windows.Graphics;
+using Microsoft.UI.Xaml;
 
 namespace IceAge;
 
@@ -23,8 +24,12 @@ public class Settings : INotifyPropertyChanged
     private AppRegistration _appRegistration;
     private string _authCode;
     private Auth _auth;
+    private ElementTheme _elementTheme;
     private RectInt32 _windowSizeAndPosition;
+    private bool _saveWindowSizeAndPosition;
     private bool _shortenHyperlinks;
+    private bool _autoPlay;
+    private bool _newWindows;
     #endregion
 
     #region Public Properties
@@ -78,6 +83,21 @@ public class Settings : INotifyPropertyChanged
     }
 
     [JsonProperty]
+    public ElementTheme ElementTheme
+    {
+        get => _elementTheme;
+        set
+        {
+            if (value != _elementTheme)
+            {
+                _elementTheme = value;
+                RaisePropertyChanged(nameof(ElementTheme));
+                SaveAsync().ConfigureAwait(false);
+            }
+        }
+    }
+
+    [JsonProperty]
     public RectInt32 WindowSizeAndPosition
     {
         get => _windowSizeAndPosition;
@@ -92,6 +112,29 @@ public class Settings : INotifyPropertyChanged
     }
 
     [JsonProperty]
+    public bool SaveWindowSizeAndPosition
+    {
+        get => _saveWindowSizeAndPosition;
+        set
+        {
+            if (value != _saveWindowSizeAndPosition)
+            {
+                if (value)
+                {
+                    _saveWindowSizeAndPosition = true;
+                }
+                else
+                {
+                    _saveWindowSizeAndPosition = false;
+                    WindowSizeAndPosition = new RectInt32();
+                }
+                RaisePropertyChanged(nameof(SaveWindowSizeAndPosition));
+                SaveAsync().ConfigureAwait(false);
+            }
+        }
+    }
+
+    [JsonProperty]
     public bool ShortenHyperlinks
     {
         get => _shortenHyperlinks;
@@ -101,6 +144,36 @@ public class Settings : INotifyPropertyChanged
             {
                 _shortenHyperlinks = value;
                 RaisePropertyChanged(nameof(ShortenHyperlinks));
+                SaveAsync().ConfigureAwait(false);
+            }
+        }
+    }
+
+    [JsonProperty]
+    public bool AutoPlay
+    {
+        get => _autoPlay;
+        set
+        {
+            if (value != _autoPlay)
+            {
+                _autoPlay = value;
+                RaisePropertyChanged(nameof(AutoPlay));
+                SaveAsync().ConfigureAwait(false);
+            }
+        }
+    }
+
+    [JsonProperty]
+    public bool NewWindows
+    {
+        get => _newWindows;
+        set
+        {
+            if (value != _newWindows)
+            {
+                _newWindows = value;
+                RaisePropertyChanged(nameof(NewWindows));
                 SaveAsync().ConfigureAwait(false);
             }
         }
@@ -137,6 +210,8 @@ public class Settings : INotifyPropertyChanged
     {
         AppRegistration = null;
         _canSave = true;
+        _saveWindowSizeAndPosition = true;
+        _autoPlay = true;
     }
     #endregion
 
