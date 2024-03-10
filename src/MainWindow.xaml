@@ -94,5 +94,7 @@
                 <NavigationViewItemSeparator/>
             </NavigationView.FooterMenuItems>
         </NavigationView>
+        <TeachingTip x:Name="TestTeachingTip" PreferredPlacement="Bottom" PlacementMargin="10" IsLightDismissEnabled="False"
+                     CloseButtonContent="Close"/>
     </Grid>
 </Window>
