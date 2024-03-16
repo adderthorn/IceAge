@@ -4,7 +4,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using System.Linq;
 using Mastonet.Entities;
-using Newtonsoft.Json;
 using Windows.Storage;
 using System;
 using System.IO;
@@ -24,11 +23,13 @@ public sealed partial class TimelinePage : Page
     private bool _loadingMorePages = false;
 
     public App ThisApp => App.Current as App;
+    public Settings Settings { get; }
     public TimelineStreaming Streaming { get; private set; }
     public MastodonList<Status> Timeline { get; private set; }
 
-    public TimelinePage()
+    public TimelinePage(Settings settings)
     {
+        Settings = settings;
         this.InitializeComponent();
         Streaming = ThisApp.MastodonClient.GetUserStreaming();
         Streaming.ReconnectStreamOnDisconnect = true;
@@ -37,7 +38,7 @@ public sealed partial class TimelinePage : Page
 
     private void Streaming_OnUpdate(object sender, StreamUpdateEventArgs e)
     {
-        var toot = new TootControl(e.Status, ThisApp.MastodonClient, ThisApp.Settings.ShortenHyperlinks);
+        var toot = new TootControl(e.Status, ThisApp.MastodonClient, Settings.ShortenHyperlinks);
         TootsPanel.Children.Insert(0, toot);
         if (ScrollViewer.VerticalOffset > 0)
         {
@@ -50,40 +51,9 @@ public sealed partial class TimelinePage : Page
     {
         base.OnNavigatedTo(e);
         TootsPanel.Children.Clear();
-        var localFolder = ApplicationData.Current.LocalFolder;
-        var serializer = new JsonSerializer();
-        StorageFile file = await localFolder.GetFileAsync("timeline.json");
-
-        /**
-         * This is a temporary measure to load a subset of the timeline and keep using
-         * it for testing. I was having issues testing small changes when the content kept
-         * changing on me in realtime. This way it caches a set of the timeline and will
-         * use it on launch if the timeline file exists. This will be discarded eventually.
-         **/
-        if (file != null)
-        {
-            ;
-            using (var reader = new StreamReader(await file.OpenStreamForReadAsync()))
-            using (JsonReader jReader = new JsonTextReader(reader))
-            {
-                Timeline = serializer.Deserialize<MastodonList<Status>>(jReader);
-            }
-        }
-        else
-        {
-            // TODO: Handle offline
-            Timeline = await ThisApp.MastodonClient.GetHomeTimeline();
-            file = await localFolder.CreateFileAsync("timeline.json");
-            using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
-            using (JsonWriter jWriter = new JsonTextWriter(writer))
-            {
-                serializer.Serialize(jWriter, Timeline);
-            }
-        }
-
         foreach (var item in Timeline)
         {
-            TootControl toot = new(item, ThisApp.MastodonClient, ThisApp.Settings.ShortenHyperlinks);
+            TootControl toot = new(item, ThisApp.MastodonClient, Settings.ShortenHyperlinks);
             TootsPanel.Children.Add(toot);
         }
         // TODO: need to fix this, right now streaming will close after some time without warning
@@ -107,7 +77,7 @@ public sealed partial class TimelinePage : Page
             foreach (var item in newStatuses)
             {
                 Timeline.Add(item);
-                var toot = new TootControl(item, ThisApp.MastodonClient, ThisApp.Settings.ShortenHyperlinks);
+                var toot = new TootControl(item, ThisApp.MastodonClient, Settings.ShortenHyperlinks);
                 TootsPanel.Children.Add(toot);
             }
         }

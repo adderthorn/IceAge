@@ -23,6 +23,7 @@ using System.Threading;
 using IceAge.Pages;
 using Windows.Graphics;
 using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -35,23 +36,26 @@ public sealed partial class MainWindow : Window
 {
     public App ThisApp => App.Current as App;
 
+    public Settings Settings { get; }
+
     public static readonly Dictionary<string, Type> NavigationPageDictionary = new()
     {
         { "Home", typeof(TimelinePage) },
         { "Settings", typeof(SettingsPage) }
     };
 
-    public MainWindow()
+    public MainWindow(Settings settings)
     {
+        this.Settings = settings;
         this.InitializeComponent();
         ThisApp.HttpClient = new HttpClient();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
-        if (ThisApp.Settings.Auth != null)
+        if (Settings.Auth != null)
         {
-            ThisApp.Auth = ThisApp.Settings.Auth;
-            ThisApp.MastodonClient = new MastodonClient(ThisApp.Settings.AppRegistration.Instance, ThisApp.Settings.Auth.AccessToken, ThisApp.HttpClient);
+            ThisApp.Auth = Settings.Auth;
+            ThisApp.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, ThisApp.HttpClient);
             Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
         }
         else
@@ -59,24 +63,23 @@ public sealed partial class MainWindow : Window
             Navigate(typeof(LoginPage));
         }
 
-        this.AppWindow.Closing += async (s, e) =>
+        this.AppWindow.Closing += (s, e) =>
         {
             // TODO Prevent this if window is maximized.
-            if (ThisApp.Settings.SaveWindowSizeAndPosition
+            if (Settings.SaveWindowSizeAndPosition
                 && AppWindow.Size.Width > 0
                 && AppWindow.Size.Height > 0)
             {
                 var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
-                ThisApp.Settings.WindowSizeAndPosition = rect;
-                await ThisApp.Settings.SaveAsync();
+                Settings.WindowSizeAndPosition = rect;
             }
         };
 
-        if (ThisApp.Settings.SaveWindowSizeAndPosition
-            && ThisApp.Settings.WindowSizeAndPosition.Width > 0
-            && ThisApp.Settings.WindowSizeAndPosition.Height > 0)
+        if (Settings.SaveWindowSizeAndPosition
+            && Settings.WindowSizeAndPosition.Width > 0
+            && Settings.WindowSizeAndPosition.Height > 0)
         {
-            AppWindow.MoveAndResize(ThisApp.Settings.WindowSizeAndPosition);
+            AppWindow.MoveAndResize(Settings.WindowSizeAndPosition);
         }
     }
 

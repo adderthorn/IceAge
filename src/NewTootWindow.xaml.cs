@@ -23,8 +23,6 @@ namespace IceAge;
 /// </summary>
 public sealed partial class NewTootWindow : Window
 {
-    public Settings Settings => (App.Current as App).Settings;
-
     public NewTootWindow()
     {
         this.InitializeComponent();

@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 using IceAge.Controls;
 using Mastonet;
 using Mastonet.Entities;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Windows.Storage;
+using System.Text.Json.Serialization.Metadata;
+using System.Net.Http;
 
 namespace IceAge.Interop;
 
-class TootFactory
+internal class TootFactory : ITootFactory
 {
+    private readonly Settings _settings;
+    private readonly StorageFile _cacheFile;
     private MastodonList<Status> _timeline;
-    private MastodonClient _client;
     private List<TootControl> _controls;
-    private Settings _settings;
-    private StorageFile _cacheFile;
     private bool _isWritingCacheFile;
-    private readonly JsonSerializer _serializer;
 
     public MastodonList<Status> Timeline
     {
@@ -33,13 +33,20 @@ class TootFactory
         }
     }
 
-    public TootFactory(MastodonClient mastodonClient, Settings settings, MastodonList<Status> timeline, StorageFile cacheFile = null)
+    public HttpClient HttpClient { get; }
+
+    public MastodonClient MastodonClient { get; }
+
+    public AuthenticationClient AuthenticationClient => throw new NotImplementedException();
+
+    public Auth Auth => throw new NotImplementedException();
+
+    public TootFactory()
     {
-        _client = mastodonClient;
+        MastodonClient = _settings.
         _timeline = timeline;
         _settings = settings;
         _cacheFile = cacheFile;
-        _serializer = new JsonSerializer();
         _isWritingCacheFile = false;
         init();
     }
@@ -82,13 +89,15 @@ class TootFactory
 
     private async Task saveCacheFileAsync()
     {
-        if (_cacheFile == null)
+        if (_cacheFile == null || _isWritingCacheFile)
             return;
         _isWritingCacheFile = true;
         using (var writer = new StreamWriter(await _cacheFile.OpenStreamForWriteAsync()))
-        using (var jsonWriter = new JsonTextWriter(writer))
         {
-            _serializer.Serialize(jsonWriter, _timeline);
+            var typeInfo = JsonTypeInfo.CreateJsonTypeInfo(typeof(MastodonList<Status>), JsonSerializerOptions.Default);
+            var json = JsonSerializer.Serialize(_timeline, typeInfo);
+            await writer.WriteAsync(json);
+            await writer.FlushAsync();
         }
         _isWritingCacheFile = false;
     }

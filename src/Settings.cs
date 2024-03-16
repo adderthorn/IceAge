@@ -1,246 +1,138 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Windows.Storage;
 using Mastonet.Entities;
-using System.Xml.Linq;
-using System.IO;
-using Mastonet;
 using Windows.Graphics;
 using Microsoft.UI.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Diagnostics;
 
 namespace IceAge;
 
-public class Settings : INotifyPropertyChanged
+public partial class Settings : ObservableObject
 {
     #region Private Variables
-    private const string FILE_NAME = "settings.json";
-    private bool _canSave = false;
+    private readonly ApplicationDataContainer localSettings;
 
-    private AppRegistration _appRegistration;
-    private string _authCode;
-    private Auth _auth;
-    private ElementTheme _elementTheme;
-    private RectInt32 _windowSizeAndPosition;
-    private bool _saveWindowSizeAndPosition;
-    private bool _shortenHyperlinks;
-    private bool _autoPlay;
-    private bool _newWindows;
+    // Defaults
+    private const AppRegistration kAppRegistration = null;
+    private const string kAuthCode = null;
+    private const Auth kAuth = null;
+    private const ElementTheme kElementTheme = ElementTheme.Default;
+    private readonly RectInt32 kWindowSizeAndPosition = new();
+    private const bool kSaveWindowSizeAndPosition = true;
+    private const bool kShortenHyperlinks = true;
+    private const bool kAutoPlay = true;
+    private const bool kNewWindows = false;
     #endregion
 
     #region Public Properties
+    /// <summary>
+    /// Name of the Application for use in Mastodon API registration.
+    /// </summary>
     public const string AppName = "IceAge";
-    public event PropertyChangedEventHandler PropertyChanged;
 
+    [ObservableProperty]
+    private AppRegistration _appRegistration;
 
-    [JsonProperty]
-    public AppRegistration AppRegistration
+    [ObservableProperty]
+    private string _authCode;
+
+    [ObservableProperty]
+    private Auth _auth;
+
+    [ObservableProperty]
+    private ElementTheme _elementTheme;
+
+    [ObservableProperty]
+    private RectInt32 _windowSizeAndPosition;
+
+    [ObservableProperty]
+    private bool _saveWindowSizeAndPosition;
+
+    [ObservableProperty]
+    private bool _shortenHyperlinks;
+
+    [ObservableProperty]
+    private bool _autoPlay;
+
+    [ObservableProperty]
+    private bool _newWindows;
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Loads the settings object and populates all settings from the
+    /// local data container.
+    /// </summary>
+    /// <exception cref="Exception">The local settings container was null.</exception>
+    public Settings()
     {
-        get => _appRegistration;
-        set
-        {
-            if (value != _appRegistration)
-            {
-                _appRegistration = value;
-                RaisePropertyChanged(nameof(AppRegistration));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
+        localSettings = ApplicationData.Current.LocalSettings;
 
-    [JsonProperty]
-    public string AuthCode
-    {
-        get => _authCode;
-        set
-        {
-            if (value != _authCode)
-            {
-                _authCode = value;
-                RaisePropertyChanged(nameof(AuthCode));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
+        if (localSettings == null)
+            throw new Exception("Local settings cannot be null");
 
-    [JsonProperty]
-    public Auth Auth
-    {
-        get => _auth;
-        set
-        {
-            if (value != _auth)
-            {
-                _auth = value;
-                RaisePropertyChanged(nameof(Auth));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public ElementTheme ElementTheme
-    {
-        get => _elementTheme;
-        set
-        {
-            if (value != _elementTheme)
-            {
-                _elementTheme = value;
-                RaisePropertyChanged(nameof(ElementTheme));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public RectInt32 WindowSizeAndPosition
-    {
-        get => _windowSizeAndPosition;
-        set
-        {
-            if (value != _windowSizeAndPosition)
-            {
-                _windowSizeAndPosition = value;
-                RaisePropertyChanged(nameof(WindowSizeAndPosition));
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool SaveWindowSizeAndPosition
-    {
-        get => _saveWindowSizeAndPosition;
-        set
-        {
-            if (value != _saveWindowSizeAndPosition)
-            {
-                if (value)
-                {
-                    _saveWindowSizeAndPosition = true;
-                }
-                else
-                {
-                    _saveWindowSizeAndPosition = false;
-                    WindowSizeAndPosition = new RectInt32();
-                }
-                RaisePropertyChanged(nameof(SaveWindowSizeAndPosition));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool ShortenHyperlinks
-    {
-        get => _shortenHyperlinks;
-        set
-        {
-            if (value != _shortenHyperlinks)
-            {
-                _shortenHyperlinks = value;
-                RaisePropertyChanged(nameof(ShortenHyperlinks));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool AutoPlay
-    {
-        get => _autoPlay;
-        set
-        {
-            if (value != _autoPlay)
-            {
-                _autoPlay = value;
-                RaisePropertyChanged(nameof(AutoPlay));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool NewWindows
-    {
-        get => _newWindows;
-        set
-        {
-            if (value != _newWindows)
-            {
-                _newWindows = value;
-                RaisePropertyChanged(nameof(NewWindows));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
+        this.AppRegistration = getSetting(nameof(AppRegistration), kAppRegistration);
+        this.AuthCode = getSetting(nameof(AuthCode), kAuthCode);
+        this.Auth = getSetting(nameof(Auth), kAuth);
+        this.ElementTheme = getSetting(nameof(ElementTheme), kElementTheme);
+        this.WindowSizeAndPosition = getSetting(nameof(WindowSizeAndPosition), kWindowSizeAndPosition);
+        this.SaveWindowSizeAndPosition = getSetting(nameof(SaveWindowSizeAndPosition), kSaveWindowSizeAndPosition);
+        this.ShortenHyperlinks = getSetting(nameof(ShortenHyperlinks), kShortenHyperlinks);
+        this.AutoPlay = getSetting(nameof(AutoPlay), kAutoPlay);
+        this.NewWindows = getSetting(nameof(NewWindows), kNewWindows);
     }
     #endregion
 
-    #region Constructors & Static Methods
-    public static async Task<Settings> LoadSettingsAsync()
+    #region Public Functions
+    /// <summary>
+    /// Saves the settings to the local data container.
+    /// </summary>
+    public void Save()
     {
-        var localFolder = ApplicationData.Current.LocalFolder;
-        StorageFile file;
-        try
-        {
-            file = await localFolder.GetFileAsync(FILE_NAME);
-            using (StreamReader streamReader = new StreamReader(await file.OpenStreamForReadAsync()))
-            using (JsonReader reader = new JsonTextReader(streamReader))
-            {
-                var serializer = new JsonSerializer();
-                var settings = serializer.Deserialize<Settings>(reader) ?? new Settings();
-                settings._canSave = true;
-                return settings;
-            }
-        }
-        catch (FileNotFoundException)
-        {
-            file = await localFolder.CreateFileAsync(FILE_NAME);
-            var settings = new Settings();
-            await settings.saveAsync(file);
-            return settings;
-        }
-    }
-
-    private Settings()
-    {
-        AppRegistration = null;
-        _canSave = true;
-        _saveWindowSizeAndPosition = true;
-        _autoPlay = true;
+        localSettings.Values[nameof(AppRegistration)] = this.AppRegistration;
+        localSettings.Values[nameof(AuthCode)] = this.AuthCode;
+        localSettings.Values[nameof(Auth)] = this.Auth;
+        localSettings.Values[nameof(ElementTheme)] = this.ElementTheme;
+        localSettings.Values[nameof(WindowSizeAndPosition)] = this.WindowSizeAndPosition;
+        localSettings.Values[nameof(SaveWindowSizeAndPosition)] = this.SaveWindowSizeAndPosition;
+        localSettings.Values[nameof(ShortenHyperlinks)] = this.ShortenHyperlinks;
+        localSettings.Values[nameof(AutoPlay)] = this.AutoPlay;
+        localSettings.Values[nameof(NewWindows)] = this.NewWindows;
     }
     #endregion
 
     #region Private Functions
-    private void RaisePropertyChanged(string propertyName)
+    /// <summary>
+    /// Gets either the saved setting value from the
+    /// local data container or a specified default value.
+    /// </summary>
+    /// <typeparam name="T">Type of the value object.</typeparam>
+    /// <param name="key">Setting key name.</param>
+    /// <param name="defaultValue">Default value of the setting.</param>
+    /// <returns>Setting value.</returns>
+    private T getSetting<T>(string key, T defaultValue)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public async Task SaveAsync()
-    {
-        var localFolder = ApplicationData.Current.LocalFolder;
-        var file = await localFolder.GetFileAsync(FILE_NAME);
-        await saveAsync(file);
-    }
-
-    private async Task saveAsync(StorageFile file)
-    {
-        if (!_canSave)
-            return;
-        _canSave = false;
-        using (StreamWriter streamWriter = new StreamWriter(await file.OpenStreamForWriteAsync(), new UTF8Encoding(false)))
-        using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
+        try
         {
-            var serializer = new JsonSerializer();
-            jsonWriter.Formatting = Formatting.Indented;
-            serializer.Serialize(jsonWriter, this);
+            Object obj = localSettings.Values[key];
+            if (obj == null || obj.GetType() != typeof(T))
+            {
+                return defaultValue;
+            }
+            return (T)obj;
         }
-        _canSave = true;
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            return defaultValue;
+        }
+    }
+
+    partial void OnSaveWindowSizeAndPositionChanged(bool value)
+    {
+        if (!value)
+            WindowSizeAndPosition = new RectInt32();
     }
     #endregion
 }

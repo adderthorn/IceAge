@@ -40,7 +40,6 @@ public enum LoginAttemptStatus
 public sealed partial class LoginPage : Page, INotifyPropertyChanged
 {
     private const string kMastodonUrl = "https://www.joinmastodon.org/";
-    private const string kAppName = "IceAge";
     private bool _waitingOnAuthCode;
     private bool _isLoggingIn;
     private AuthenticationClient _authClient;
@@ -49,7 +48,7 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public App ThisApp => App.Current as App;
+    public Settings Settings { get; }
 
     public bool WaitingOnAuthCode
     {
@@ -80,10 +79,11 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
         }
     }
 
-    public LoginPage()
+    public LoginPage(Settings settings)
     {
+        this.Settings = settings;
         this.InitializeComponent();
-        ThisApp.HttpClient = new HttpClient();
+        App.Current.HttpClient = new HttpClient();
         resourceLoader = new ResourceLoader();
         _waitingOnAuthCode = false;
         _isLoggingIn = false;
@@ -100,8 +100,8 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
         try
         {
             string instance = match.Groups.Values.LastOrDefault().Value;
-            _authClient = new AuthenticationClient(instance, ThisApp.HttpClient);
-            ThisApp.Settings.AppRegistration = await _authClient.CreateApp(kAppName, null, null, GranularScope.Read, GranularScope.Write, GranularScope.Follow, GranularScope.Push);
+            _authClient = new AuthenticationClient(instance, App.Current.HttpClient);
+            Settings.AppRegistration = await _authClient.CreateApp(Settings.AppName, null, null, GranularScope.Read, GranularScope.Write, GranularScope.Follow, GranularScope.Push);
             var url = _authClient.OAuthUrl();
             if (await Windows.System.Launcher.LaunchUriAsync(new Uri(url)))
             {
@@ -156,9 +156,9 @@ public sealed partial class LoginPage : Page, INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(AuthCodeTextBox.Text))
             return;
-        ThisApp.Settings.AuthCode = AuthCodeTextBox.Text.Trim();
-        ThisApp.Settings.Auth = await _authClient.ConnectWithCode(ThisApp.Settings.AuthCode);
-        ThisApp.MastodonClient = new MastodonClient(_authClient.Instance, ThisApp.Settings.Auth.AccessToken);
+        Settings.AuthCode = AuthCodeTextBox.Text.Trim();
+        Settings.Auth = await _authClient.ConnectWithCode(Settings.AuthCode);
+        App.Current.MastodonClient = new MastodonClient(_authClient.Instance, Settings.Auth.AccessToken);
         Frame.Navigate(typeof(TimelinePage));
     }
 

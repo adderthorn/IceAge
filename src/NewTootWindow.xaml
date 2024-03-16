@@ -9,7 +9,7 @@
     xmlns:controls="using:IceAge.Controls"
     mc:Ignorable="d">
 
-    <Grid RequestedTheme="{x:Bind Settings.ElementTheme, Mode=OneWay}">
+    <Grid>
         <controls:NewTootControl/>
     </Grid>
 </Window>
