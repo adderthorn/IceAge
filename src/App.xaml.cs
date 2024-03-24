@@ -8,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using IceAge.Interop;
+using IceAge.TootFactory;
+using IceAge.TimelineFetcher;
+using IceAge.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,9 +21,8 @@ namespace IceAge;
 /// </summary>
 public partial class App : Application
 {
-    public HttpClient HttpClient { get; set; }
+    public HttpClient HttpClient { get; }
     public MastodonClient MastodonClient { get; set; }
-    public AuthenticationClient AuthenticationClient { get; set; }
     public Auth Auth { get; set; }
     public static new App Current => Application.Current as App;
     public IServiceProvider Services { get; }
@@ -30,7 +32,10 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddSingleton<Settings>()
-            .AddSingleton<ITootFactory, TootFactory>();
+            .AddSingleton<TimelineFetcherBase, HomeTimelineFetcher>()
+            .AddSingleton<TimelineFetcherBase, LocalTimelineFetcher>()
+            .AddSingleton<TimelineFetcherBase, FederatedTimelineFetcher>()
+            .AddSingleton<TimelineViewModel>();
 
         return services.BuildServiceProvider();
     }

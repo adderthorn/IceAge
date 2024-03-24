@@ -34,8 +34,6 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    public App ThisApp => App.Current as App;
-
     public Settings Settings { get; }
 
     public static readonly Dictionary<string, Type> NavigationPageDictionary = new()
@@ -48,14 +46,12 @@ public sealed partial class MainWindow : Window
     {
         this.Settings = settings;
         this.InitializeComponent();
-        ThisApp.HttpClient = new HttpClient();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
         if (Settings.Auth != null)
         {
-            ThisApp.Auth = Settings.Auth;
-            ThisApp.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, ThisApp.HttpClient);
+            App.Current.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, App.Current.HttpClient);
             Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
         }
         else
@@ -73,6 +69,9 @@ public sealed partial class MainWindow : Window
                 var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
                 Settings.WindowSizeAndPosition = rect;
             }
+
+            Settings.Save();
+            App.Current.HttpClient.Dispose();
         };
 
         if (Settings.SaveWindowSizeAndPosition
