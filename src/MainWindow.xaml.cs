@@ -49,15 +49,6 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
-        if (Settings.Auth != null)
-        {
-            App.Current.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, App.Current.HttpClient);
-            Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
-        }
-        else
-        {
-            Navigate(typeof(LoginPage));
-        }
 
         this.AppWindow.Closing += (s, e) =>
         {
@@ -160,6 +151,19 @@ public sealed partial class MainWindow : Window
             MainNavigationView.SelectedItem = MainNavigationView.MenuItems
                 .OfType<NavigationViewItem>()
                 .FirstOrDefault(i => i.Name == ContentFrame.SourcePageType.Name);
+        }
+    }
+
+    private void ContentFrame_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (Settings.Auth != null)
+        {
+            App.Current.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, App.Current.HttpClient);
+            Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
+        }
+        else
+        {
+            Navigate(typeof(LoginPage));
         }
     }
 }

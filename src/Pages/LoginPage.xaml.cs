@@ -20,160 +20,46 @@ using System.ComponentModel;
 using HtmlAgilityPack;
 using System.Diagnostics;
 using Microsoft.Windows.ApplicationModel.Resources;
+using IceAge.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace IceAge.Pages;
 
-public enum LoginAttemptStatus
-{
-    InvalidHandle,
-    UnhandledError,
-    Failure,
-    Success
-}
+
 
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class LoginPage : Page, INotifyPropertyChanged
+public sealed partial class LoginPage : Page
 {
-    private const string kMastodonUrl = "https://www.joinmastodon.org/";
-    private bool _waitingOnAuthCode;
-    private bool _isLoggingIn;
-    private AuthenticationClient _authClient;
+    public LoginViewModel ViewModel { get; }
 
-    private readonly ResourceLoader resourceLoader;
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public Settings Settings { get; }
-
-    public bool WaitingOnAuthCode
+    public LoginPage()
     {
-        get => _waitingOnAuthCode;
-        set
-        {
-            if (_waitingOnAuthCode != value)
-            {
-                _waitingOnAuthCode = value;
-                notifyPropertyChanged(nameof(WaitingOnAuthCode));
-                notifyPropertyChanged(nameof(LabelText));
-            }
-        }
-    }
-
-    public string LabelText => WaitingOnAuthCode ? "Auth Code:" : "Handle:";
-
-    public bool IsLoggingIn
-    {
-        get => _isLoggingIn;
-        set
-        {
-            if (_isLoggingIn != value)
-            {
-                _isLoggingIn = value;
-                notifyPropertyChanged(nameof(IsLoggingIn));
-            }
-        }
-    }
-
-    public LoginPage(Settings settings)
-    {
-        this.Settings = settings;
         this.InitializeComponent();
-        App.Current.HttpClient = new HttpClient();
-        resourceLoader = new ResourceLoader();
-        _waitingOnAuthCode = false;
-        _isLoggingIn = false;
+        this.ViewModel = App.Current.Services.GetService<LoginViewModel>();
     }
 
-    private async Task<LoginAttemptStatus> AttemptLogin()
-    {
-        string handle = HandleTextBox.Text.Trim();
-        var match = Regex.Match(handle, IceAgeHelper.UsernameRegex, IceAgeHelper.UsernameRegexOptions);
-        if (!match.Success)
-        {
-            return LoginAttemptStatus.InvalidHandle;
-        }
-        try
-        {
-            string instance = match.Groups.Values.LastOrDefault().Value;
-            _authClient = new AuthenticationClient(instance, App.Current.HttpClient);
-            Settings.AppRegistration = await _authClient.CreateApp(Settings.AppName, null, null, GranularScope.Read, GranularScope.Write, GranularScope.Follow, GranularScope.Push);
-            var url = _authClient.OAuthUrl();
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(url)))
-            {
-                return LoginAttemptStatus.Success;
-            }
-            return LoginAttemptStatus.Failure;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            return LoginAttemptStatus.UnhandledError;
-        }
-    }
+    private async void LoginButton_Click(object sender, RoutedEventArgs e) =>
+        await ViewModel.AttemptLoginAsync(HandleTextBox.Text.Trim());
 
-    private async void LoginButton_Click(object sender, RoutedEventArgs e)
-    {
-        IsLoggingIn = true;
-        switch (await AttemptLogin())
-        {
-            case LoginAttemptStatus.InvalidHandle:
-                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/InvalidHandle/Title");
-                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/InvalidHandle/Subtitle");
-                InvalidHandleTip.IsOpen = true;
-                break;
-            case LoginAttemptStatus.UnhandledError:
-                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/Error/Title");
-                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/Error/Subtitle");
-                InvalidHandleTip.IsOpen = true;
-                break;
-            case LoginAttemptStatus.Failure:
-                InvalidHandleTip.Title = resourceLoader.GetString("LoginStatus/Failure/Title");
-                InvalidHandleTip.Subtitle = resourceLoader.GetString("LoginStatus/Failure/Subtitle");
-                InvalidHandleTip.IsOpen = true;
-                break;
-            case LoginAttemptStatus.Success:
-                InvalidHandleTip.IsOpen = false;
-                WaitingOnAuthCode = true;
-                break;
-        }
-        IsLoggingIn = false;
-    }
-
-    private void notifyPropertyChanged(string propertyName) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    private async void SignupButton_Click(object sender, RoutedEventArgs e)
-    {
-        await Windows.System.Launcher.LaunchUriAsync(new Uri(kMastodonUrl));
-    }
-
-    private async void AuthCodeButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (string.IsNullOrWhiteSpace(AuthCodeTextBox.Text))
-            return;
-        Settings.AuthCode = AuthCodeTextBox.Text.Trim();
-        Settings.Auth = await _authClient.ConnectWithCode(Settings.AuthCode);
-        App.Current.MastodonClient = new MastodonClient(_authClient.Instance, Settings.Auth.AccessToken);
-        Frame.Navigate(typeof(TimelinePage));
-    }
+    private async void SignupButton_Click(object sender, RoutedEventArgs e) =>
+        await Windows.System.Launcher.LaunchUriAsync(new Uri(IceAgeHelper.MastodonUrl));
 
     private void HandleTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
     {
         if (e.Key == Windows.System.VirtualKey.Enter)
         {
-            if (WaitingOnAuthCode)
-            {
+            if (ViewModel.WaitingOnAuthCode)
                 AuthCodeButton_Click(sender, e);
-            }
             else
-            {
                 LoginButton_Click(sender, e);
-            }
         }
     }
+
+    private async void AuthCodeButton_Click(object sender, RoutedEventArgs e) =>
+        await ViewModel.AuthenticateAsync(AuthCodeTextBox.Text.Trim());
 }

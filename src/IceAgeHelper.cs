@@ -15,6 +15,7 @@ public static class IceAgeHelper
 {
     private const int kDPI = 96;
 
+    public const string MastodonUrl = "https://www.joinmastodon.org/";
     public const string UsernameRegex = @"@?\b([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,})\b";
     public const RegexOptions UsernameRegexOptions = RegexOptions.IgnoreCase;
 

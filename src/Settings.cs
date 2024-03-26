@@ -17,7 +17,7 @@ public partial class Settings : ObservableObject
     private const AppRegistration kAppRegistration = null;
     private const string kAuthCode = null;
     private const Auth kAuth = null;
-    private const ElementTheme kElementTheme = ElementTheme.Default;
+    private const string kElementTheme = "Default";
     private readonly RectInt32 kWindowSizeAndPosition = new();
     private const bool kSaveWindowSizeAndPosition = true;
     private const bool kShortenHyperlinks = true;
@@ -75,7 +75,8 @@ public partial class Settings : ObservableObject
         this.AppRegistration = getSetting(nameof(AppRegistration), kAppRegistration);
         this.AuthCode = getSetting(nameof(AuthCode), kAuthCode);
         this.Auth = getSetting(nameof(Auth), kAuth);
-        this.ElementTheme = getSetting(nameof(ElementTheme), kElementTheme);
+        string elementThemeStr = getSetting<string>(nameof(ElementTheme), kElementTheme);
+        ElementTheme = (ElementTheme)Enum.Parse(typeof(ElementTheme), elementThemeStr);
         this.WindowSizeAndPosition = getSetting(nameof(WindowSizeAndPosition), kWindowSizeAndPosition);
         this.SaveWindowSizeAndPosition = getSetting(nameof(SaveWindowSizeAndPosition), kSaveWindowSizeAndPosition);
         this.ShortenHyperlinks = getSetting(nameof(ShortenHyperlinks), kShortenHyperlinks);
@@ -93,7 +94,7 @@ public partial class Settings : ObservableObject
         localSettings.Values[nameof(AppRegistration)] = this.AppRegistration;
         localSettings.Values[nameof(AuthCode)] = this.AuthCode;
         localSettings.Values[nameof(Auth)] = this.Auth;
-        localSettings.Values[nameof(ElementTheme)] = this.ElementTheme;
+        localSettings.Values[nameof(ElementTheme)] = this.ElementTheme.ToString();
         localSettings.Values[nameof(WindowSizeAndPosition)] = this.WindowSizeAndPosition;
         localSettings.Values[nameof(SaveWindowSizeAndPosition)] = this.SaveWindowSizeAndPosition;
         localSettings.Values[nameof(ShortenHyperlinks)] = this.ShortenHyperlinks;

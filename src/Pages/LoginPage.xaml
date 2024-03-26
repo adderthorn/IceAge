@@ -23,12 +23,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Right"
-                   VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind LabelText, Mode=OneWay}"/>
+                   VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind ViewModel.LabelText, Mode=OneWay}"/>
         <TextBox x:Uid="HandleTextBox" x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5"
-                 Visibility="{x:Bind WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
-                 KeyUp="HandleTextBox_KeyUp" IsEnabled="{x:Bind IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
+                 Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
+                 KeyUp="HandleTextBox_KeyUp" IsEnabled="{x:Bind ViewModel.IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
                  IsSpellCheckEnabled="False"/>
-        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"
+        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Mode=OneWay}"
                  IsSpellCheckEnabled="False"/>
         <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
             <Grid.ColumnDefinitions>
@@ -36,19 +36,19 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
-                    Visibility="{x:Bind WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
                     Click="SignupButton_Click" x:Uid="SignupButton"
-                    IsEnabled="{x:Bind IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"/>
+                    IsEnabled="{x:Bind ViewModel.IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"/>
             <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100"
-                    Click="LoginButton_Click" Visibility="{x:Bind WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
-                    IsEnabled="{x:Bind IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}">
+                    Click="LoginButton_Click" Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"
+                    IsEnabled="{x:Bind ViewModel.IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="LoginButtonContent" Visibility="{x:Bind IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"/>
-                    <ProgressRing Height="10" Width="10" Visibility="{x:Bind IsLoggingIn, Mode=OneWay}"/>
+                    <TextBlock x:Uid="LoginButtonContent" Visibility="{x:Bind ViewModel.IsLoggingIn, Converter={StaticResource BoolNegConverter}, Mode=OneWay}"/>
+                    <ProgressRing Height="10" Width="10" Visibility="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay}"/>
                 </StackPanel>
             </Button>
             <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
-                    x:Uid="AuthCodeButton" Visibility="{x:Bind WaitingOnAuthCode, Mode=OneWay}"/>
+                    x:Uid="AuthCodeButton" Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Mode=OneWay}"/>
         </Grid>
         <TeachingTip x:Name="InvalidHandleTip" Target="{x:Bind HandleTextBox}">
             <TeachingTip.IconSource>

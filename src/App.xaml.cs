@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using IceAge.Interop;
-using IceAge.TootFactory;
 using IceAge.TimelineFetcher;
 using IceAge.ViewModels;
 

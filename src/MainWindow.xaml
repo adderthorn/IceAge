@@ -88,7 +88,7 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame" NavigationFailed="ContentFrame_NavigationFailed" Navigated="ContentFrame_Navigated"/>
+            <Frame x:Name="ContentFrame" NavigationFailed="ContentFrame_NavigationFailed" Navigated="ContentFrame_Navigated" Loaded="ContentFrame_Loaded"/>
             <NavigationView.FooterMenuItems>
                 <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
                 <NavigationViewItemSeparator/>
