@@ -1,29 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using IceAge.Interconnect;
-using System.Net.Http;
 using Mastonet;
-using System.Diagnostics;
-using Mastonet.Entities;
-using System.Threading.Tasks;
-using IceAge.Controls;
-using System.Threading;
 using IceAge.Pages;
 using Windows.Graphics;
 using Microsoft.UI.Xaml.Media.Animation;
-using Microsoft.Extensions.DependencyInjection;
+using IceAge.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,7 +21,8 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    public Settings Settings { get; }
+    public App App => App.Current;
+    public MastodonInterop MastodonInterop { get; }
 
     public static readonly Dictionary<string, Type> NavigationPageDictionary = new()
     {
@@ -42,34 +30,34 @@ public sealed partial class MainWindow : Window
         { "Settings", typeof(SettingsPage) }
     };
 
-    public MainWindow(Settings settings)
+    public MainWindow(MastodonInterop mastodonInterop)
     {
-        this.Settings = settings;
+        MastodonInterop = mastodonInterop;
         this.InitializeComponent();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         SystemBackdrop = new MicaBackdrop();
 
-        this.AppWindow.Closing += (s, e) =>
+        this.AppWindow.Closing += async (s, e) =>
         {
             // TODO Prevent this if window is maximized.
-            if (Settings.SaveWindowSizeAndPosition
+            if (App.Settings.SaveWindowSizeAndPosition
                 && AppWindow.Size.Width > 0
                 && AppWindow.Size.Height > 0)
             {
                 var rect = new RectInt32(AppWindow.Position.X, AppWindow.Position.Y, AppWindow.Size.Width, AppWindow.Size.Height);
-                Settings.WindowSizeAndPosition = rect;
+                App.Settings.WindowSizeAndPosition = rect;
             }
 
-            Settings.Save();
-            App.Current.HttpClient.Dispose();
+            await App.Settings.SaveAsync();
+            MastodonInterop.HttpClient.Dispose();
         };
 
-        if (Settings.SaveWindowSizeAndPosition
-            && Settings.WindowSizeAndPosition.Width > 0
-            && Settings.WindowSizeAndPosition.Height > 0)
+        if (App.Settings.SaveWindowSizeAndPosition
+            && App.Settings.WindowSizeAndPosition.Width > 0
+            && App.Settings.WindowSizeAndPosition.Height > 0)
         {
-            AppWindow.MoveAndResize(Settings.WindowSizeAndPosition);
+            AppWindow.MoveAndResize(App.Settings.WindowSizeAndPosition);
         }
     }
 
@@ -156,9 +144,12 @@ public sealed partial class MainWindow : Window
 
     private void ContentFrame_Loaded(object sender, RoutedEventArgs e)
     {
-        if (Settings.Auth != null)
+        if (App.Settings.Auth != null)
         {
-            App.Current.MastodonClient = new MastodonClient(Settings.AppRegistration.Instance, Settings.Auth.AccessToken, App.Current.HttpClient);
+            MastodonInterop.MastodonClient = new MastodonClient(
+                App.Settings.AppRegistration.Instance,
+                App.Settings.Auth.AccessToken,
+                MastodonInterop.HttpClient);
             Navigate(typeof(TimelinePage), new EntranceNavigationTransitionInfo());
         }
         else

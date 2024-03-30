@@ -5,19 +5,25 @@ using Windows.Graphics;
 using Microsoft.UI.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json.Serialization.Metadata;
+using Newtonsoft.Json;
 
 namespace IceAge;
 
 public partial class Settings : ObservableObject
 {
     #region Private Variables
-    private readonly ApplicationDataContainer localSettings;
+    private const string kFileName = "settings.json";
+    private bool _isSaving;
+    private readonly JsonSerializer serializer;
 
     // Defaults
     private const AppRegistration kAppRegistration = null;
     private const string kAuthCode = null;
     private const Auth kAuth = null;
-    private const string kElementTheme = "Default";
+    private const ElementTheme kElementTheme = ElementTheme.Default;
     private readonly RectInt32 kWindowSizeAndPosition = new();
     private const bool kSaveWindowSizeAndPosition = true;
     private const bool kShortenHyperlinks = true;
@@ -60,28 +66,43 @@ public partial class Settings : ObservableObject
     #endregion
 
     #region Constructors
-    /// <summary>
-    /// Loads the settings object and populates all settings from the
-    /// local data container.
-    /// </summary>
-    /// <exception cref="Exception">The local settings container was null.</exception>
     public Settings()
     {
-        localSettings = ApplicationData.Current.LocalSettings;
+        AppRegistration = kAppRegistration;
+        AuthCode = kAuthCode;
+        Auth = kAuth;
+        ElementTheme = kElementTheme;
+        WindowSizeAndPosition = kWindowSizeAndPosition;
+        SaveWindowSizeAndPosition = kSaveWindowSizeAndPosition;
+        ShortenHyperlinks = kShortenHyperlinks;
+        AutoPlay = kAutoPlay;
+        NewWindows = kNewWindows;
+        serializer = JsonSerializer.Create();
+    }
 
-        if (localSettings == null)
-            throw new Exception("Local settings cannot be null");
-
-        this.AppRegistration = getSetting(nameof(AppRegistration), kAppRegistration);
-        this.AuthCode = getSetting(nameof(AuthCode), kAuthCode);
-        this.Auth = getSetting(nameof(Auth), kAuth);
-        string elementThemeStr = getSetting<string>(nameof(ElementTheme), kElementTheme);
-        ElementTheme = (ElementTheme)Enum.Parse(typeof(ElementTheme), elementThemeStr);
-        this.WindowSizeAndPosition = getSetting(nameof(WindowSizeAndPosition), kWindowSizeAndPosition);
-        this.SaveWindowSizeAndPosition = getSetting(nameof(SaveWindowSizeAndPosition), kSaveWindowSizeAndPosition);
-        this.ShortenHyperlinks = getSetting(nameof(ShortenHyperlinks), kShortenHyperlinks);
-        this.AutoPlay = getSetting(nameof(AutoPlay), kAutoPlay);
-        this.NewWindows = getSetting(nameof(NewWindows), kNewWindows);
+    public static async Task<Settings> CreateAsync()
+    {
+        StorageFile settingsFile;
+        try
+        {
+            settingsFile = await ApplicationData.Current.LocalFolder.GetFileAsync(kFileName);
+            var stream = await settingsFile.OpenStreamForReadAsync();
+            Settings settings;
+            using (var streamReader = new StreamReader(stream))
+            using (var reader = new JsonTextReader(streamReader))
+            {
+                var serializer = JsonSerializer.Create();
+                settings = serializer.Deserialize<Settings>(reader);
+            }
+            return settings;
+        }
+        catch (FileNotFoundException)
+        {
+            settingsFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(kFileName);
+            var settings = new Settings();
+            await settings.SaveAsync(await settingsFile.OpenStreamForWriteAsync());
+            return settings;
+        }
     }
     #endregion
 
@@ -89,47 +110,31 @@ public partial class Settings : ObservableObject
     /// <summary>
     /// Saves the settings to the local data container.
     /// </summary>
-    public void Save()
+    public async Task SaveAsync()
     {
-        localSettings.Values[nameof(AppRegistration)] = this.AppRegistration;
-        localSettings.Values[nameof(AuthCode)] = this.AuthCode;
-        localSettings.Values[nameof(Auth)] = this.Auth;
-        localSettings.Values[nameof(ElementTheme)] = this.ElementTheme.ToString();
-        localSettings.Values[nameof(WindowSizeAndPosition)] = this.WindowSizeAndPosition;
-        localSettings.Values[nameof(SaveWindowSizeAndPosition)] = this.SaveWindowSizeAndPosition;
-        localSettings.Values[nameof(ShortenHyperlinks)] = this.ShortenHyperlinks;
-        localSettings.Values[nameof(AutoPlay)] = this.AutoPlay;
-        localSettings.Values[nameof(NewWindows)] = this.NewWindows;
+        var settingsFile = await ApplicationData.Current.LocalFolder.GetFileAsync(kFileName);
+        var stream = await settingsFile.OpenStreamForWriteAsync();
+        await SaveAsync(stream);
+    }
+
+    public async Task SaveAsync(Stream stream)
+    {
+        if (_isSaving)
+            return;
+
+        _isSaving = true;
+        using (var streamWriter = new StreamWriter(stream))
+        using (var writer = new JsonTextWriter(streamWriter))
+        {
+            serializer.Serialize(writer, this);
+            await writer.FlushAsync();
+            await streamWriter.FlushAsync();
+        }
+        _isSaving = false;
     }
     #endregion
 
     #region Private Functions
-    /// <summary>
-    /// Gets either the saved setting value from the
-    /// local data container or a specified default value.
-    /// </summary>
-    /// <typeparam name="T">Type of the value object.</typeparam>
-    /// <param name="key">Setting key name.</param>
-    /// <param name="defaultValue">Default value of the setting.</param>
-    /// <returns>Setting value.</returns>
-    private T getSetting<T>(string key, T defaultValue)
-    {
-        try
-        {
-            Object obj = localSettings.Values[key];
-            if (obj == null || obj.GetType() != typeof(T))
-            {
-                return defaultValue;
-            }
-            return (T)obj;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            return defaultValue;
-        }
-    }
-
     partial void OnSaveWindowSizeAndPositionChanged(bool value)
     {
         if (!value)

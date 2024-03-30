@@ -1,4 +1,5 @@
-﻿using Mastonet;
+﻿using IceAge.Interop;
+using Mastonet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,16 @@ internal class FederatedTimelineFetcher : TimelineFetcherBase
 {
     private readonly TimelineStreaming _streaming;
 
-    public FederatedTimelineFetcher(Settings settings) : base(settings)
+    public FederatedTimelineFetcher(MastodonInterop mastodonInterop) : base(mastodonInterop)
     {
-        _streaming = App.Current.MastodonClient.GetPublicStreaming();
+        _streaming = _mastodonInterop.MastodonClient.GetPublicStreaming();
     }
 
     public override TimelineStreaming Streaming => _streaming;
 
-    public override async Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
+    public async override Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
     {
-        var statuses = await App.Current.MastodonClient.GetPublicTimeline(options, local: false);
+        var statuses = await _mastodonInterop.MastodonClient.GetPublicTimeline(options, local: false);
         if (Timeline?.Count == 0)
         {
             Timeline = statuses;

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using IceAge.Interop;
 using IceAge.Pages;
 using Mastonet;
+using Microsoft.UI.Xaml.Controls;
 using Microsoft.Windows.ApplicationModel.Resources;
 using System;
 using System.Collections.Generic;
@@ -19,47 +21,65 @@ public partial class LoginViewModel : ObservableObject
 
     private AuthenticationClient _authClient;
 
-    public Settings Settings { get; }
+    public MastodonInterop MastodonInterop { get; }
 
     public string LabelText => WaitingOnAuthCode
         ? _resourceLoader.GetString("LoginPage/AuthCode")
         : _resourceLoader.GetString("LoginPage/Handle");
 
-    [ObservableProperty]
-    public bool _waitingOnAuthCode;
+    public bool NotWaitingOnAuthCode => !WaitingOnAuthCode;
+
+    public bool NotIsLoggingIn => !IsLoggingIn;
 
     [ObservableProperty]
-    public bool _isLoggingIn;
+    private bool _waitingOnAuthCode;
 
     [ObservableProperty]
-    public string _invalidHandleTitle;
+    private bool _isLoggingIn;
 
     [ObservableProperty]
-    public string _invalidHandleSubtitle;
+    private string _invalidHandleTitle;
 
     [ObservableProperty]
-    public bool _invalidHandleIsOpen;
+    private string _invalidHandleSubtitle;
 
-    public LoginViewModel(Settings settings)
+    [ObservableProperty]
+    private bool _invalidHandleIsOpen;
+
+    public LoginViewModel(MastodonInterop mastodonInterop)
     {
-        this.Settings = settings;
+        this.MastodonInterop = mastodonInterop;
         this._resourceLoader = new ResourceLoader();
         IsLoggingIn = false;
+        WaitingOnAuthCode = false;
     }
 
     partial void OnWaitingOnAuthCodeChanged(bool value)
     {
         OnPropertyChanged(nameof(LabelText));
+        OnPropertyChanged(nameof(NotWaitingOnAuthCode));
     }
 
-    public async Task AuthenticateAsync(string authCode)
+    partial void OnIsLoggingInChanged(bool value)
+    {
+        OnPropertyChanged(nameof(NotIsLoggingIn));
+    }
+
+    public async Task<bool> AuthenticateAsync(string authCode)
     {
         if (string.IsNullOrWhiteSpace(authCode))
-            return;
-        Settings.AuthCode = authCode;
-        Settings.Auth = await _authClient.ConnectWithCode(Settings.AuthCode);
-        App.Current.MastodonClient = new MastodonClient(_authClient.Instance, Settings.Auth.AccessToken);
-        (MainWindow.Current as MainWindow).Navigate(typeof(TimelinePage));
+            return false;
+        try
+        {
+            App.Current.Settings.AuthCode = authCode;
+            App.Current.Settings.Auth = await _authClient.ConnectWithCode(App.Current.Settings.AuthCode);
+            MastodonInterop.MastodonClient = new MastodonClient(_authClient.Instance, App.Current.Settings.Auth.AccessToken);
+            return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public async Task AttemptLoginAsync(string handle)
@@ -77,8 +97,8 @@ public partial class LoginViewModel : ObservableObject
         try
         {
             string instance = match.Groups.Values.LastOrDefault().Value;
-            _authClient = new AuthenticationClient(instance, App.Current.HttpClient);
-            Settings.AppRegistration = await _authClient.CreateApp(
+            _authClient = new AuthenticationClient(instance, MastodonInterop.HttpClient);
+            App.Current.Settings.AppRegistration = await _authClient.CreateApp(
                 appName: Settings.AppName,
                 website: null,
                 redirectUri: null,

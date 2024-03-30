@@ -11,6 +11,13 @@
 
     <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" Padding="0,40,0,0"
                   VerticalScrollBarVisibility="Visible" ViewChanged="ScrollViewer_ViewChangedAsync">
-        <StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="20"/>
+        <!--<StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="20"/>-->
+        <ItemsControl x:Name="TootsPanel" ItemsSource="{x:Bind ViewModel.Fetcher.TootControls, Mode=OneWay}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" Padding="20" CornerRadius="4"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </ScrollViewer>
 </Page>

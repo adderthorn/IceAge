@@ -10,6 +10,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 using System.Net.Http;
+using IceAge.Interop;
+using System.Collections.ObjectModel;
 
 namespace IceAge.TimelineFetcher;
 
@@ -24,13 +26,13 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     private bool _isWritingCacheFile;
     private bool _isLoadingMorePages;
 
-    protected readonly Settings _settings;
+    protected readonly MastodonInterop _mastodonInterop;
 
-    protected TimelineFetcherBase(Settings settings)
+    protected TimelineFetcherBase(MastodonInterop mastodonInterop)
     {
         _isWritingCacheFile = false;
         _isLoadingMorePages = false;
-        _settings = settings;
+        _mastodonInterop = mastodonInterop;
     }
 
     public StorageFile CacheFile { get; set; }
@@ -41,7 +43,7 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     private MastodonList<Status> _timeline;
 
     [ObservableProperty]
-    private List<TootControl> _tootControls;
+    private ObservableCollection<TootControl> _tootControls;
 
     public abstract Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null);
 
@@ -120,7 +122,7 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         catch (HttpRequestException)
         {
             // TODO: Handle offline
-            App.Current.HttpClient.CancelPendingRequests();
+            _mastodonInterop.HttpClient.CancelPendingRequests();
             throw;
         }
         finally
@@ -137,7 +139,8 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         if (CacheFile == null || _isWritingCacheFile)
             return;
         _isWritingCacheFile = true;
-        using (var writer = new StreamWriter(await CacheFile.OpenStreamForWriteAsync()))
+        var stream = await CacheFile.OpenStreamForWriteAsync();
+        using (var writer = new StreamWriter(stream))
         {
             var typeInfo = JsonTypeInfo.CreateJsonTypeInfo(typeof(MastodonList<Status>), JsonSerializerOptions.Default);
             var json = JsonSerializer.Serialize(Timeline, typeInfo);
@@ -150,5 +153,6 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     partial void OnTimelineChanged(MastodonList<Status> value) =>
         TootControls = [.. Timeline.Select(createControl)];
 
-    protected TootControl createControl(Status status) => new(status, App.Current.MastodonClient, _settings.ShortenHyperlinks);
+    protected TootControl createControl(Status status) =>
+        new(status, _mastodonInterop.MastodonClient, App.Current.Settings.ShortenHyperlinks);
 }

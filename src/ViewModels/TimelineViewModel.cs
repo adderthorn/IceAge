@@ -9,14 +9,11 @@ using Mastonet.Entities;
 
 namespace IceAge.ViewModels;
 public class TimelineViewModel
-{
-    public Settings Settings { get; }
-    
+{    
     public HomeTimelineFetcher Fetcher { get; }
 
-    public TimelineViewModel(Settings settings, HomeTimelineFetcher fetcher)
+    public TimelineViewModel(HomeTimelineFetcher fetcher)
     { 
-        Settings = settings;
         Fetcher = fetcher;
         fetcher.Streaming.OnUpdate += Streaming_OnUpdateAsync;
     }

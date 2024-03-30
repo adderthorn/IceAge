@@ -1,17 +1,5 @@
-using IceAge.Controls;
-using Mastonet;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using System.Linq;
-using Mastonet.Entities;
-using Windows.Storage;
-using System;
-using System.IO;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Net.Http;
-using IceAge.Interop;
-using Windows.Graphics.Display;
 using IceAge.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,13 +16,14 @@ public sealed partial class TimelinePage : Page
 
     public TimelinePage()
     {
-        this.InitializeComponent();
         this.ViewModel = App.Current.Services.GetService<TimelineViewModel>();
+        this.InitializeComponent();
     }
 
-    protected override async void OnNavigatedTo(NavigationEventArgs e)
+    protected async override void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
+        await ViewModel.Fetcher.FetchTimelineAsync(TimelineFetcher.TimelineMode.Add);
         await ViewModel.Fetcher.StartStreamingAsync();
     }
 

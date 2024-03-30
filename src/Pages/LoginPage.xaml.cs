@@ -60,6 +60,11 @@ public sealed partial class LoginPage : Page
         }
     }
 
-    private async void AuthCodeButton_Click(object sender, RoutedEventArgs e) =>
-        await ViewModel.AuthenticateAsync(AuthCodeTextBox.Text.Trim());
+    private async void AuthCodeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (await ViewModel.AuthenticateAsync(AuthCodeTextBox.Text.Trim()))
+        {
+            Frame.Navigate(typeof(TimelinePage));
+        }
+    }
 }

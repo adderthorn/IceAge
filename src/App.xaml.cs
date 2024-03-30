@@ -20,20 +20,19 @@ namespace IceAge;
 /// </summary>
 public partial class App : Application
 {
-    public HttpClient HttpClient { get; }
-    public MastodonClient MastodonClient { get; set; }
-    public Auth Auth { get; set; }
     public static new App Current => Application.Current as App;
+    public Settings Settings { get; private set; }
     public IServiceProvider Services { get; }
 
     public static IServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
 
-        services.AddSingleton<Settings>()
-            .AddSingleton<TimelineFetcherBase, HomeTimelineFetcher>()
-            .AddSingleton<TimelineFetcherBase, LocalTimelineFetcher>()
-            .AddSingleton<TimelineFetcherBase, FederatedTimelineFetcher>()
+        services.AddSingleton<MastodonInterop>()
+            .AddSingleton<HomeTimelineFetcher>()
+            .AddSingleton<LocalTimelineFetcher>()
+            .AddSingleton<FederatedTimelineFetcher>()
+            .AddSingleton<LoginViewModel>()
             .AddSingleton<TimelineViewModel>();
 
         return services.BuildServiceProvider();
@@ -47,16 +46,16 @@ public partial class App : Application
     {
         this.Services = ConfigureServices();
         this.InitializeComponent();
-        this.HttpClient = new HttpClient();
     }
 
     /// <summary>
     /// Invoked when the application is launched.
     /// </summary>
     /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    protected async override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
-        m_window = new MainWindow(this.Services.GetService<Settings>());
+        this.Settings = await Settings.CreateAsync();
+        m_window = new MainWindow(this.Services.GetService<MastodonInterop>());
         m_window.Activate();
     }
 
