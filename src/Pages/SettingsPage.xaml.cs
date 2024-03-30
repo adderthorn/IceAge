@@ -22,10 +22,11 @@ namespace IceAge.Pages;
 /// </summary>
 public sealed partial class SettingsPage : Page
 {
-    public Settings Settings => (App.Current as App).Settings;
+    public Settings Settings { get; }
 
-    public SettingsPage()
+    public SettingsPage(Settings settings)
     {
+        Settings = settings;
         this.InitializeComponent();
     }
 

@@ -1,246 +1,144 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Windows.Storage;
 using Mastonet.Entities;
-using System.Xml.Linq;
-using System.IO;
-using Mastonet;
 using Windows.Graphics;
 using Microsoft.UI.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json.Serialization.Metadata;
+using Newtonsoft.Json;
 
 namespace IceAge;
 
-public class Settings : INotifyPropertyChanged
+public partial class Settings : ObservableObject
 {
     #region Private Variables
-    private const string FILE_NAME = "settings.json";
-    private bool _canSave = false;
+    private const string kFileName = "settings.json";
+    private bool _isSaving;
+    private readonly JsonSerializer serializer;
 
-    private AppRegistration _appRegistration;
-    private string _authCode;
-    private Auth _auth;
-    private ElementTheme _elementTheme;
-    private RectInt32 _windowSizeAndPosition;
-    private bool _saveWindowSizeAndPosition;
-    private bool _shortenHyperlinks;
-    private bool _autoPlay;
-    private bool _newWindows;
+    // Defaults
+    private const AppRegistration kAppRegistration = null;
+    private const string kAuthCode = null;
+    private const Auth kAuth = null;
+    private const ElementTheme kElementTheme = ElementTheme.Default;
+    private readonly RectInt32 kWindowSizeAndPosition = new();
+    private const bool kSaveWindowSizeAndPosition = true;
+    private const bool kShortenHyperlinks = true;
+    private const bool kAutoPlay = true;
+    private const bool kNewWindows = false;
     #endregion
 
     #region Public Properties
+    /// <summary>
+    /// Name of the Application for use in Mastodon API registration.
+    /// </summary>
     public const string AppName = "IceAge";
-    public event PropertyChangedEventHandler PropertyChanged;
 
+    [ObservableProperty]
+    private AppRegistration _appRegistration;
 
-    [JsonProperty]
-    public AppRegistration AppRegistration
+    [ObservableProperty]
+    private string _authCode;
+
+    [ObservableProperty]
+    private Auth _auth;
+
+    [ObservableProperty]
+    private ElementTheme _elementTheme;
+
+    [ObservableProperty]
+    private RectInt32 _windowSizeAndPosition;
+
+    [ObservableProperty]
+    private bool _saveWindowSizeAndPosition;
+
+    [ObservableProperty]
+    private bool _shortenHyperlinks;
+
+    [ObservableProperty]
+    private bool _autoPlay;
+
+    [ObservableProperty]
+    private bool _newWindows;
+    #endregion
+
+    #region Constructors
+    public Settings()
     {
-        get => _appRegistration;
-        set
-        {
-            if (value != _appRegistration)
-            {
-                _appRegistration = value;
-                RaisePropertyChanged(nameof(AppRegistration));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
+        AppRegistration = kAppRegistration;
+        AuthCode = kAuthCode;
+        Auth = kAuth;
+        ElementTheme = kElementTheme;
+        WindowSizeAndPosition = kWindowSizeAndPosition;
+        SaveWindowSizeAndPosition = kSaveWindowSizeAndPosition;
+        ShortenHyperlinks = kShortenHyperlinks;
+        AutoPlay = kAutoPlay;
+        NewWindows = kNewWindows;
+        serializer = JsonSerializer.Create();
     }
 
-    [JsonProperty]
-    public string AuthCode
+    public static async Task<Settings> CreateAsync()
     {
-        get => _authCode;
-        set
+        StorageFile settingsFile;
+        try
         {
-            if (value != _authCode)
+            settingsFile = await ApplicationData.Current.LocalFolder.GetFileAsync(kFileName);
+            var stream = await settingsFile.OpenStreamForReadAsync();
+            Settings settings;
+            using (var streamReader = new StreamReader(stream))
+            using (var reader = new JsonTextReader(streamReader))
             {
-                _authCode = value;
-                RaisePropertyChanged(nameof(AuthCode));
-                SaveAsync().ConfigureAwait(false);
+                var serializer = JsonSerializer.Create();
+                settings = serializer.Deserialize<Settings>(reader);
             }
+            return settings;
         }
-    }
-
-    [JsonProperty]
-    public Auth Auth
-    {
-        get => _auth;
-        set
+        catch (FileNotFoundException)
         {
-            if (value != _auth)
-            {
-                _auth = value;
-                RaisePropertyChanged(nameof(Auth));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public ElementTheme ElementTheme
-    {
-        get => _elementTheme;
-        set
-        {
-            if (value != _elementTheme)
-            {
-                _elementTheme = value;
-                RaisePropertyChanged(nameof(ElementTheme));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public RectInt32 WindowSizeAndPosition
-    {
-        get => _windowSizeAndPosition;
-        set
-        {
-            if (value != _windowSizeAndPosition)
-            {
-                _windowSizeAndPosition = value;
-                RaisePropertyChanged(nameof(WindowSizeAndPosition));
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool SaveWindowSizeAndPosition
-    {
-        get => _saveWindowSizeAndPosition;
-        set
-        {
-            if (value != _saveWindowSizeAndPosition)
-            {
-                if (value)
-                {
-                    _saveWindowSizeAndPosition = true;
-                }
-                else
-                {
-                    _saveWindowSizeAndPosition = false;
-                    WindowSizeAndPosition = new RectInt32();
-                }
-                RaisePropertyChanged(nameof(SaveWindowSizeAndPosition));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool ShortenHyperlinks
-    {
-        get => _shortenHyperlinks;
-        set
-        {
-            if (value != _shortenHyperlinks)
-            {
-                _shortenHyperlinks = value;
-                RaisePropertyChanged(nameof(ShortenHyperlinks));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool AutoPlay
-    {
-        get => _autoPlay;
-        set
-        {
-            if (value != _autoPlay)
-            {
-                _autoPlay = value;
-                RaisePropertyChanged(nameof(AutoPlay));
-                SaveAsync().ConfigureAwait(false);
-            }
-        }
-    }
-
-    [JsonProperty]
-    public bool NewWindows
-    {
-        get => _newWindows;
-        set
-        {
-            if (value != _newWindows)
-            {
-                _newWindows = value;
-                RaisePropertyChanged(nameof(NewWindows));
-                SaveAsync().ConfigureAwait(false);
-            }
+            settingsFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(kFileName);
+            var settings = new Settings();
+            await settings.SaveAsync(await settingsFile.OpenStreamForWriteAsync());
+            return settings;
         }
     }
     #endregion
 
-    #region Constructors & Static Methods
-    public static async Task<Settings> LoadSettingsAsync()
+    #region Public Functions
+    /// <summary>
+    /// Saves the settings to the local data container.
+    /// </summary>
+    public async Task SaveAsync()
     {
-        var localFolder = ApplicationData.Current.LocalFolder;
-        StorageFile file;
-        try
-        {
-            file = await localFolder.GetFileAsync(FILE_NAME);
-            using (StreamReader streamReader = new StreamReader(await file.OpenStreamForReadAsync()))
-            using (JsonReader reader = new JsonTextReader(streamReader))
-            {
-                var serializer = new JsonSerializer();
-                var settings = serializer.Deserialize<Settings>(reader) ?? new Settings();
-                settings._canSave = true;
-                return settings;
-            }
-        }
-        catch (FileNotFoundException)
-        {
-            file = await localFolder.CreateFileAsync(FILE_NAME);
-            var settings = new Settings();
-            await settings.saveAsync(file);
-            return settings;
-        }
+        var settingsFile = await ApplicationData.Current.LocalFolder.GetFileAsync(kFileName);
+        var stream = await settingsFile.OpenStreamForWriteAsync();
+        await SaveAsync(stream);
     }
 
-    private Settings()
+    public async Task SaveAsync(Stream stream)
     {
-        AppRegistration = null;
-        _canSave = true;
-        _saveWindowSizeAndPosition = true;
-        _autoPlay = true;
+        if (_isSaving)
+            return;
+
+        _isSaving = true;
+        using (var streamWriter = new StreamWriter(stream))
+        using (var writer = new JsonTextWriter(streamWriter))
+        {
+            serializer.Serialize(writer, this);
+            await writer.FlushAsync();
+            await streamWriter.FlushAsync();
+        }
+        _isSaving = false;
     }
     #endregion
 
     #region Private Functions
-    private void RaisePropertyChanged(string propertyName)
+    partial void OnSaveWindowSizeAndPositionChanged(bool value)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public async Task SaveAsync()
-    {
-        var localFolder = ApplicationData.Current.LocalFolder;
-        var file = await localFolder.GetFileAsync(FILE_NAME);
-        await saveAsync(file);
-    }
-
-    private async Task saveAsync(StorageFile file)
-    {
-        if (!_canSave)
-            return;
-        _canSave = false;
-        using (StreamWriter streamWriter = new StreamWriter(await file.OpenStreamForWriteAsync(), new UTF8Encoding(false)))
-        using (JsonWriter jsonWriter = new JsonTextWriter(streamWriter))
-        {
-            var serializer = new JsonSerializer();
-            jsonWriter.Formatting = Formatting.Indented;
-            serializer.Serialize(jsonWriter, this);
-        }
-        _canSave = true;
+        if (!value)
+            WindowSizeAndPosition = new RectInt32();
     }
     #endregion
 }
