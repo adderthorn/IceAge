@@ -5,11 +5,10 @@ using Mastonet.Entities;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json.Serialization.Metadata;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 using System.Net.Http;
+using Newtonsoft.Json;
 using IceAge.Interop;
 using System.Collections.ObjectModel;
 
@@ -27,12 +26,15 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     private bool _isLoadingMorePages;
 
     protected readonly MastodonInterop _mastodonInterop;
+    protected readonly JsonSerializer _serializer;
 
     protected TimelineFetcherBase(MastodonInterop mastodonInterop)
     {
         _isWritingCacheFile = false;
         _isLoadingMorePages = false;
         _mastodonInterop = mastodonInterop;
+        var s = new JsonSerializerSettings() { Formatting = Formatting.Indented };
+        _serializer = JsonSerializer.Create(s);
     }
 
     public StorageFile CacheFile { get; set; }
@@ -44,6 +46,9 @@ public abstract partial class TimelineFetcherBase : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<TootControl> _tootControls;
+
+    [ObservableProperty]
+    private bool _isLoadingTimeline;
 
     public abstract Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null);
 
@@ -75,10 +80,16 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         return addedControls;
     }
 
-    public async Task RemoveAsync(Status status)
+    public void Remove(Status status)
     {
         Timeline.Remove(status);
-        await saveCacheFileAsync();
+        TootControls.Remove(TootControls.FirstOrDefault(tc => tc.Status.Id == status.Id));
+    }
+
+    public void RemoveAt(int index)
+    {
+        Timeline.RemoveAt(index);
+        TootControls.RemoveAt(index);
     }
 
     public async Task<TootControl> InsertAsync(int index, Status status)
@@ -134,17 +145,16 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     public async Task StartStreamingAsync() => await Streaming.Start();
     public void StopStreaming() => Streaming.Stop();
 
-    private async Task saveCacheFileAsync()
+    protected async Task saveCacheFileAsync()
     {
         if (CacheFile == null || _isWritingCacheFile)
             return;
         _isWritingCacheFile = true;
         var stream = await CacheFile.OpenStreamForWriteAsync();
-        using (var writer = new StreamWriter(stream))
+        using (var streamWriter = new StreamWriter(stream))
+        using (var writer = new JsonTextWriter(streamWriter))
         {
-            var typeInfo = JsonTypeInfo.CreateJsonTypeInfo(typeof(MastodonList<Status>), JsonSerializerOptions.Default);
-            var json = JsonSerializer.Serialize(Timeline, typeInfo);
-            await writer.WriteAsync(json);
+            _serializer.Serialize(writer, Timeline);
             await writer.FlushAsync();
         }
         _isWritingCacheFile = false;
@@ -155,4 +165,17 @@ public abstract partial class TimelineFetcherBase : ObservableObject
 
     protected TootControl createControl(Status status) =>
         new(status, _mastodonInterop.MastodonClient, App.Current.Settings.ShortenHyperlinks);
+
+    protected async Task populateFromCache()
+    {
+        if (CacheFile == null || _isWritingCacheFile)
+            return;
+
+        var stream = await CacheFile.OpenStreamForReadAsync();
+        using (var streamReader = new StreamReader(stream))
+        using (var reader = new JsonTextReader(streamReader))
+        {
+            Timeline = _serializer.Deserialize<MastodonList<Status>>(reader);
+        }
+    }
 }

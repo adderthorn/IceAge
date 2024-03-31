@@ -75,4 +75,11 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
     {
         throw new NotImplementedException();
     }
+
+    private void RemoteImage_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        AltTextBlock.Visibility = AltTextBlock.Visibility == Microsoft.UI.Xaml.Visibility.Visible
+            ? Microsoft.UI.Xaml.Visibility.Collapsed
+            : Microsoft.UI.Xaml.Visibility.Visible;
+    }
 }

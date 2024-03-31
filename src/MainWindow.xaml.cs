@@ -136,9 +136,13 @@ public sealed partial class MainWindow : Window
         }
         else if (ContentFrame.SourcePageType is not null)
         {
-            MainNavigationView.SelectedItem = MainNavigationView.MenuItems
+            string key = NavigationPageDictionary.FirstOrDefault(kv => kv.Value == ContentFrame.SourcePageType).Key;
+            if (key != null)
+            {
+                MainNavigationView.SelectedItem = MainNavigationView.MenuItems
                 .OfType<NavigationViewItem>()
-                .FirstOrDefault(i => i.Name == ContentFrame.SourcePageType.Name);
+                .FirstOrDefault(i => i.Name == key);
+            }
         }
     }
 
