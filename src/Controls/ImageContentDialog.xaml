@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Image x:Name="BlurImage" Grid.RowSpan="3"/>
-        <Image x:Name="RemoteImage" Grid.RowSpan="3"/>
+        <Image x:Name="RemoteImage" Grid.RowSpan="3" Tapped="RemoteImage_Tapped"/>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -34,7 +33,7 @@
             </Button>
         </Grid>
         <Rectangle Visibility="{x:Bind HasAltText, Mode=OneWay}" Fill="{ThemeResource OverlayAcrylicBrush}" Grid.Row="2"/>
-        <TextBlock Grid.Row="2" Text="{x:Bind MediaAttachment.Description, Mode=OneWay}"
-                   TextWrapping="WrapWholeWords" Margin="5" Foreground="White" IsTextSelectionEnabled="True"/>
+        <TextBlock x:Name="AltTextBlock" Grid.Row="2" Text="{x:Bind MediaAttachment.Description, Mode=OneWay}" Margin="5"
+                   TextWrapping="WrapWholeWords" Foreground="White" IsTextSelectionEnabled="True" Visibility="Collapsed"/>
     </Grid>
 </ContentDialog>

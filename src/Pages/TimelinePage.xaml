@@ -8,16 +8,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" Padding="0,40,0,0"
-                  VerticalScrollBarVisibility="Visible" ViewChanged="ScrollViewer_ViewChangedAsync">
-        <!--<StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="20"/>-->
-        <ItemsControl x:Name="TootsPanel" ItemsSource="{x:Bind ViewModel.Fetcher.TootControls, Mode=OneWay}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" Padding="20" CornerRadius="4"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </ScrollViewer>
+    <Grid>
+        <ProgressRing Visibility="{x:Bind ViewModel.Fetcher.IsLoadingTimeline, Mode=OneWay}" IsIndeterminate="True" Width="100" Height="100"/>
+        <ScrollViewer x:Name="ScrollViewer" Grid.Row="0" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" Padding="0,40,0,0"
+                      VerticalScrollBarVisibility="Visible" ViewChanged="ScrollViewer_ViewChangedAsync">
+            <!--<StackPanel x:Name="TootsPanel" CornerRadius="4" Orientation="Vertical" Padding="20"/>-->
+            <ItemsControl x:Name="TootsPanel" ItemsSource="{x:Bind ViewModel.Fetcher.TootControls, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Padding="20" CornerRadius="4"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </Page>
