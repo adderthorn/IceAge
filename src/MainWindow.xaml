@@ -73,8 +73,8 @@
                         <FontIcon FontFamily="Segoe UI" Margin="-5" FontWeight="Medium" Glyph="&#x0023;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="People" Content="Local" />
-                <NavigationViewItem Icon="Globe" Content="Federated" />
+                <NavigationViewItem Name="Local" Icon="People" Content="Local" />
+                <NavigationViewItem Name="Federated" Icon="Globe" Content="Federated" />
                 <NavigationViewItem Content="Direct Messages">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F2;"/>

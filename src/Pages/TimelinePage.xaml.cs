@@ -18,6 +18,7 @@ public sealed partial class TimelinePage : Page
     {
         this.ViewModel = App.Current.Services.GetService<TimelineViewModel>();
         this.InitializeComponent();
+        this.NavigationCacheMode = NavigationCacheMode.Enabled;
     }
 
     protected async override void OnNavigatedTo(NavigationEventArgs e)

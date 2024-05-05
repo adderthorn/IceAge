@@ -14,7 +14,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,13 +22,13 @@ namespace IceAge.Pages;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public sealed partial class LocalPage : Page
+public sealed partial class FederatedPage : Page
 {
-    public LocalViewModel ViewModel { get; }
+    public FederatedViewModel ViewModel { get; }
 
-    public LocalPage()
+    public FederatedPage()
     {
-        this.ViewModel = App.Current.Services.GetService<LocalViewModel>();
+        this.ViewModel = App.Current.Services.GetService<FederatedViewModel>();
         this.InitializeComponent();
         this.NavigationCacheMode = NavigationCacheMode.Enabled;
     }

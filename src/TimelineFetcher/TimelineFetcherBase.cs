@@ -11,6 +11,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using IceAge.Interop;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace IceAge.TimelineFetcher;
 
@@ -35,6 +36,7 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         _mastodonInterop = mastodonInterop;
         var s = new JsonSerializerSettings() { Formatting = Formatting.Indented };
         _serializer = JsonSerializer.Create(s);
+        Timeline = new MastodonList<Status>();
     }
 
     public StorageFile CacheFile { get; set; }
@@ -171,6 +173,7 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         if (CacheFile == null || _isWritingCacheFile)
             return;
 
+        Debug.WriteLine("Populating from cache...");
         var stream = await CacheFile.OpenStreamForReadAsync();
         using (var streamReader = new StreamReader(stream))
         using (var reader = new JsonTextReader(streamReader))

@@ -23,6 +23,7 @@
     <None Remove="Controls\TootControl.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="NewTootWindow.xaml" />
+    <None Remove="Pages\FederatedPage.xaml" />
     <None Remove="Pages\LocalPage.xaml" />
     <None Remove="Pages\TimelinePage.xaml" />
     <None Remove="SettingsPage.xaml" />
@@ -138,6 +139,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\LocalPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Pages\FederatedPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <None Update="Themes\Generic.xaml">

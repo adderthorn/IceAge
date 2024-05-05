@@ -29,7 +29,7 @@ public class TimelineViewModel
 
     private async void init()
     {
-        var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(kFileName, CreationCollisionOption.OpenIfExists);
-        Fetcher.CacheFile = file;
+        var fileTask = ApplicationData.Current.LocalFolder.CreateFileAsync(kFileName, CreationCollisionOption.OpenIfExists);
+        Fetcher.CacheFile = await fileTask;
     }
 }
