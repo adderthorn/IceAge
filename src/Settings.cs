@@ -63,6 +63,9 @@ public partial class Settings : ObservableObject
 
     [ObservableProperty]
     private bool _newWindows;
+
+    [ObservableProperty]
+    private bool _authSuccessful;
     #endregion
 
     #region Constructors
