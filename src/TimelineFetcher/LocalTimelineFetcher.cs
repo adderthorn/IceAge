@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace IceAge.TimelineFetcher;
-internal class LocalTimelineFetcher : TimelineFetcherBase
+public class LocalTimelineFetcher : TimelineFetcherBase
 {
     private readonly TimelineStreaming _streaming;
 
