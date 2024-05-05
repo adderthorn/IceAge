@@ -60,7 +60,7 @@
         </Border>
         <NavigationView x:Name="MainNavigationView" Grid.Column="1" Grid.RowSpan="2"  Canvas.ZIndex="0" 
                         IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" SelectionChanged="MainNavigationView_SelectionChanged"
-                        BackRequested="MainNavigationView_BackRequested">
+                        BackRequested="MainNavigationView_BackRequested" IsPaneVisible="{x:Bind App.Settings.AuthSuccessful, Mode=OneWay}">
             <NavigationView.MenuItems>
                 <NavigationViewItem Name="Home" Content="Home" Icon="Home" />
                 <NavigationViewItem Name="Notifiations" Content="Notifications">
@@ -73,8 +73,8 @@
                         <FontIcon FontFamily="Segoe UI" Margin="-5" FontWeight="Medium" Glyph="&#x0023;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="People" Content="Local" />
-                <NavigationViewItem Icon="Globe" Content="Federated" />
+                <NavigationViewItem Name="Local" Icon="People" Content="Local" />
+                <NavigationViewItem Name="Federated" Icon="Globe" Content="Federated" />
                 <NavigationViewItem Content="Direct Messages">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F2;"/>

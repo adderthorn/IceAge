@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.ConversationalAgent;
 
 namespace IceAge.TimelineFetcher;
-internal class FederatedTimelineFetcher : TimelineFetcherBase
+public class FederatedTimelineFetcher : TimelineFetcherBase
 {
     private readonly TimelineStreaming _streaming;
 
     public FederatedTimelineFetcher(MastodonInterop mastodonInterop) : base(mastodonInterop)
     {
+        Timeline = new Mastonet.Entities.MastodonList<Mastonet.Entities.Status>();
         _streaming = _mastodonInterop.MastodonClient.GetPublicStreaming();
     }
 
@@ -21,20 +22,30 @@ internal class FederatedTimelineFetcher : TimelineFetcherBase
 
     public async override Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
     {
+        IsLoadingTimeline = true;
+        await populateFromCache();
         var statuses = await _mastodonInterop.MastodonClient.GetPublicTimeline(options, local: false);
         if (Timeline?.Count == 0)
         {
             Timeline = statuses;
-            return;
         }
-        switch (mode)
+        else
         {
-            case TimelineMode.Add:
-                _ = await this.AddRangeAsync(statuses);
-                break;
-            case TimelineMode.Insert:
-                _ = await this.InsertRangeAsync(0, statuses);
-                break;
+            switch (mode)
+            {
+                case TimelineMode.Add:
+                    _ = await this.AddRangeAsync(statuses);
+                    break;
+                case TimelineMode.Insert:
+                    _ = await this.InsertRangeAsync(0, statuses);
+                    break;
+            }
+            for (int i = Timeline.Count - 1; i > 100; i--)
+            {
+                this.RemoveAt(i);
+            }
         }
+        await saveCacheFileAsync();
+        IsLoadingTimeline = false;
     }
 }

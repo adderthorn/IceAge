@@ -4,25 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mastonet;
-using Mastonet.Entities;
 using Windows.Storage;
 
 namespace IceAge.ViewModels;
-public class TimelineViewModel
+public class LocalViewModel
 {
-    private const string kFileName = "timeline.json";
+    private const string kFileName = "local.json";
 
-    public HomeTimelineFetcher Fetcher { get; }
+    public LocalTimelineFetcher Fetcher { get; }
 
-    public TimelineViewModel(HomeTimelineFetcher fetcher)
-    { 
+    public LocalViewModel(LocalTimelineFetcher fetcher)
+    {
         Fetcher = fetcher;
         fetcher.Streaming.OnUpdate += Streaming_OnUpdateAsync;
         init();
     }
 
-    private async void Streaming_OnUpdateAsync(object sender, StreamUpdateEventArgs e)
+    private async void Streaming_OnUpdateAsync(object sender, Mastonet.StreamUpdateEventArgs e)
     {
         await Fetcher.InsertAsync(0, e.Status);
     }

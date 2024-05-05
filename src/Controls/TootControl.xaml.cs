@@ -76,8 +76,8 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         if (_timer.IsEnabled)
             _timer.Stop();
         _status = value;
-        IsFavorite = Status.Favourited.Value;
-        IsBoosted = Status.Reblogged.Value;
+        IsFavorite = Status.Favourited == true;
+        IsBoosted = Status.Reblogged == true;
         IsBotAccount = Status.Account.Bot == true;
         ReplyCount = Status.RepliesCount;
         BoostedCount = Status.ReblogCount;
@@ -113,8 +113,8 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         {
             foreach (var item in mediaAttachments)
             {
-                uint width = (uint)(item.Meta.Small.Width ?? 200);
-                uint height = (uint)(item.Meta.Small.Height ?? 200);
+                uint width = (uint)(item.Meta?.Small?.Width ?? 200);
+                uint height = (uint)(item.Meta?.Small?.Height ?? 200);
 
                 if (mediaAttachments.Count > 1)
                 {
@@ -339,7 +339,11 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             }
             else
             {
-                return $"{(int)diff.TotalSeconds}s";
+                if (diff.TotalSeconds < 0)
+                {
+                    return "0s";
+                }
+                return $"{(int)Math.Ceiling(diff.TotalSeconds)}s";
             }
         }
     }

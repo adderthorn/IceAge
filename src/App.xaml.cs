@@ -33,7 +33,9 @@ public partial class App : Application
             .AddSingleton<LocalTimelineFetcher>()
             .AddSingleton<FederatedTimelineFetcher>()
             .AddSingleton<LoginViewModel>()
-            .AddSingleton<TimelineViewModel>();
+            .AddSingleton<TimelineViewModel>()
+            .AddSingleton<LocalViewModel>()
+            .AddSingleton<FederatedViewModel>();
 
         return services.BuildServiceProvider();
     }
