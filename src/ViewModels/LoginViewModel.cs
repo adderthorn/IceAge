@@ -74,6 +74,7 @@ public partial class LoginViewModel : ObservableObject
             App.Current.Settings.AuthCode = authCode;
             App.Current.Settings.Auth = await _authClient.ConnectWithCode(App.Current.Settings.AuthCode);
             MastodonInterop.MastodonClient = new MastodonClient(_authClient.Instance, App.Current.Settings.Auth.AccessToken);
+            await App.Current.Settings.SaveAsync();
             return true;
         }
         catch (Exception)
