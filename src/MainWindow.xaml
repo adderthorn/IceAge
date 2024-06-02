@@ -68,7 +68,7 @@
                         <FontIcon Glyph="&#xE7E7;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Explore">
+                <NavigationViewItem Name="Explore" Content="Explore">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe UI" Margin="-5" FontWeight="Medium" Glyph="&#x0023;"/>
                     </NavigationViewItem.Icon>
