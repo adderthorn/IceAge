@@ -17,6 +17,7 @@
     <None Remove="Assets\LaunchImage.png" />
     <None Remove="Controls\AnimatedContentDialog.xaml" />
     <None Remove="Controls\AnimatedPreviewAttachmentControl.xaml" />
+    <None Remove="Controls\ErrorContentDialog.xaml" />
     <None Remove="Controls\ImageAttachmentControl.xaml" />
     <None Remove="Controls\ImageContentDialog.xaml" />
     <None Remove="Controls\NewTootControl.xaml" />
@@ -142,6 +143,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\FederatedPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\ErrorContentDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <None Update="Themes\Generic.xaml">

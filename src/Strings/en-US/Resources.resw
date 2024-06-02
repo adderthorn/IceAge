@@ -132,6 +132,18 @@
   <data name="BotToolTip.Content" xml:space="preserve">
     <value>Bot Account</value>
   </data>
+  <data name="ErrorDialog.CloseButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ErrorDialog.PrimaryButton.Text" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="ErrorDialog.SecondaryButton.Text" xml:space="preserve">
+    <value>Reauthorize</value>
+  </data>
+  <data name="ErrorDialog.Title" xml:space="preserve">
+    <value>An Error Occured.</value>
+  </data>
   <data name="HandleTextBox.PlaceholderText" xml:space="preserve">
     <value>user@example.com</value>
   </data>

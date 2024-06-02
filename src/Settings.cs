@@ -135,6 +135,13 @@ public partial class Settings : ObservableObject
         }
         _isSaving = false;
     }
+
+    public void ClearAuthorization()
+    {
+        AppRegistration = kAppRegistration;
+        Auth = kAuth;
+        AuthCode = kAuthCode;
+    }
     #endregion
 
     #region Private Functions

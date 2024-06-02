@@ -1,7 +1,11 @@
+using System;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using IceAge.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Mastonet;
+using IceAge.Controls;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -13,6 +17,7 @@ namespace IceAge.Pages;
 public sealed partial class TimelinePage : Page
 {
     public TimelineViewModel ViewModel { get; }
+    public Settings Settings => App.Current.Settings;
 
     public TimelinePage()
     {
@@ -24,8 +29,28 @@ public sealed partial class TimelinePage : Page
     protected async override void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
-        await ViewModel.Fetcher.FetchTimelineAsync(TimelineFetcher.TimelineMode.Add);
-        await ViewModel.Fetcher.StartStreamingAsync();
+        try
+        {
+            await ViewModel.Fetcher.FetchTimelineAsync(TimelineFetcher.TimelineMode.Add);
+            await ViewModel.Fetcher.StartStreamingAsync();
+        }
+        catch (ServerErrorException ex)
+        {
+            var dialog = new ErrorContentDialog(ex.Message, this.XamlRoot);
+            var result = await dialog.ShowAsync();
+            switch (result)
+            {
+                case ContentDialogResult.Primary:
+                    // Retry
+                    OnNavigatedTo(e);
+                    break;
+                case ContentDialogResult.Secondary:
+                    // Reauth
+                    Settings.ClearAuthorization();
+                    Frame.Navigate(typeof(LoginPage));
+                    break;
+            }
+        }
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)
