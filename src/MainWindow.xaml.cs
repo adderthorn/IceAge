@@ -11,6 +11,8 @@ using IceAge.Pages;
 using Windows.Graphics;
 using Microsoft.UI.Xaml.Media.Animation;
 using IceAge.Interop;
+using Windows.UI.Popups;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -116,7 +118,12 @@ public sealed partial class MainWindow : Window
             }
             else
             {
-                throw new ArgumentException($"No page type matching \"{args.SelectedItemContainer.Name}\"");
+                string msg = $"No page type matching \"{args.SelectedItemContainer.Name}\"";
+#if DEBUG
+                Debug.WriteLine(msg);
+#else
+                throw new ArgumentException(msg);
+#endif
             }
         }
     }

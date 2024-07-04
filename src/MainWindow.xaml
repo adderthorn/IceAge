@@ -62,26 +62,26 @@
                         IsTabStop="False" IsTitleBarAutoPaddingEnabled="True" SelectionChanged="MainNavigationView_SelectionChanged"
                         BackRequested="MainNavigationView_BackRequested" IsPaneVisible="{x:Bind App.Settings.AuthSuccessful, Mode=OneWay}">
             <NavigationView.MenuItems>
-                <NavigationViewItem Name="Home" Content="Home" Icon="Home" />
-                <NavigationViewItem Name="Notifiations" Content="Notifications">
+                <NavigationViewItem x:Uid="NavigationItemHome" Name="Home" Icon="Home" />
+                <NavigationViewItem x:Uid="NavigationItemNotifications" Name="Notifiations">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7E7;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Name="Explore" Content="Explore">
+                <NavigationViewItem x:Uid="NavigationItemExplore" Name="Explore">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe UI" Margin="-5" FontWeight="Medium" Glyph="&#x0023;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Name="Local" Icon="People" Content="Local" />
-                <NavigationViewItem Name="Federated" Icon="Globe" Content="Federated" />
-                <NavigationViewItem Content="Direct Messages">
+                <NavigationViewItem x:Uid="NavigationItemLocal" Name="Local" Icon="People"/>
+                <NavigationViewItem x:Uid="NavigationItemFederated" Name="Federated" Icon="Globe"/>
+                <NavigationViewItem x:Uid="NavigationItemDM">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F2;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Favorites" Icon="Favorite" />
-                <NavigationViewItem Content="Lists">
+                <NavigationViewItem x:Uid="NavigationItemFavorites" Icon="Favorite" />
+                <NavigationViewItem x:Uid="NavigationItemLists">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8FD;"/>
                     </NavigationViewItem.Icon>
@@ -89,7 +89,7 @@
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" NavigationFailed="ContentFrame_NavigationFailed" Navigated="ContentFrame_Navigated" Loaded="ContentFrame_Loaded"/>
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Name="NewTootButton" Content="New Toot" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
+                <NavigationViewItem x:Uid="NavigationItemToot" x:Name="NewTootButton" Icon="Add" SelectsOnInvoked="False" Tapped="NewTootButton_Tapped" />
                 <NavigationViewItemSeparator/>
             </NavigationView.FooterMenuItems>
         </NavigationView>

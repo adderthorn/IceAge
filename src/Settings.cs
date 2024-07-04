@@ -29,6 +29,8 @@ public partial class Settings : ObservableObject
     private const bool kShortenHyperlinks = true;
     private const bool kAutoPlay = true;
     private const bool kNewWindows = false;
+    private const bool kPendingNotifications = false;
+    private const string kLastNoticiation = null;
     #endregion
 
     #region Public Properties
@@ -66,6 +68,12 @@ public partial class Settings : ObservableObject
 
     [ObservableProperty]
     private bool _authSuccessful;
+
+    [ObservableProperty]
+    private bool _pendingNotifications;
+
+    [ObservableProperty]
+    private string _lastReadNotification;
     #endregion
 
     #region Constructors
@@ -80,6 +88,8 @@ public partial class Settings : ObservableObject
         ShortenHyperlinks = kShortenHyperlinks;
         AutoPlay = kAutoPlay;
         NewWindows = kNewWindows;
+        PendingNotifications = kPendingNotifications;
+        LastReadNotification = kLastNoticiation;
         serializer = JsonSerializer.Create();
     }
 
@@ -141,6 +151,8 @@ public partial class Settings : ObservableObject
         AppRegistration = kAppRegistration;
         Auth = kAuth;
         AuthCode = kAuthCode;
+        PendingNotifications = kPendingNotifications;
+        LastReadNotification = kLastNoticiation;
     }
     #endregion
 

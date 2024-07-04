@@ -37,11 +37,6 @@ internal class HtmlInterop : INotifyPropertyChanged
             using var reader = new StreamReader(await htmlFile.OpenStreamForReadAsync());
             _html = await reader.ReadToEndAsync();
         }
-        WebView2.NavigationCompleted += async (o, k) =>
-        {
-            //string serializedStatusContent = Newtonsoft.Json.JsonConvert.SerializeObject(Status.Content);
-            //await WebView2.ExecuteScriptAsync($"setText({serializedStatusContent});");
-        };
         WebView2.NavigateToString(_html);
     }
 

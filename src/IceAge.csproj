@@ -27,6 +27,7 @@
     <None Remove="Pages\ExplorePage.xaml" />
     <None Remove="Pages\FederatedPage.xaml" />
     <None Remove="Pages\LocalPage.xaml" />
+    <None Remove="Pages\NotificationsPage.xaml" />
     <None Remove="Pages\TimelinePage.xaml" />
     <None Remove="SettingsPage.xaml" />
   </ItemGroup>
@@ -146,6 +147,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\ExplorePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Pages\NotificationsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <None Update="Themes\Generic.xaml">
