@@ -63,8 +63,8 @@
             <Button x:Name="ReplyButton" HorizontalAlignment="Left" BorderThickness="0" PointerEntered="ActionButton_PointerEntered">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <FontIcon Glyph="&#xE97A;" Margin="0,0,0,5"/>
-                        <TextBlock Text="{x:Bind ReplyCountText}"/>
+                        <FontIcon Glyph="&#xE97A;"/>
+                        <TextBlock Margin="5,0,0,0" Text="{x:Bind ReplyCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
                     </StackPanel>
                 </Button.Content>
             </Button>

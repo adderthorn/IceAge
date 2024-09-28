@@ -26,6 +26,7 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     private bool _lockedAccount;
     private long _boostedCount;
     private long _replyCount;
+    private long _favoriteCount;
     private bool _isNavigatingToNewPage = false;
     private bool _isContentBoost;
     private bool _isBotAccount;
@@ -356,20 +357,17 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             if (_replyCount == value) return;
             _replyCount = value;
             NotifyPropertyChanged(nameof(ReplyCount));
-            NotifyPropertyChanged(nameof(ReplyCountText));
         }
     }
 
-    public string ReplyCountText
+    public long FavoriteCount
     {
-        get
+        get => _favoriteCount;
+        set
         {
-            if (ReplyCount <= 0)
-                return string.Empty;
-            else if (ReplyCount == 1)
-                return "1";
-            else
-                return "1+";
+            if (_favoriteCount == value) return;
+            _favoriteCount = value;
+            NotifyPropertyChanged(nameof(FavoriteCount));
         }
     }
 
@@ -401,9 +399,15 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         FavoriteRotateAnimation.StartAsync();
         IsFavorite = !IsFavorite;
         if (IsFavorite)
+        {
+            FavoriteCount++;
             _client.Favourite(Status.Id);
+        }
         else
+        {
+            FavoriteCount--;
             _client.Unfavourite(Status.Id);
+        }
     }
 
     private void BoostButton_Tapped(object sender, TappedRoutedEventArgs e)
