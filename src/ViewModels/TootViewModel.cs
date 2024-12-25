@@ -12,47 +12,47 @@ namespace IceAge.ViewModels;
 public partial class TootViewModel : ObservableObject
 {
     [ObservableProperty]
-    private bool _isFavorite;
+    public partial bool IsFavorite { get; set; }
 
     [ObservableProperty]
-    private bool _isBoosted;
+    public partial bool IsBoosted { get; set; }
 
     [ObservableProperty]
-    private bool _lockedAccount;
+    public partial bool LockedAccount { get; set; }
 
     [ObservableProperty]
-    private long _boostedCount;
+    public partial long BoostedCount { get; set; }
 
     [ObservableProperty]
-    private long _replyCount;
+    public partial long ReplyCount { get; set; }
 
     [ObservableProperty]
-    private long _favoriteCount;
+    public partial long FavoriteCount { get; set; }
 
     [ObservableProperty]
-    private bool _isNavigatingToNewPage;
+    public partial bool IsNavigatingToNewPage { get; set; }
 
     [ObservableProperty]
-    private bool _isContentBoost;
+    public partial bool IsContentBoost { get; set; }
 
     [ObservableProperty]
-    private bool _isBotAccount;
+    public partial bool IsBotAccount { get; set; }
 
     [ObservableProperty]
-    private string _profileImageUrl;
+    public partial string ProfileImageUrl { get; set; }
 
     [ObservableProperty]
-    private string _username;
+    public partial string Username { get; set; }
 
     [ObservableProperty]
-    private string _displayName;
+    public partial string DisplayName { get; set; }
 
     [ObservableProperty]
-    private string _originalUsername;
+    public partial string OriginalUsername { get; set; }
 
     [ObservableProperty]
-    private string _originalDisplayName;
+    public partial string OriginalDisplayName { get; set; }
 
     [ObservableProperty]
-    private DateTime _created;
+    public partial DateTime Created { get; set; }
 }
