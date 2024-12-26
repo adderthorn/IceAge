@@ -77,9 +77,9 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         if (_timer.IsEnabled)
             _timer.Stop();
         _status = value;
-        IsFavorite = Status.Favourited == true;
-        IsBoosted = Status.Reblogged == true;
-        IsBotAccount = Status.Account.Bot == true;
+        IsFavorite = Status.Favourited ?? false;
+        IsBoosted = Status.Reblogged ?? false;
+        IsBotAccount = Status.Account.Bot ?? false;
         ReplyCount = Status.RepliesCount;
         BoostedCount = Status.ReblogCount;
         OriginalDisplayName = Status.Account.DisplayName;
@@ -348,41 +348,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
             }
         }
     }
-
-    public long ReplyCount
-    {
-        get => _replyCount;
-        set
-        {
-            if (_replyCount == value) return;
-            _replyCount = value;
-            NotifyPropertyChanged(nameof(ReplyCount));
-        }
-    }
-
-    public long FavoriteCount
-    {
-        get => _favoriteCount;
-        set
-        {
-            if (_favoriteCount == value) return;
-            _favoriteCount = value;
-            NotifyPropertyChanged(nameof(FavoriteCount));
-        }
-    }
-
-    public bool IsBotAccount
-    {
-        get => _isBotAccount;
-        set
-        {
-            if (_isBotAccount == value) return;
-            _isBotAccount = value;
-            NotifyPropertyChanged(nameof(IsBotAccount));
-        }
-    }
-
-    public FontWeight BoostedWeight => IsBoosted ? FontWeights.Bold : FontWeights.Normal;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
