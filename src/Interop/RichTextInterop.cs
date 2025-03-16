@@ -10,43 +10,49 @@ using Microsoft.UI.Text;
 using Windows.UI.Text;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using IceAge.ViewModels;
 
 namespace IceAge.Interop;
 internal class RichTextInterop
 {
     private const char kHellip = (char)8230;
 
-    private string _content;
+    private TootViewModel _viewModel;
     private readonly bool _shortenHyperlinks;
     private readonly HtmlDocument _htmlDocument;
 
     public RichTextBlock RichTextBlock { get; set; }
-    public string Content
-    {
-        get => _content;
-        set
-        {
-            if (_content == value)
-                return;
-            _content = value;
-            RichTextBlock.Blocks.Clear();
-            _htmlDocument.LoadHtml(ReplaceWhitespace(_content));
-            var inlines = ParseNodes(_htmlDocument.DocumentNode.ChildNodes, RichTextBlock.Blocks);
-            if (inlines.Count > 0)
-            {
-                var p = new Paragraph();
-                foreach (var inline in inlines)
-                    p.Inlines.Add(inline);
-                RichTextBlock.Blocks.Add(p);
-            }
-        }
-    }
 
-    public RichTextInterop(RichTextBlock richTextBlock, bool shortenHyperlinks)
+    public RichTextInterop(RichTextBlock richTextBlock, TootViewModel viewModel, bool shortenHyperlinks)
     {
         this.RichTextBlock = richTextBlock;
         this._shortenHyperlinks = shortenHyperlinks;
+        this._viewModel = viewModel;
         _htmlDocument = new HtmlDocument();
+        _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+        UpdateContent();
+    }
+
+    private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TootViewModel.Content))
+        {
+            UpdateContent();
+        }
+    }
+
+    private void UpdateContent()
+    {
+        RichTextBlock.Blocks.Clear();
+        _htmlDocument.LoadHtml(ReplaceWhitespace(_viewModel.Content));
+        var inlines = ParseNodes(_htmlDocument.DocumentNode.ChildNodes, RichTextBlock.Blocks);
+        if (inlines.Count > 0)
+        {
+            var p = new Paragraph();
+            foreach (var inline in inlines)
+                p.Inlines.Add(inline);
+            RichTextBlock.Blocks.Add(p);
+        }
     }
 
     private IList<Inline> ParseNodes(IEnumerable<HtmlNode> nodes, BlockCollection blocks)

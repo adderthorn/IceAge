@@ -32,19 +32,19 @@ public partial class LoginViewModel : ObservableObject
     public bool NotIsLoggingIn => !IsLoggingIn;
 
     [ObservableProperty]
-    private bool _waitingOnAuthCode;
+    public partial bool WaitingOnAuthCode { get; set; }
 
     [ObservableProperty]
-    private bool _isLoggingIn;
+    public partial bool IsLoggingIn { get; set; }
 
     [ObservableProperty]
-    private string _invalidHandleTitle;
+    public partial string InvalidHandleTitle {  get; set; }
 
     [ObservableProperty]
-    private string _invalidHandleSubtitle;
+    public partial string InvalidHandleSubtitle {  get; set; }
 
     [ObservableProperty]
-    private bool _invalidHandleIsOpen;
+    public partial bool InvalidHandleIsOpen {  get; set; }
 
     public LoginViewModel(MastodonInterop mastodonInterop)
     {
@@ -119,6 +119,14 @@ public partial class LoginViewModel : ObservableObject
             InvalidHandleSubtitle = _resourceLoader.GetString("LoginStatus/Failure/Subtitle");
             InvalidHandleIsOpen = true;
             return;
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            Debug.WriteLine(ex);
+            InvalidHandleTitle = "";
+            InvalidHandleTitle = _resourceLoader.GetString("LoginStatus/Error/Title");
+            InvalidHandleSubtitle = _resourceLoader.GetString("LoginStatus/NotAServer/Subtitle");
+            InvalidHandleIsOpen = true;
         }
         catch (Exception ex)
         {
