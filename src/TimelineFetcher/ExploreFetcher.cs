@@ -1,28 +1,26 @@
-﻿using IceAge.Interop;
-using Mastonet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IceAge.Interop;
+using Mastonet;
 
 namespace IceAge.TimelineFetcher;
-public class LocalTimelineFetcher : TimelineFetcherBase
+public class ExploreFetcher : TimelineFetcherBase
 {
-    private readonly TimelineStreaming _streaming;
-
-    public LocalTimelineFetcher(MastodonInterop mastodonInterop) : base(mastodonInterop)
+    public ExploreFetcher(MastodonInterop mastodonInterop) : base(mastodonInterop)
     {
-        _streaming = _mastodonInterop.MastodonClient.GetPublicLocalStreaming();
+        Timeline = new Mastonet.Entities.MastodonList<Mastonet.Entities.Status>();
     }
 
-    public override TimelineStreaming Streaming => _streaming;
+    // This feature doesn't support streaming.
+    public override TimelineStreaming Streaming => null;
 
     public async override Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
     {
         IsLoadingTimeline = true;
-        await PopulateFromCache();
-        var statuses = await _mastodonInterop.MastodonClient.GetPublicTimeline(options, local: true);
+        var statuses = await _mastodonInterop.MastodonClient.GetTrendingStatuses(null, options?.Limit);
         if (Timeline?.Count == 0)
         {
             Timeline = statuses;
@@ -43,7 +41,6 @@ public class LocalTimelineFetcher : TimelineFetcherBase
                 this.RemoveAt(i);
             }
         }
-        await SaveCacheFileAsync();
         IsLoadingTimeline = false;
     }
 }

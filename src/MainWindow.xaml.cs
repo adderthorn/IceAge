@@ -29,6 +29,7 @@ public sealed partial class MainWindow : Window
         { "Home", typeof(TimelinePage) },
         { "Local", typeof(LocalPage) },
         { "Federated", typeof(FederatedPage) },
+        { "Explore", typeof(ExplorePage) },
         { "Settings", typeof(SettingsPage) }
     };
 

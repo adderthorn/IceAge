@@ -7,53 +7,106 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:conv="using:CommunityToolkit.WinUI.Converters"
+    xmlns:animations="using:CommunityToolkit.WinUI.Animations"
+    xmlns:behavior="using:CommunityToolkit.WinUI.Behaviors"
+    xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:media="using:CommunityToolkit.WinUI.Media"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolVisConverter"/>
     </Page.Resources>
-    <Grid VerticalAlignment="Center" MaxWidth="400">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Right"
+    <Grid>
+        <Border IsHitTestVisible="True">
+            <Image Source="/Assets/LaunchImage.png" Stretch="UniformToFill"/>
+        </Border>
+        <Rectangle Fill="{ThemeResource OverlayAcrylicBrush}" Width="450" VerticalAlignment="Center" Height="270"
+                   RadiusX="5" RadiusY="5"/>
+        <Grid VerticalAlignment="Center" MaxWidth="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Vertical">
+                <TextBlock Text="IceAge" FontSize="52" FontWeight="Bold" HorizontalAlignment="Center"
+                           Foreground="WhiteSmoke"/>
+                <TextBlock x:Uid="AppTagline" Margin="20" Foreground="WhiteSmoke" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Left" Foreground="WhiteSmoke"
                    VerticalAlignment="Center" FontWeight="Bold" Text="{x:Bind ViewModel.LabelText, Mode=OneWay}"/>
-        <TextBox x:Uid="HandleTextBox" x:Name="HandleTextBox" Grid.Row="0" Grid.Column="1" Margin="5"
+            <TextBox x:Uid="HandleTextBox" x:Name="HandleTextBox" Grid.Row="2" Margin="5"
                  Visibility="{x:Bind ViewModel.NotWaitingOnAuthCode, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"
                  KeyUp="HandleTextBox_KeyUp" IsEnabled="{x:Bind ViewModel.NotIsLoggingIn, Mode=OneWay}"
                  IsSpellCheckEnabled="False"/>
-        <TextBox x:Name="AuthCodeTextBox" Grid.Row="0" Grid.Column="1" Margin="5" IsSpellCheckEnabled="False"
+            <TextBox x:Name="AuthCodeTextBox" Grid.Row="3" Margin="5" IsSpellCheckEnabled="False"
                  Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"/>
-        <Grid Grid.Row="1" Grid.Column="1" Margin="5,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
+            <Grid Grid.Row="4" Grid.Column="1" Margin="5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SignupButton" Grid.Column="0" HorizontalAlignment="Left" Width="100"
                     Visibility="{x:Bind ViewModel.NotWaitingOnAuthCode, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"
                     Click="SignupButton_Click" x:Uid="SignupButton" IsEnabled="{x:Bind ViewModel.NotIsLoggingIn, Mode=OneWay}"/>
-            <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="LoginButton_Click"
+                <Button x:Name="LoginButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="LoginButton_Click"
                     Visibility="{x:Bind ViewModel.NotWaitingOnAuthCode, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"
                     IsEnabled="{x:Bind ViewModel.NotIsLoggingIn, Mode=OneWay}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="LoginButtonContent" Visibility="{x:Bind ViewModel.NotIsLoggingIn, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"/>
-                    <ProgressRing Height="10" Width="10" Visibility="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay}"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Uid="LoginButtonContent" Visibility="{x:Bind ViewModel.NotIsLoggingIn, Converter={StaticResource BoolVisConverter}, Mode=OneWay}"/>
+                        <ProgressRing Height="10" Width="10" Visibility="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay}"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="AuthCodeButton" Grid.Column="1" HorizontalAlignment="Right" Width="100" Click="AuthCodeButton_Click"
                     x:Uid="AuthCodeButton" Visibility="{x:Bind ViewModel.WaitingOnAuthCode, Mode=OneWay}"/>
-        </Grid>
-        <TeachingTip x:Name="InvalidHandleTip" Target="{x:Bind HandleTextBox}" IsOpen="{x:Bind ViewModel.InvalidHandleIsOpen, Mode=TwoWay}"
+            </Grid>
+            <TeachingTip x:Name="InvalidHandleTip" Target="{x:Bind HandleTextBox}" IsOpen="{x:Bind ViewModel.InvalidHandleIsOpen, Mode=TwoWay}"
                      Title="{x:Bind ViewModel.InvalidHandleTitle, Mode=OneWay}" Subtitle="{x:Bind ViewModel.InvalidHandleSubtitle, Mode=OneWay}">
-            <TeachingTip.IconSource>
-                <SymbolIconSource Symbol="Flag"/>
-            </TeachingTip.IconSource>
-        </TeachingTip>
+                <TeachingTip.IconSource>
+                    <SymbolIconSource Symbol="Flag"/>
+                </TeachingTip.IconSource>
+            </TeachingTip>
+        </Grid>
+        <media:UIElementExtensions.VisualFactory>
+            <media:PipelineVisualFactory>
+
+                <media:BlurEffect x:Name="ImageBlurEffect"
+                          Amount="32"
+                          IsAnimatable="True" />
+            </media:PipelineVisualFactory>
+        </media:UIElementExtensions.VisualFactory>
+
+        <animations:Explicit.Animations>
+            <animations:AnimationSet x:Name="ClipAnimation">
+                <animations:AnimationScope EasingMode="EaseOut"
+                                   Duration="0:0:3">
+
+                    <animations:ClipAnimation From="0,0,1280,0"
+                                      To="0" />
+
+                    <animations:TranslationAnimation From="32,0,0"
+                                             To="0" />
+
+                    <animations:ScaleAnimation From="1.1"
+                                       To="1" />
+
+                    <animations:BlurEffectAnimation Target="{x:Bind ImageBlurEffect}"
+                                            From="32"
+                                            To="0" />
+                </animations:AnimationScope>
+            </animations:AnimationSet>
+        </animations:Explicit.Animations>
+
+        <interactivity:Interaction.Behaviors>
+            <interactions:EventTriggerBehavior EventName="Loaded">
+                <behavior:StartAnimationAction Animation="{x:Bind ClipAnimation}" />
+            </interactions:EventTriggerBehavior>
+        </interactivity:Interaction.Behaviors>
     </Grid>
 </Page>

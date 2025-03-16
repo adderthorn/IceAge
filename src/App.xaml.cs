@@ -32,10 +32,12 @@ public partial class App : Application
             .AddSingleton<HomeTimelineFetcher>()
             .AddSingleton<LocalTimelineFetcher>()
             .AddSingleton<FederatedTimelineFetcher>()
+            .AddSingleton<ExploreFetcher>()
             .AddSingleton<LoginViewModel>()
             .AddSingleton<TimelineViewModel>()
             .AddSingleton<LocalViewModel>()
-            .AddSingleton<FederatedViewModel>();
+            .AddSingleton<FederatedViewModel>()
+            .AddSingleton<ExploreViewModel>();
 
         return services.BuildServiceProvider();
     }

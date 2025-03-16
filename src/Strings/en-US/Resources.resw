@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppTagline.Text" xml:space="preserve">
+    <value>A Mastodon App for Windows</value>
+  </data>
   <data name="AuthCodeButton.Content" xml:space="preserve">
     <value>Continue...</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="LoginStatus.InvalidHandle.Title" xml:space="preserve">
     <value>Invalid Handle</value>
+  </data>
+  <data name="LoginStatus.NotAServer.Subtitle" xml:space="preserve">
+    <value>It does not appear this server is a valid instance. Please double-check and try again.</value>
   </data>
   <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
     <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
