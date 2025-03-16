@@ -16,9 +16,9 @@
         <conv:StringFormatConverter x:Key="StringFormatConverter"/>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical" BorderBrush="{ThemeResource SystemColorControlAccentBrush}" BorderThickness="0,0,0,1" Margin="0,15,0,0">
-        <StackPanel Visibility="{x:Bind IsContentBoost, Mode=OneWay}" Orientation="Horizontal" Margin="0,5">
+        <StackPanel Visibility="{x:Bind ViewModel.IsContentBoost, Mode=OneWay}" Orientation="Horizontal" Margin="0,5">
             <SymbolIcon Symbol="ReShare" Margin="5,0"/>
-            <TextBlock Text="{x:Bind OriginalDisplayName, Mode=OneWay}" PointerEntered="ActionButton_PointerEntered"/>
+            <TextBlock Text="{x:Bind ViewModel.OriginalDisplayName, Mode=OneWay}" PointerEntered="ActionButton_PointerEntered"/>
             <TextBlock x:Uid="BoostedBlock" Margin="4,0"/>
         </StackPanel>
         <Grid>
@@ -31,7 +31,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <PersonPicture Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,0" Width="50" PointerEntered="ActionButton_PointerEntered"
-                           ProfilePicture="{x:Bind ProfileImageUrl, Mode=OneWay}" DisplayName="{x:Bind DisplayName, Mode=OneWay}"/>
+                           ProfilePicture="{x:Bind ViewModel.ProfileImageUrl, Mode=OneWay}" DisplayName="{x:Bind ViewModel.DisplayName, Mode=OneWay}"/>
             <Grid Grid.Column="1" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -39,22 +39,22 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
                     <FontIcon FontFamily="Segoe Fluent Icons" Margin="0,0,3,0" Glyph="&#xE99A;"
-                              Visibility="{x:Bind IsBotAccount, Mode=OneWay}">
+                              Visibility="{x:Bind ViewModel.IsBotAccount, Mode=OneWay}">
                         <ToolTipService.ToolTip>
                             <ToolTip x:Uid="BotToolTip"/>
                         </ToolTipService.ToolTip>
                     </FontIcon>
-                    <TextBlock Text="{x:Bind DisplayName, Mode=OneWay}" Grid.Column="0"/>
+                    <TextBlock Text="{x:Bind ViewModel.DisplayName, Mode=OneWay}" Grid.Column="0"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" DoubleTapped="StackPanel_DoubleTapped">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="{x:Bind Created}"/>
+                        <ToolTip Content="{x:Bind ViewModel.Created}"/>
                     </ToolTipService.ToolTip>
-                    <FontIcon Glyph="{x:Bind StatusGlyph}"/>
-                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{x:Bind CreatedTimeAgo, Mode=OneWay}"/>
+                    <FontIcon Glyph="{x:Bind ViewModel.StatusGlyph}"/>
+                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{x:Bind ViewModel.CreatedTimeAgo, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
-            <TextBlock Text="{x:Bind Username, Mode=OneWay}" Grid.Column="1" Grid.Row="1"
+            <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}" Grid.Column="1" Grid.Row="1"
                        Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"/>
         </Grid>
         <RichTextBlock x:Name="ContentBlock" Margin="0,5,0,5" CanDrag="False" TextWrapping="WrapWholeWords"/>
@@ -64,7 +64,7 @@
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE97A;"/>
-                        <TextBlock Margin="5,0,0,0" Text="{x:Bind ReplyCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
+                        <TextBlock Margin="5,0,0,0" Text="{x:Bind ViewModel.ReplyCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -80,8 +80,8 @@
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="ReShare" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="{x:Bind BoostedWeight, Mode=OneWay}"
-                                   Text="{x:Bind BoostedCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="{x:Bind ViewModel.BoostedWeight, Mode=OneWay}"
+                                   Text="{x:Bind ViewModel.BoostedCount, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter=\{0:N0\}}"/>
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -95,7 +95,7 @@
                                                                 EasingMode="EaseOut" EasingType="Linear"/>
                             </ani:AnimationSet>
                         </ani:Explicit.Animations>
-                        <FontIcon Visibility="{x:Bind IsFavorite, Mode=OneWay}" FontFamily="Segoe Fluent Icons" Glyph="&#xE735;"
+                        <FontIcon Visibility="{x:Bind ViewModel.IsFavorite, Mode=OneWay}" FontFamily="Segoe Fluent Icons" Glyph="&#xE735;"
                                   HorizontalAlignment="Center" Foreground="Yellow"/>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;"/>
                     </Grid>

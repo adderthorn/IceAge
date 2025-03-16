@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using IceAge.Interop;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using IceAge.ViewModels;
 
 namespace IceAge.TimelineFetcher;
 
@@ -60,9 +61,9 @@ public abstract partial class TimelineFetcherBase : ObservableObject
             return null;
 
         Timeline.Add(status);
-        var toot = createControl(status);
+        var toot = CreateControl(status);
         TootControls.Add(toot);
-        await saveCacheFileAsync();
+        await SaveCacheFileAsync();
         return toot;
     }
 
@@ -74,18 +75,18 @@ public abstract partial class TimelineFetcherBase : ObservableObject
             if (Timeline.Any(s => s.Id == status.Id))
                 continue;
             Timeline.Add(status);
-            var toot = createControl(status);
+            var toot = CreateControl(status);
             TootControls.Add(toot);
             addedControls.Add(toot);
         }
-        await saveCacheFileAsync();
+        await SaveCacheFileAsync();
         return addedControls;
     }
 
     public void Remove(Status status)
     {
         Timeline.Remove(status);
-        TootControls.Remove(TootControls.FirstOrDefault(tc => tc.Status.Id == status.Id));
+        TootControls.Remove(TootControls.FirstOrDefault(tc => tc.ViewModel.Status.Id == status.Id));
     }
 
     public void RemoveAt(int index)
@@ -99,9 +100,9 @@ public abstract partial class TimelineFetcherBase : ObservableObject
         if (Timeline.Any(s => s.Id == status.Id))
             return null;
         Timeline.Insert(index, status);
-        var toot = createControl(status);
+        var toot = CreateControl(status);
         TootControls.Insert(index, toot);
-        await saveCacheFileAsync();
+        await SaveCacheFileAsync();
         return toot;
     }
 
@@ -113,11 +114,11 @@ public abstract partial class TimelineFetcherBase : ObservableObject
             if (Timeline.Any(s => s.Id == status.Id))
                 continue;
             Timeline.Insert(index, status);
-            var toot = createControl(status);
+            var toot = CreateControl(status);
             TootControls.Insert(index++, toot);
             insertedControls.Add(toot);
         }
-        await saveCacheFileAsync();
+        await SaveCacheFileAsync();
         return insertedControls;
     }
 
@@ -147,7 +148,7 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     public async Task StartStreamingAsync() => await Streaming.Start();
     public void StopStreaming() => Streaming.Stop();
 
-    protected async Task saveCacheFileAsync()
+    protected async Task SaveCacheFileAsync()
     {
         if (CacheFile == null || _isWritingCacheFile)
             return;
@@ -163,12 +164,16 @@ public abstract partial class TimelineFetcherBase : ObservableObject
     }
 
     partial void OnTimelineChanged(MastodonList<Status> value) =>
-        TootControls = [.. Timeline.Select(createControl)];
+        TootControls = [.. Timeline.Select(CreateControl)];
 
-    protected TootControl createControl(Status status) =>
-        new(status, _mastodonInterop.MastodonClient, App.Current.Settings.ShortenHyperlinks);
+    protected TootControl CreateControl(Status status)
+    {
+        var viewModel = new TootViewModel(_mastodonInterop, status);
+        var control = new TootControl(viewModel, App.Current.Settings.ShortenHyperlinks);
+        return control;
+    }
 
-    protected async Task populateFromCache()
+    protected async Task PopulateFromCache()
     {
         if (CacheFile == null || _isWritingCacheFile)
             return;

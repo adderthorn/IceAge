@@ -27,7 +27,7 @@ public class HomeTimelineFetcher : TimelineFetcherBase
     public async override Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
     {
         IsLoadingTimeline = true;
-        await populateFromCache();
+        await PopulateFromCache();
         try
         {
             var statuses = await _mastodonInterop.MastodonClient.GetHomeTimeline(options);
@@ -51,7 +51,7 @@ public class HomeTimelineFetcher : TimelineFetcherBase
                     this.RemoveAt(i);
                 }
             }
-            await saveCacheFileAsync();
+            await SaveCacheFileAsync();
         }
         finally
         {

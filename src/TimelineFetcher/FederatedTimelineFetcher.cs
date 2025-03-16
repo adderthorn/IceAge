@@ -23,7 +23,7 @@ public class FederatedTimelineFetcher : TimelineFetcherBase
     public async override Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null)
     {
         IsLoadingTimeline = true;
-        await populateFromCache();
+        await PopulateFromCache();
         var statuses = await _mastodonInterop.MastodonClient.GetPublicTimeline(options, local: false);
         if (Timeline?.Count == 0)
         {
@@ -45,7 +45,7 @@ public class FederatedTimelineFetcher : TimelineFetcherBase
                 this.RemoveAt(i);
             }
         }
-        await saveCacheFileAsync();
+        await SaveCacheFileAsync();
         IsLoadingTimeline = false;
     }
 }
