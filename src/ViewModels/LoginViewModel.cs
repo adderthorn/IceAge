@@ -120,6 +120,14 @@ public partial class LoginViewModel : ObservableObject
             InvalidHandleIsOpen = true;
             return;
         }
+        catch (IndexOutOfRangeException ex)
+        {
+            Debug.WriteLine(ex);
+            InvalidHandleTitle = "";
+            InvalidHandleTitle = _resourceLoader.GetString("LoginStatus/Error/Title");
+            InvalidHandleSubtitle = _resourceLoader.GetString("LoginStatus/NotAServer/Subtitle");
+            InvalidHandleIsOpen = true;
+        }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);

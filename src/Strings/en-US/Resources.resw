@@ -183,6 +183,9 @@
   <data name="LoginStatus.InvalidHandle.Title" xml:space="preserve">
     <value>Invalid Handle</value>
   </data>
+  <data name="LoginStatus.NotAServer.Subtitle" xml:space="preserve">
+    <value>It does not appear this server is a valid instance. Please double-check and try again.</value>
+  </data>
   <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
     <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
   </data>
