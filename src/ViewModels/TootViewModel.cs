@@ -25,6 +25,9 @@ public partial class TootViewModel : ObservableObject
     public partial Status Status { get; set; }
 
     [ObservableProperty]
+    public partial string Content {  get; set; }
+
+    [ObservableProperty]
     public partial bool IsFavorite { get; set; }
 
     [ObservableProperty]
@@ -171,6 +174,7 @@ public partial class TootViewModel : ObservableObject
             ProfileImageUrl = value.Account.AvatarUrl;
             Username = OriginalUsername;
             DisplayName = OriginalDisplayName;
+            Content = Status.Content;
             IsContentBoost = false;
             attachments = value.MediaAttachments.ToList();
         }
@@ -181,6 +185,7 @@ public partial class TootViewModel : ObservableObject
             ProfileImageUrl = value.Reblog.Account.AvatarUrl;
             Username = $"@{value.Reblog.Account.AccountName}";
             DisplayName = value.Reblog.Account.DisplayName;
+            Content = Status.Reblog.Content;
             IsContentBoost = true;
             attachments = value.Reblog.MediaAttachments.ToList();
         }

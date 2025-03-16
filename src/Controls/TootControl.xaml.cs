@@ -31,7 +31,12 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     {
         this.InitializeComponent();
         ViewModel = viewModel;
-        _interop = new RichTextInterop(ContentBlock, shortenHyperlinks);
+        _interop = new RichTextInterop(ContentBlock, viewModel, shortenHyperlinks);
+        AttachmentBlock.Items.Clear();
+        foreach (var ctrl in ViewModel.AttachmentControls)
+        {
+            AttachmentBlock.Items.Add(ctrl);
+        }
     }
 
     private async void Img_Tapped(object sender, TappedRoutedEventArgs e)
