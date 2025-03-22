@@ -35,6 +35,14 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
         AttachmentBlock.Items.Clear();
         foreach (var ctrl in ViewModel.AttachmentControls)
         {
+            if (ctrl is ImageAttachmentControl imgCtrl)
+            {
+                imgCtrl.ContentTapped += Img_Tapped;
+            }
+            else if (ctrl is AnimatedPreviewAttachmentControl aniCtrl)
+            {
+                aniCtrl.ContentTapped += Animated_Tapped;
+            }
             AttachmentBlock.Items.Add(ctrl);
         }
     }

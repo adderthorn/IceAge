@@ -10,9 +10,9 @@
 
     <Grid x:Name="MainGrid">
         <Image x:Name="BlurImage" Width="{x:Bind ImageWidth, Mode=OneWay}" Height="{x:Bind ImageHeight, Mode=OneWay}"
-               Stretch="UniformToFill"/>
+               Stretch="UniformToFill" Tapped="Content_Tapped"/>
         <Image x:Name="DisplayImage" Width="{x:Bind Width, Mode=OneWay}" Height="{x:Bind Height, Mode=OneWay}"
-               Stretch="UniformToFill">
+               Stretch="UniformToFill" Tapped="Content_Tapped">
             <ToolTipService.ToolTip>
                 <ToolTip IsEnabled="{x:Bind HasAltText, Mode=OneWay}" Content="{x:Bind AltText, Mode=OneWay}"/>
             </ToolTipService.ToolTip>
@@ -20,7 +20,7 @@
         <MediaPlayerElement x:Name="Player" AutoPlay="{x:Bind Autoplay, Mode=OneWay}"
                             MaxWidth="{x:Bind ImageWidth, Mode=OneWay}"/>
         <Button VerticalAlignment="Center" HorizontalAlignment="Center"
-                Visibility="{x:Bind NotAutoplay, Mode=OneWay}">
+                Visibility="{x:Bind NotAutoplay, Mode=OneWay}" Tapped="PlayButton_Tapped">
             <SymbolIcon x:Name="PlaySymbol" Symbol="Play" Foreground="White"/>
         </Button>
     </Grid>

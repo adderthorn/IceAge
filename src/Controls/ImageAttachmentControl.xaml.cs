@@ -35,6 +35,7 @@ public sealed partial class ImageAttachmentControl : UserControl, INotifyPropert
     private string _altText;
 
     public event PropertyChangedEventHandler PropertyChanged;
+    public event TappedEventHandler ContentTapped;
 
     public Attachment MediaAttachment => _mediaAttachment;
 
@@ -132,4 +133,13 @@ public sealed partial class ImageAttachmentControl : UserControl, INotifyPropert
 
     private void NotifyPropertyChanged(string propertyName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    private void SensitiveButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        IsSensitive = false;
+        initImage();
+    }
+
+    private void Content_Tapped(object sender, TappedRoutedEventArgs e) =>
+        ContentTapped?.Invoke(this, e);
 }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Blurhash;
 using Mastonet.Entities;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Media.Core;
 
@@ -20,6 +21,7 @@ public sealed partial class AnimatedPreviewAttachmentControl : UserControl, INot
     private string _altText;
 
     public event PropertyChangedEventHandler PropertyChanged;
+    public event TappedEventHandler ContentTapped;
 
     public Attachment MediaAttachment => _mediaAttachment;
 
@@ -126,5 +128,13 @@ public sealed partial class AnimatedPreviewAttachmentControl : UserControl, INot
             Player.Source = MediaSource.CreateFromUri(new Uri(MediaAttachment.Url));
             Player.MediaPlayer.IsLoopingEnabled = Autoplay;
         }
+    }
+
+    private void Content_Tapped(object sender, TappedRoutedEventArgs e) =>
+        ContentTapped?.Invoke(this, e);
+
+    private void PlayButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        Player.MediaPlayer.IsLoopingEnabled = true;
     }
 }

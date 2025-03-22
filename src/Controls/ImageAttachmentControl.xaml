@@ -10,14 +10,15 @@
 
     <Grid>
         <Image x:Name="BlurImage" Width="{x:Bind ImageWidth, Mode=OneWay}" Height="{x:Bind ImageHeight, Mode=OneWay}"
-               Stretch="UniformToFill"/>
+               Stretch="UniformToFill" Tapped="Content_Tapped"/>
         <Image x:Name="DisplayImage" Width="{x:Bind ImageWidth, Mode=OneWay}" Height="{x:Bind ImageHeight, Mode=OneWay}"
-               Stretch="UniformToFill">
+               Stretch="UniformToFill" Tapped="Content_Tapped">
             <ToolTipService.ToolTip>
                 <ToolTip IsEnabled="{x:Bind HasAltText, Mode=OneWay}" Content="{x:Bind AltText, Mode=OneWay}"/>
             </ToolTipService.ToolTip>
         </Image>
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind IsSensitive, Mode=OneWay}">
+        <Button x:Name="SensitiveButton" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind IsSensitive, Mode=OneWay}"
+                Tapped="SensitiveButton_Tapped">
             <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7B3;"/>
             <ToolTipService.ToolTip>
                 <ToolTip x:Uid="SensitiveToolTip"/>
