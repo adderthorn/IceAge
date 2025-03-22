@@ -185,6 +185,7 @@
   </data>
   <data name="LoginStatus.NotAServer.Subtitle" xml:space="preserve">
     <value>It does not appear this server is a valid instance. Please double-check and try again.</value>
+  </data>
   <data name="NavigationItemDM.Content" xml:space="preserve">
     <value>Direct Messages</value>
   </data>
