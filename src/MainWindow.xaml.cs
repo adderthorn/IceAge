@@ -29,6 +29,7 @@ public sealed partial class MainWindow : Window
     public static readonly Dictionary<string, Type> NavigationPageDictionary = new()
     {
         { "Home", typeof(TimelinePage) },
+        { "Notifications", typeof(NotificationsPage) },
         { "Local", typeof(LocalPage) },
         { "Federated", typeof(FederatedPage) },
         { "Explore", typeof(ExplorePage) },

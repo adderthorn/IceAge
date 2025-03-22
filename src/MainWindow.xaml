@@ -63,10 +63,13 @@
                         BackRequested="MainNavigationView_BackRequested" IsPaneVisible="{x:Bind App.Settings.AuthSuccessful, Mode=OneWay}">
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Uid="NavigationItemHome" Name="Home" Icon="Home" />
-                <NavigationViewItem x:Uid="NavigationItemNotifications" Name="Notifiations">
+                <NavigationViewItem x:Uid="NavigationItemNotifications" Name="Notifications">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7E7;"/>
                     </NavigationViewItem.Icon>
+                    <NavigationViewItem.InfoBadge>
+                        <InfoBadge Value="100"/>
+                    </NavigationViewItem.InfoBadge>
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavigationItemExplore" Name="Explore">
                     <NavigationViewItem.Icon>

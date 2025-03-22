@@ -35,6 +35,7 @@ public partial class App : Application
             .AddSingleton<ExploreFetcher>()
             .AddSingleton<LoginViewModel>()
             .AddSingleton<TimelineViewModel>()
+            .AddSingleton<NotificationsViewModel>()
             .AddSingleton<LocalViewModel>()
             .AddSingleton<FederatedViewModel>()
             .AddSingleton<ExploreViewModel>();

@@ -32,4 +32,9 @@ public sealed partial class NotificationsPage : Page
         this.InitializeComponent();
         this.NavigationCacheMode = NavigationCacheMode.Enabled;
     }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.ShowHelloWorldToast();
+    }
 }
