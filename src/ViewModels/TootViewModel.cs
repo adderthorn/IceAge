@@ -169,7 +169,7 @@ public partial class TootViewModel : ObservableObject
 
         if (value.Reblog == null)
         {
-            Created = value.CreatedAt;
+            Created = value.CreatedAt.ToLocalTime();
             LockedAccount = value.Account.Locked;
             ProfileImageUrl = value.Account.AvatarUrl;
             Username = OriginalUsername;
@@ -180,7 +180,7 @@ public partial class TootViewModel : ObservableObject
         }
         else
         {
-            Created = value.Reblog.CreatedAt;
+            Created = value.Reblog.CreatedAt.ToLocalTime();
             LockedAccount = value.Reblog.Account.Locked;
             ProfileImageUrl = value.Reblog.Account.AvatarUrl;
             Username = $"@{value.Reblog.Account.AccountName}";
