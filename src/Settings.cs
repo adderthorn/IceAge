@@ -38,34 +38,34 @@ public partial class Settings : ObservableObject
     public const string AppName = "IceAge";
 
     [ObservableProperty]
-    private AppRegistration _appRegistration;
+    public partial AppRegistration AppRegistration { get; set; }
 
     [ObservableProperty]
-    private string _authCode;
+    public partial string AuthCode { get; set; }
 
     [ObservableProperty]
-    private Auth _auth;
+    public partial Auth Auth { get; set; }
 
     [ObservableProperty]
-    private ElementTheme _elementTheme;
+    public partial ElementTheme ElementTheme { get; set; }
 
     [ObservableProperty]
-    private RectInt32 _windowSizeAndPosition;
+    public partial RectInt32 WindowSizeAndPosition { get; set; }
 
     [ObservableProperty]
-    private bool _saveWindowSizeAndPosition;
+    public partial bool SaveWindowSizeAndPosition { get; set; }
 
     [ObservableProperty]
-    private bool _shortenHyperlinks;
+    public partial bool ShortenHyperlinks { get; set; }
 
     [ObservableProperty]
-    private bool _autoPlay;
+    public partial bool AutoPlay { get; set; }
 
     [ObservableProperty]
-    private bool _newWindows;
+    public partial bool NewWindows { get; set; }
 
     [ObservableProperty]
-    private bool _authSuccessful;
+    public partial bool AuthSuccessful { get; set; }
     #endregion
 
     #region Constructors
