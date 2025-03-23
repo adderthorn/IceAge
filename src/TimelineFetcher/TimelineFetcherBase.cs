@@ -45,13 +45,13 @@ public abstract partial class TimelineFetcherBase : ObservableObject
 
 
     [ObservableProperty]
-    private MastodonList<Status> _timeline;
+    public partial MastodonList<Status> Timeline { get; set; }
 
     [ObservableProperty]
-    private ObservableCollection<TootControl> _tootControls;
+    public partial ObservableCollection<TootControl> TootControls { get; set; }
 
     [ObservableProperty]
-    private bool _isLoadingTimeline;
+    public partial bool IsLoadingTimeline { get; set; }
 
     public abstract Task FetchTimelineAsync(TimelineMode mode, ArrayOptions options = null);
 
