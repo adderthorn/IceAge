@@ -68,7 +68,7 @@
                         <FontIcon Glyph="&#xE7E7;"/>
                     </NavigationViewItem.Icon>
                     <NavigationViewItem.InfoBadge>
-                        <InfoBadge Value="100"/>
+                        <InfoBadge Value="0"/>
                     </NavigationViewItem.InfoBadge>
                 </NavigationViewItem>
                 <NavigationViewItem x:Uid="NavigationItemExplore" Name="Explore">

@@ -20,7 +20,7 @@ using Windows.UI.Text;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace IceAge.Controls;
-public sealed partial class TootControl : UserControl, INotifyPropertyChanged
+public sealed partial class TootControl : UserControl
 {
     //private readonly MastodonClient _client;
     private readonly RichTextInterop _interop;
@@ -65,9 +65,6 @@ public sealed partial class TootControl : UserControl, INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
-
-    private void NotifyPropertyChanged(string propertyName) =>
-           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     private void ActionButton_PointerEntered(object sender, PointerRoutedEventArgs e)
     {

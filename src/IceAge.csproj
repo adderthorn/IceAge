@@ -23,6 +23,7 @@
     <None Remove="Controls\ImageAttachmentControl.xaml" />
     <None Remove="Controls\ImageContentDialog.xaml" />
     <None Remove="Controls\NewTootControl.xaml" />
+    <None Remove="Controls\NotificationControl.xaml" />
     <None Remove="Controls\TootControl.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="NewTootWindow.xaml" />
@@ -152,6 +153,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Update="Pages\NotificationsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Controls\NotificationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <None Update="Themes\Generic.xaml">

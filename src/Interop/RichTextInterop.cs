@@ -17,7 +17,7 @@ internal class RichTextInterop
 {
     private const char kHellip = (char)8230;
 
-    private TootViewModel _viewModel;
+    private readonly TootViewModel _viewModel;
     private readonly bool _shortenHyperlinks;
     private readonly HtmlDocument _htmlDocument;
 

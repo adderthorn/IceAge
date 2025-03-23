@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using IceAge.Controls;
+using IceAge.Interop;
 using IceAge.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
@@ -24,17 +26,25 @@ namespace IceAge.Pages;
 /// </summary>
 public sealed partial class NotificationsPage : Page
 {
-    public NotificationsViewModel ViewModel { get; }
+    private readonly MastodonInterop _interop;
 
     public NotificationsPage()
     {
-        this.ViewModel = App.Current.Services.GetService<NotificationsViewModel>();
         this.InitializeComponent();
+        _interop = App.Current.Services.GetService<MastodonInterop>();
         this.NavigationCacheMode = NavigationCacheMode.Enabled;
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    protected async override void OnNavigatedTo(NavigationEventArgs e)
     {
-        ViewModel.ShowHelloWorldToast();
+        base.OnNavigatedTo(e);
+        var notifications = await _interop.MastodonClient.GetNotifications();
+        MainPanel.Children.Clear();
+        foreach (var item in notifications.Where(nf => nf.Status != null))
+        {
+            var vm = new NotificationViewModel(_interop, item);
+            var n = new NotificationControl(vm);
+            MainPanel.Children.Add(n);
+        }
     }
 }
