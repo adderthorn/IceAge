@@ -212,7 +212,6 @@ public partial class TootViewModel : ObservableObject
                     break;
                 case "audio":
                     throw new NotImplementedException();
-                    break;
             }
         }
         _timer.Start();
