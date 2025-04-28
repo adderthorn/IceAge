@@ -9,7 +9,6 @@
     xmlns:conv="using:CommunityToolkit.WinUI.Converters"
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:behavior="using:CommunityToolkit.WinUI.Behaviors"
-    xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:media="using:CommunityToolkit.WinUI.Media"
     mc:Ignorable="d"
@@ -104,9 +103,9 @@
         </animations:Explicit.Animations>
 
         <interactivity:Interaction.Behaviors>
-            <interactions:EventTriggerBehavior EventName="Loaded">
+            <interactivity:EventTriggerBehavior EventName="Loaded">
                 <behavior:StartAnimationAction Animation="{x:Bind ClipAnimation}" />
-            </interactions:EventTriggerBehavior>
+            </interactivity:EventTriggerBehavior>
         </interactivity:Interaction.Behaviors>
     </Grid>
 </Page>
