@@ -219,6 +219,21 @@
   <data name="NewWindowsSettingsCard.Header" xml:space="preserve">
     <value>Open Attachments In New Window</value>
   </data>
+  <data name="NotificationType.favourite" xml:space="preserve">
+    <value>favorited your post</value>
+  </data>
+  <data name="NotificationType.follow" xml:space="preserve">
+    <value>followed you</value>
+  </data>
+  <data name="NotificationType.mention" xml:space="preserve">
+    <value>mentioned you</value>
+  </data>
+  <data name="NotificationType.poll" xml:space="preserve">
+    <value>A poll you voted in has ended</value>
+  </data>
+  <data name="NotificationType.reblog" xml:space="preserve">
+    <value>boosted your post</value>
+  </data>
   <data name="SensitiveToolTip.Content" xml:space="preserve">
     <value>Sesitive content. Click to show.</value>
   </data>

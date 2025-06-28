@@ -10,8 +10,9 @@
 
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{x:Bind ViewModel.Type}"/>
-            <TextBlock Text="{x:Bind ViewModel.Created}"/>
+            <FontIcon Glyph="{x:Bind ViewModel.Glyph, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind ViewModel.Phrase, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind ViewModel.Created, Mode=OneWay}"/>
         </StackPanel>
         <StackPanel x:Name="TootHolder"/>
     </StackPanel>
