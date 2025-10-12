@@ -37,7 +37,8 @@ public partial class App : Application
             .AddSingleton<TimelineViewModel>()
             .AddSingleton<LocalViewModel>()
             .AddSingleton<FederatedViewModel>()
-            .AddSingleton<ExploreViewModel>();
+            .AddSingleton<ExploreViewModel>()
+            .AddSingleton<NotificationPageViewModel>();
 
         return services.BuildServiceProvider();
     }

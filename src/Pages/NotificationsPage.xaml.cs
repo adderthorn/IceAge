@@ -26,25 +26,25 @@ namespace IceAge.Pages;
 /// </summary>
 public sealed partial class NotificationsPage : Page
 {
-    private readonly MastodonInterop _interop;
+    public NotificationPageViewModel ViewModel { get; }
 
     public NotificationsPage()
     {
+        this.ViewModel = App.Current.Services.GetService<NotificationPageViewModel>();
         this.InitializeComponent();
-        _interop = App.Current.Services.GetService<MastodonInterop>();
         this.NavigationCacheMode = NavigationCacheMode.Enabled;
     }
 
     protected async override void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
-        var notifications = await _interop.MastodonClient.GetNotifications();
-        MainPanel.Children.Clear();
-        foreach (var item in notifications.Where(nf => nf.Status != null))
+        try
         {
-            var vm = new NotificationViewModel(_interop, item);
-            var n = new NotificationControl(vm);
-            MainPanel.Children.Add(n);
+            await ViewModel.FetchNotificationsAsync();
+        }
+        catch
+        {
+            throw;
         }
     }
 }

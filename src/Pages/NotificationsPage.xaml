@@ -8,8 +8,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <StackPanel x:Name="MainPanel" Orientation="Vertical">
-
-    </StackPanel>
+    <Grid>
+        <ProgressRing Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay}" IsIndeterminate="True" Width="100" Height="100"/>
+        <ScrollViewer HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled" Padding="0,40,0,0"
+                      VerticalScrollBarVisibility="Visible">
+            <ItemsControl x:Name="NotificationsPanel" ItemsSource="{x:Bind ViewModel.NotificationControls, Mode=OneWay}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Padding="20" CornerRadius="4"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </Page>

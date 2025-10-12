@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Windows.AI.MachineLearning;
 
 namespace IceAge.ViewModels;
-public class NotificationPageViewModel : ObservableObject
+public partial class NotificationPageViewModel : ObservableObject
 {
     private readonly MastodonInterop _interop;
 
@@ -26,11 +26,11 @@ public class NotificationPageViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<NotificationControl> NotificationControls { get; set; }
 
-    private async Task FetchNotificationsAsync()
+    public async Task FetchNotificationsAsync()
     {
         IsLoading = true;
         var notifications = await _interop.MastodonClient.GetNotifications();
-        NotificationControls.Clear();
+        NotificationControls = new ObservableCollection<NotificationControl>();
         foreach (var item in notifications)
         {
             var vm = new NotificationViewModel(_interop, item);

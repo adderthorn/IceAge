@@ -26,8 +26,11 @@ public sealed partial class NotificationControl : UserControl
     {
         this.InitializeComponent();
         ViewModel = viewModel;
-        var tootControl = new TootControl(viewModel.TootViewModel, true);
-        TootHolder.Children.Clear();
-        TootHolder.Children.Add(tootControl);
+        if (viewModel.TootViewModel != null)
+        {
+            var tootControl = new TootControl(viewModel.TootViewModel, true);
+            TootHolder.Children.Clear();
+            TootHolder.Children.Add(tootControl);
+        }
     }
 }
