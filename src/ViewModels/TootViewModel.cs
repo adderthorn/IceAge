@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 using Windows.UI.Text;
 
 namespace IceAge.ViewModels;
@@ -113,6 +114,8 @@ public partial class TootViewModel : ObservableObject
         }
     }
 
+    public string CreatedCurrentCulture => Created.ToString("f", CultureInfo.CurrentCulture);
+
     public string StatusGlyph => LockedAccount
         ? "\xE785" //Unlock
         : "\xE774"; //Globe
@@ -144,6 +147,7 @@ public partial class TootViewModel : ObservableObject
     partial void OnCreatedChanged(DateTime value)
     {
         OnPropertyChanged(nameof(CreatedTimeAgo));
+        OnPropertyChanged(nameof(CreatedCurrentCulture));
     }
 
     partial void OnLockedAccountChanged(bool value)

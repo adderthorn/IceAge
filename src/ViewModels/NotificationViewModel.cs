@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using IceAge.Interop;
 using Mastonet.Entities;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.Windows.ApplicationModel.Resources;
@@ -24,8 +26,27 @@ public partial class NotificationViewModel : ObservableObject
     [ObservableProperty]
     public partial DateTime Created { get; set; }
 
+    public string CreatedCurrentCulture => Created.ToString("f", CultureInfo.CurrentCulture);
+
     [ObservableProperty]
     public partial string Type { get; set; }
+
+    public Visibility AccountVisibility
+    {
+        get
+        {
+            switch (this.Type)
+            {
+                case "mention":
+                case "reblog":
+                case "favourite":
+                case "follow":
+                    return Visibility.Visible;
+                default:
+                    return Visibility.Collapsed;
+            }
+        }
+    }
 
     public string Phrase => _resourceLoader.GetString($"NotificationType/{this.Type}");
 
@@ -66,5 +87,11 @@ public partial class NotificationViewModel : ObservableObject
         }
         Created = value.CreatedAt;
         Type = value.Type;
+        OnPropertyChanged(nameof(AccountVisibility));
+    }
+
+    partial void OnCreatedChanged(DateTime value)
+    {
+        OnPropertyChanged(nameof(CreatedCurrentCulture));
     }
 }

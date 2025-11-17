@@ -5,6 +5,7 @@ using IceAge.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Mastonet;
 using IceAge.Controls;
+using System.Net.WebSockets;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -50,6 +51,10 @@ public sealed partial class TimelinePage : Page
                     Frame.Navigate(typeof(LoginPage));
                     break;
             }
+        }
+        catch (WebSocketException)
+        {
+            ViewModel.Fetcher.StopStreaming();
         }
     }
 

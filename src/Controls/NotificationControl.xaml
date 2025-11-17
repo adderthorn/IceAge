@@ -8,11 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" Margin="0,0,0,10">
         <StackPanel Orientation="Horizontal">
             <FontIcon Glyph="{x:Bind ViewModel.Glyph, Mode=OneWay}"/>
-            <TextBlock Text="{x:Bind ViewModel.Phrase, Mode=OneWay}"/>
-            <TextBlock Text="{x:Bind ViewModel.Created, Mode=OneWay}"/>
+            <TextBlock Margin="5,0,0,0" Text="{x:Bind ViewModel.Notification.Account.DisplayName, Mode=OneWay}"
+                       Visibility="{x:Bind ViewModel.AccountVisibility, Mode=OneWay}"/>
+            <TextBlock Margin="5,0" Text="{x:Bind ViewModel.Phrase, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind ViewModel.CreatedCurrentCulture, Mode=OneWay}"/>
         </StackPanel>
         <StackPanel x:Name="TootHolder"/>
     </StackPanel>
