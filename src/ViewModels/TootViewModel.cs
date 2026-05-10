@@ -78,6 +78,9 @@ public partial class TootViewModel : ObservableObject
     [ObservableProperty]
     public partial ObservableCollection<UserControl> AttachmentControls { get; set; }
 
+    [ObservableProperty]
+    public partial UserControl PollControl { get; set; }
+
     public string CreatedTimeAgo
     {
         get
@@ -218,6 +221,18 @@ public partial class TootViewModel : ObservableObject
                     throw new NotImplementedException();
             }
         }
+
+        if (value.Poll != null)
+        {
+            var pollViewModel = new PollViewModel(value.Poll);
+            var pollCtrl = new PollControl(pollViewModel);
+            PollControl = pollCtrl;
+        }
+        else
+        {
+            PollControl = null;
+        }
+        
         _timer.Start();
     }
 

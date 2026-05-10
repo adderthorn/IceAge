@@ -62,6 +62,7 @@
         </Grid>
         <RichTextBlock x:Name="ContentBlock" Margin="0,5,0,5" CanDrag="False" TextWrapping="WrapWholeWords"/>
         <GridView x:Name="AttachmentBlock" IsItemClickEnabled="True" SelectionMode="None"/>
+        <UserControl x:Name="PollControl"/>
         <toolkit:UniformGrid Orientation="Horizontal" Rows="1" Margin="0,5,0,15">
             <Button x:Name="ReplyButton" HorizontalAlignment="Left" BorderThickness="0" PointerEntered="ActionButton_PointerEntered">
                 <Button.Content>

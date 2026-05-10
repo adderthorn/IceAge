@@ -234,6 +234,27 @@
   <data name="NotificationType.reblog" xml:space="preserve">
     <value>boosted your post</value>
   </data>
+  <data name="Poll.Ended" xml:space="preserve">
+    <value>Poll ended</value>
+  </data>
+  <data name="Poll.Ending.Days" xml:space="preserve">
+    <value>days left.</value>
+  </data>
+  <data name="Poll.Ending.Hours" xml:space="preserve">
+    <value>hours left.</value>
+  </data>
+  <data name="Poll.Ending.Minutes" xml:space="preserve">
+    <value>minutes left.</value>
+  </data>
+  <data name="Poll.Ending.Seconds" xml:space="preserve">
+    <value>seconds left.</value>
+  </data>
+  <data name="Poll.VoterCountText" xml:space="preserve">
+    <value>people</value>
+  </data>
+  <data name="Poll.Votes" xml:space="preserve">
+    <value>votes</value>
+  </data>
   <data name="SensitiveToolTip.Content" xml:space="preserve">
     <value>Sesitive content. Click to show.</value>
   </data>

@@ -4,6 +4,8 @@
 
 IceAge is a [Mastodon](https://joinmastodon.org/) client written specifically (and only) for Windows using modern user interface paradigms. IceAge is currently in the early stages of development.
 
+**Note on AI:** While the splash image is AI (and a placeholder for now), the rest of the code has been developed without the use of AI. This project is for me, for fun, a way for me to see how well my squishy brain, not silicon, can generate code.
+
 ### :dart: Goals
 
 IceAge aims to be a first-class Mastodon client for the Windows platform. Unfortunately, Windows has few dedicated hobbyist developers interested in creating good open source software using the latest, modern UI frameworks, this includes any fist-class Mastodon clients. IceAge aims to rectify that. IceAge is written in C\# using modern .NET, and the [WinUI3](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/) framework.
@@ -19,7 +21,11 @@ IceAge aims to be a first-class Mastodon client for the Windows platform. Unfort
 - [ ] Opinionated WinUI interface with sensible customizations.
 - [ ] Notifications.
 - [ ] Ability to toot including with attachments.
-- [ ] Batch file for building application
+- [ ] Batch file for building application.
+- [ ] Poll Support
+	- [X] Support for viewing polls.
+	- [ ] Support for voting in polls.
+	- [ ] Support for creating polls.
 
 ### :dart::dart: Stretch Goals
 

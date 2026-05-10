@@ -77,6 +77,7 @@ public partial class NotificationViewModel : ObservableObject
         this._interop = mastodonInterop;
         this._resourceLoader = new ResourceLoader();
         Notification = notification;
+       
     }
 
     partial void OnNotificationChanged(Notification value)

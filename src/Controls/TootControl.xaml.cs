@@ -45,6 +45,10 @@ public sealed partial class TootControl : UserControl
             }
             AttachmentBlock.Items.Add(ctrl);
         }
+        if (ViewModel.PollControl != null)
+        {
+            PollControl = ViewModel.PollControl;
+        }
     }
 
     private async void Img_Tapped(object sender, TappedRoutedEventArgs e)
