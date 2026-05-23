@@ -5,6 +5,12 @@ using System.ComponentModel;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Mastonet.Entities;
 using Blurhash;
+using Microsoft.Windows.Storage.Pickers;
+using Microsoft.UI.Windowing;
+using System.Threading.Tasks;
+using System.Net;
+using System.Net.Http;
+using System.IO;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -16,6 +22,7 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
     private Attachment _mediaAttachment;
 
     public event PropertyChangedEventHandler PropertyChanged;
+    public event EventHandler<AttachmentButtonTappedEventArgs> SaveButtonTapped;
 
     public Attachment MediaAttachment
     {
@@ -71,9 +78,13 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
         throw new NotImplementedException();
     }
 
+
     private void SaveButton_Tapped(object sender, TappedRoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        SaveButtonTapped?.Invoke(this, new AttachmentButtonTappedEventArgs()
+        {
+            AttachmentUri = new Uri(MediaAttachment.RemoteUrl)
+        });
     }
 
     private void RemoteImage_Tapped(object sender, TappedRoutedEventArgs e)
@@ -82,4 +93,9 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
             ? Microsoft.UI.Xaml.Visibility.Collapsed
             : Microsoft.UI.Xaml.Visibility.Visible;
     }
+}
+
+public class AttachmentButtonTappedEventArgs : EventArgs
+{
+    public Uri AttachmentUri { get;set; }
 }
