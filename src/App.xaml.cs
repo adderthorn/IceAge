@@ -21,6 +21,7 @@ namespace IceAge;
 public partial class App : Application
 {
     public static new App Current => Application.Current as App;
+    public MainWindow MainWindow => m_window as MainWindow;
     public Settings Settings { get; private set; }
     public IServiceProvider Services { get; }
 

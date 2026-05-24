@@ -1,10 +1,11 @@
-﻿using IceAge.TimelineFetcher;
-using Mastonet;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IceAge.TimelineFetcher;
+using Mastonet;
 using Windows.Storage;
 
 namespace IceAge.ViewModels;
@@ -23,7 +24,14 @@ public class FederatedViewModel
 
     private async void Streaming_OnUpdateAsync(object sender, StreamUpdateEventArgs e)
     {
-        await Fetcher.InsertAsync(0, e.Status);
+        try
+        {
+            await Fetcher.InsertAsync(0, e.Status);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error updating timeline: {ex.Message}");
+        }
     }
 
     private async void init()

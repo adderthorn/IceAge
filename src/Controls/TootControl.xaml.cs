@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using IceAge.Interop;
 using IceAge.ViewModels;
 using Mastonet;
@@ -12,7 +16,10 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.Windows.Storage.Pickers;
+using Windows.Graphics;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -54,7 +61,58 @@ public sealed partial class TootControl : UserControl
         {
             XamlRoot = this.XamlRoot
         };
+        dialog.SaveButtonTapped += Dialog_SaveButtonTapped;
+        dialog.PopupButtonTapped += Dialog_PopupButtonTapped;
+
         await dialog.ShowAsync();
+    }
+
+    private void Dialog_PopupButtonTapped(object sender, EventArgs e)
+    {
+        ImageContentDialog dialogCtrl = sender as ImageContentDialog;
+        var window = new Window()
+        {
+            ExtendsContentIntoTitleBar = true,
+            SystemBackdrop = new MicaBackdrop(),
+            Content = new Page()
+            {
+                Content = new Image()
+                {
+                    Source = new BitmapImage(new Uri(dialogCtrl.MediaAttachment.RemoteUrl)),
+                    Stretch = Stretch.Uniform
+                },
+                RequestedTheme = this.ActualTheme
+            }
+        };
+        window.AppWindow.ResizeClient(new SizeInt32(500, 500));
+        window.Activate();
+    }
+
+    private async void Dialog_SaveButtonTapped(object sender, AttachmentButtonTappedEventArgs e)
+    {
+        var fileName = e.AttachmentUri.Segments.LastOrDefault();
+        if (string.IsNullOrEmpty(fileName) || !fileName.Contains('.'))
+            throw new ArgumentException($"URI {fileName} is incorrect.");
+
+        var fileExtension = "." + fileName.Split('.').LastOrDefault();
+
+        var picker = new FileSavePicker(App.Current.MainWindow.AppWindow.Id)
+        {
+            SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+            FileTypeChoices = { { "Images", new[] { fileExtension } } }
+        };
+        var result = await picker.PickSaveFileAsync();
+        if (result != null)
+        {
+            using (var client = new HttpClient())
+            using (var response = await client.GetAsync(e.AttachmentUri))
+            using (var stream = await response.Content.ReadAsStreamAsync())
+            using (var writer = File.Create(result.Path, 8192, FileOptions.WriteThrough))
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.CopyTo(writer);
+            }
+        }
     }
 
     private async void Animated_Tapped(object sender, TappedRoutedEventArgs e)
