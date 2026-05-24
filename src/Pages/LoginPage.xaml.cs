@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Microsoft.Windows.ApplicationModel.Resources;
 using IceAge.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -47,11 +48,11 @@ public sealed partial class LoginPage : Page
         await ViewModel.AttemptLoginAsync(HandleTextBox.Text.Trim());
 
     private async void SignupButton_Click(object sender, RoutedEventArgs e) =>
-        await Windows.System.Launcher.LaunchUriAsync(new Uri(IceAgeHelper.MastodonUrl));
+        await Launcher.LaunchUriAsync(new Uri(IceAgeHelper.MastodonUrl));
 
     private void HandleTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
     {
-        if (e.Key == Windows.System.VirtualKey.Enter)
+        if (e.Key == VirtualKey.Enter)
         {
             if (ViewModel.WaitingOnAuthCode)
                 AuthCodeButton_Click(sender, e);

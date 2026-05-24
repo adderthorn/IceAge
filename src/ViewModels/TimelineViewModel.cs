@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mastonet;
 using Mastonet.Entities;
 using Windows.Storage;
+using System.Diagnostics;
 
 namespace IceAge.ViewModels;
 public class TimelineViewModel
@@ -24,7 +25,14 @@ public class TimelineViewModel
 
     private async void Streaming_OnUpdateAsync(object sender, StreamUpdateEventArgs e)
     {
-        await Fetcher.InsertAsync(0, e.Status);
+        try
+        {
+            await Fetcher.InsertAsync(0, e.Status);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error updating timeline: {ex.Message}");
+        }
     }
 
     private async void init()

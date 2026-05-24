@@ -12,6 +12,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.System;
 
 namespace IceAge.ViewModels;
 
@@ -109,7 +110,7 @@ public partial class LoginViewModel : ObservableObject
                        GranularScope.Write,
                        GranularScope.Push]);
             var url = _authClient.OAuthUrl();
-            if (await Windows.System.Launcher.LaunchUriAsync(new Uri(url)))
+            if (await Launcher.LaunchUriAsync(new Uri(url)))
             {
                 InvalidHandleIsOpen = false;
                 WaitingOnAuthCode = true;
