@@ -23,6 +23,7 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
 
     public event PropertyChangedEventHandler PropertyChanged;
     public event EventHandler<AttachmentButtonTappedEventArgs> SaveButtonTapped;
+    public event EventHandler<EventArgs> PopupButtonTapped;
 
     public Attachment MediaAttachment
     {
@@ -73,10 +74,7 @@ public sealed partial class ImageContentDialog : ContentDialog, INotifyPropertyC
         RemoteImage.Source = remoteImg;
     }
 
-    private void PopoutButton_Tapped(object sender, TappedRoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
+    private void PopoutButton_Tapped(object sender, TappedRoutedEventArgs e) => PopupButtonTapped?.Invoke(this, new EventArgs());
 
 
     private void SaveButton_Tapped(object sender, TappedRoutedEventArgs e)

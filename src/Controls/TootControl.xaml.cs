@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,8 +16,10 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.Windows.Storage.Pickers;
+using Windows.Graphics;
 using Windows.System;
 using Windows.UI.Text;
 
@@ -59,8 +62,30 @@ public sealed partial class TootControl : UserControl
             XamlRoot = this.XamlRoot
         };
         dialog.SaveButtonTapped += Dialog_SaveButtonTapped;
+        dialog.PopupButtonTapped += Dialog_PopupButtonTapped;
 
         await dialog.ShowAsync();
+    }
+
+    private void Dialog_PopupButtonTapped(object sender, EventArgs e)
+    {
+        ImageContentDialog dialogCtrl = sender as ImageContentDialog;
+        var window = new Window()
+        {
+            ExtendsContentIntoTitleBar = true,
+            SystemBackdrop = new MicaBackdrop(),
+            Content = new Page()
+            {
+                Content = new Image()
+                {
+                    Source = new BitmapImage(new Uri(dialogCtrl.MediaAttachment.RemoteUrl)),
+                    Stretch = Stretch.Uniform
+                },
+                RequestedTheme = this.ActualTheme
+            }
+        };
+        window.AppWindow.ResizeClient(new SizeInt32(500, 500));
+        window.Activate();
     }
 
     private async void Dialog_SaveButtonTapped(object sender, AttachmentButtonTappedEventArgs e)
