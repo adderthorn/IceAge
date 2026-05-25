@@ -215,7 +215,8 @@ public partial class TootViewModel : ObservableObject
                     AttachmentControls.Add(ani);
                     break;
                 case "audio":
-                    throw new NotImplementedException();
+                    // not implemented yet
+                    break;
             }
         }
         _timer.Start();
