@@ -9,7 +9,7 @@
     xmlns:controls="using:IceAge.Controls"
     mc:Ignorable="d">
 
-    <Grid>
-        <controls:NewTootControl/>
+    <Grid x:Name="MainGrid">
+        
     </Grid>
 </Window>

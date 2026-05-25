@@ -213,6 +213,9 @@
   <data name="NavigationItemToot.Content" xml:space="preserve">
     <value>New Toot</value>
   </data>
+  <data name="NewToot" xml:space="preserve">
+    <value>New Toot</value>
+  </data>
   <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
     <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
   </data>

@@ -13,6 +13,8 @@ using Microsoft.UI.Xaml.Media.Animation;
 using IceAge.Interop;
 using Windows.UI.Popups;
 using System.Diagnostics;
+using IceAge.ViewModels;
+using Microsoft.Windows.ApplicationModel.Resources;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,6 +25,8 @@ namespace IceAge;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
+    private readonly ResourceLoader _resourceLoader;
+
     public App App => App.Current;
     public MastodonInterop MastodonInterop { get; }
 
@@ -39,6 +43,7 @@ public sealed partial class MainWindow : Window
     public MainWindow(MastodonInterop mastodonInterop)
     {
         MastodonInterop = mastodonInterop;
+        this._resourceLoader = new ResourceLoader();
         this.InitializeComponent();
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
@@ -95,13 +100,17 @@ public sealed partial class MainWindow : Window
         return true;
     }
 
-    private void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
+    private async void NewTootButton_Tapped(object sender, TappedRoutedEventArgs e)
     {
-        // C# code to create a new window
-        var newWindow = new NewTootWindow();
+        var viewModel = await NewTootViewModel.CreateAsync(MastodonInterop);
+        var newWindow = new NewTootWindow(viewModel)
+        {
+            SystemBackdrop = new MicaBackdrop(),
+            Title = _resourceLoader.GetString("NewToot")
+        };
+        newWindow.AppWindow.SetIcon(@"Assets\New-Toot.ico");
+        newWindow.AppWindow.ResizeClient(new SizeInt32(640, 320));
         newWindow.Activate();
-
-        // C# code to navigate in the new window
     }
 
     private void MainNavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
