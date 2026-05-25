@@ -213,6 +213,9 @@
   <data name="NavigationItemToot.Content" xml:space="preserve">
     <value>New Toot</value>
   </data>
+  <data name="NewToot" xml:space="preserve">
+    <value>New Toot</value>
+  </data>
   <data name="NewWindowsSettingsCard.Description" xml:space="preserve">
     <value>Opens images and video attachments in a new window instead of in a popup dialog.</value>
   </data>
@@ -267,10 +270,34 @@
   <data name="ThemeSettingsCardButtonsLight.Content" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="VisibilityFollowersTooltip.Content" xml:space="preserve">
+    <value>Only your followers.</value>
+  </data>
+  <data name="VisibilityPublicTooltip.Content" xml:space="preserve">
+    <value>Anyone on and off Mastodon.</value>
+  </data>
+  <data name="VisibilityQuietTooltip.Content" xml:space="preserve">
+    <value>Hidden from Mastodon search results, trending, and public timelines.</value>
+  </data>
   <data name="WindowSizeSettingsCard.Description" xml:space="preserve">
     <value>Save your window size and position when you close the app.</value>
   </data>
   <data name="WindowSizeSettingsCard.Header" xml:space="preserve">
     <value>Remember Window Size</value>
+  </data>
+  <data name="VisibilityFollowers.Text" xml:space="preserve">
+    <value>Followers</value>
+  </data>
+  <data name="VisibilityPrivate.Text" xml:space="preserve">
+    <value>Private Mention</value>
+  </data>
+  <data name="VisibilityPublic.Text" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="VisibilityQuiet.Text" xml:space="preserve">
+    <value>Quiet Public</value>
+  </data>
+  <data name="VisibilityPrivateTooltip.Content" xml:space="preserve">
+    <value>Everyone mentioned in the post.</value>
   </data>
 </root>

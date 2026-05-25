@@ -13,21 +13,62 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.UI.Popups;
+using IceAge.ViewModels;
+using Microsoft.UI.Windowing;
+using System.Diagnostics;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+namespace IceAge.Controls;
 
-namespace IceAge.Controls
+public sealed partial class NewTootControl : UserControl
 {
-    public sealed partial class NewTootControl : UserControl
-    {
-        public NewTootControl()
-        {
-            this.InitializeComponent();
-        }
+    public NewTootViewModel ViewModel { get; }
 
-        private void PostButton_Tapped(object sender, TappedRoutedEventArgs e)
+    public NewTootControl(NewTootViewModel ViewModel)
+    {
+        this.ViewModel = ViewModel;
+        this.InitializeComponent();
+    }
+
+    public event EventHandler<StatusPostedEventArgs> StatusPosted;
+
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        ContentTextBox.Focus(FocusState.Keyboard);
+    }
+
+    private async void PostButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        if (ViewModel.Content.Length > 500)
         {
+            // TODO: Show warning
+            return;
         }
+        var status = await ViewModel.PostStatusAsync(ViewModel.Content);
+        StatusPosted?.Invoke(this, new StatusPostedEventArgs(status));
+    }
+    
+    private void PhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void VideoButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void HashtagButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void MentionButton_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+    private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+    {
+        var item = sender as MenuFlyoutItem;
+        ViewModel.SetVisibilityFromTag(item.Tag as string);
     }
 }

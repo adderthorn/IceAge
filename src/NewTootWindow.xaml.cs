@@ -1,3 +1,6 @@
+using IceAge.Controls;
+using IceAge.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -7,6 +10,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,8 +27,19 @@ namespace IceAge;
 /// </summary>
 public sealed partial class NewTootWindow : Window
 {
-    public NewTootWindow()
+    public NewTootViewModel ViewModel { get; }
+
+    public NewTootWindow(NewTootViewModel ViewModel)
     {
+        this.ViewModel = ViewModel;
         this.InitializeComponent();
+        var control = new NewTootControl(ViewModel);
+        this.Content = control;
+        control.StatusPosted += Control_StatusPosted;
+    }
+
+    private void Control_StatusPosted(object sender, StatusPostedEventArgs e)
+    {
+        this.Close();
     }
 }
