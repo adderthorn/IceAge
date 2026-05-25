@@ -14,11 +14,11 @@ IceAge aims to be a first-class Mastodon client for the Windows platform. Unfort
 - [ ] Settings page with settings support.
 - [X] Timeline views for all timelines (home, local, federated) with streaming support.
 - [ ] Ability to post toots
-	- [ ] Basic Tooting
+	- [X] Basic Tooting
 	- [ ] Polls
 	- [ ] Media
 	- [ ] Content Warnings
-	- [ ] Visibility
+	- [X] Visibility
 	- [ ] Hashtags and mentions
 - [ ] Media attachment support.
 - [ ] Cards for supported URLs.
