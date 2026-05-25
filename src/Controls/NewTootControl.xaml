@@ -30,11 +30,50 @@
         <TextBox x:Name="ContentTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" AcceptsReturn="True" Margin="0,5,5,5"
                  TextWrapping="Wrap" Text="{x:Bind ViewModel.Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
-            <Button Margin="5" Tapped="PhotoButton_Tapped">
+            <DropDownButton Margin="5" Width="60" Height="33">
+                <DropDownButton.Content>
+                    <FontIcon Glyph="{x:Bind ViewModel.SelectedVisibilityGlyph, Mode=OneWay}" FontSize="16"
+                              FontFamily="{x:Bind ViewModel.SelectedVisibilityFont, Mode=OneWay}"/>
+                </DropDownButton.Content>
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuFlyoutItem x:Uid="VisibilityPublic" Tag="public" Click="MenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE774;"/>
+                            </MenuFlyoutItem.Icon>
+                            <ToolTipService.ToolTip>
+                                <ToolTip x:Uid="VisibilityPublicTooltip"/>
+                            </ToolTipService.ToolTip>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="VisibilityQuiet" Tag="quiet" Click="MenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE7ED;"/>
+                            </MenuFlyoutItem.Icon>
+                            <ToolTipService.ToolTip>
+                                <ToolTip x:Uid="VisibilityQuietTooltip"/>
+                            </ToolTipService.ToolTip>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="VisibilityFollowers" Tag="followers" Click="MenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE72E;"/>
+                            </MenuFlyoutItem.Icon>
+                            <ToolTipService.ToolTip>
+                                <ToolTip x:Uid="VisibilityFollowersTooltip"/>
+                            </ToolTipService.ToolTip>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="VisibilityPrivate" Tag="private" Click="MenuFlyoutItem_Click">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe UI" Glyph="@"/>
+                            </MenuFlyoutItem.Icon>
+                            <ToolTipService.ToolTip>
+                                <ToolTip x:Uid="VisibilityPrivateTooltip"/>
+                            </ToolTipService.ToolTip>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <Button Tapped="PhotoButton_Tapped">
                 <SymbolIcon Symbol="Pictures"/>
-            </Button>
-            <Button Tapped="VideoButton_Tapped">
-                <SymbolIcon Symbol="VideoChat"/>
             </Button>
             <Button Margin="5" FontSize="15" FontWeight="Bold" Tapped="HashtagButton_Tapped">
                 #

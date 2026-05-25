@@ -4,7 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using IceAge.Interop;
+using Mastonet;
 using Mastonet.Entities;
+using Microsoft.UI.Xaml.Controls;
 using Windows.Foundation;
 
 namespace IceAge.ViewModels;
@@ -27,6 +29,43 @@ public partial class NewTootViewModel : ObservableObject
     [ObservableProperty]
     public partial string ContentLength { get; private set; } = $"0 / {MaxTootLength}";
 
+    [ObservableProperty]
+    public partial Mastonet.Visibility SelectedVisibility { get; set; } = Mastonet.Visibility.Public;
+
+    public string SelectedVisibilityGlyph
+    {
+        get
+        {
+            switch (SelectedVisibility)
+            {
+                case Mastonet.Visibility.Public:
+                    return "\uE774";
+                case Mastonet.Visibility.Unlisted:
+                    return "\uE7ED";
+                case Mastonet.Visibility.Private:
+                    return "\uE72E";
+                case Mastonet.Visibility.Direct:
+                    return "@";
+                default:
+                    return string.Empty;
+            }
+        }
+    }
+
+    public string SelectedVisibilityFont
+    {
+        get
+        {
+            switch (SelectedVisibility)
+            {
+                case Mastonet.Visibility.Direct:
+                    return "Segoe UI";
+                default:
+                    return "Segoe Fluent Icons";
+            }
+        }
+    }
+
     public static async Task<NewTootViewModel> CreateAsync(MastodonInterop mastodonInterop)
     {
         var viewModel = new NewTootViewModel();
@@ -38,7 +77,7 @@ public partial class NewTootViewModel : ObservableObject
 
     public async Task<Status> PostStatusAsync(string Content) => await MastodonInterop.MastodonClient.PublishStatus(
         Content,
-        Mastonet.Visibility.Public,
+        SelectedVisibility,
         replyStatusId: null,
         mediaIds: null,
         sensitive: false,
@@ -46,6 +85,25 @@ public partial class NewTootViewModel : ObservableObject
         scheduledAt: null,
         language: null,
         poll: null);
+
+    public void SetVisibilityFromTag(string Tag)
+    {
+        switch (Tag)
+        {
+            case "public":
+                SelectedVisibility = Mastonet.Visibility.Public;
+                break;
+            case "quiet":
+                SelectedVisibility = Mastonet.Visibility.Unlisted;
+                break;
+            case "followers":
+                SelectedVisibility = Mastonet.Visibility.Private;
+                break;
+            case "private":
+                SelectedVisibility = Mastonet.Visibility.Direct;
+                break;
+        }
+    }
 
     partial void OnAccountChanged(Account value)
     {
@@ -55,6 +113,12 @@ public partial class NewTootViewModel : ObservableObject
     partial void OnContentChanged(string value)
     {
         ContentLength = $"{Content.Length} / {MaxTootLength}";
+    }
+
+    partial void OnSelectedVisibilityChanged(Visibility value)
+    {
+        OnPropertyChanged(nameof(SelectedVisibilityGlyph));
+        OnPropertyChanged(nameof(SelectedVisibilityFont));
     }
 }
 

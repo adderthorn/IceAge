@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.UI.Popups;
 using IceAge.ViewModels;
 using Microsoft.UI.Windowing;
+using System.Diagnostics;
 
 namespace IceAge.Controls;
 
@@ -64,5 +65,10 @@ public sealed partial class NewTootControl : UserControl
     private void MentionButton_Tapped(object sender, TappedRoutedEventArgs e)
     {
         throw new NotImplementedException();
+    }
+    private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+    {
+        var item = sender as MenuFlyoutItem;
+        ViewModel.SetVisibilityFromTag(item.Tag as string);
     }
 }
